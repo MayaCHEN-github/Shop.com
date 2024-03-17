@@ -1,2 +1,14 @@
-# Shop.com
-2024 csci3100 Project by GroupG5
+
+
+This project is built using Vite for a faster build.
+To start the project, run the following command:
+```
+cd project // set 'current directory' to the project folder
+npm i
+npm run dev // To start development server.
+``` 
+Then start a new terminal. Here, set cd to the server folder, then
+`node server` to start server.
+
+Bootstrap, ExpressJS and Mongoose have been included as dependencies
+
