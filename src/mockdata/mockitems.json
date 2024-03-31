@@ -1,0 +1,112 @@
+[
+    {
+        "name": "Alpha Smartphone",
+        "item_id": "12001",
+        "price": "699.99",
+        "url": "https://example.com/alpha-smartphone",
+        "description": "The latest Alpha Smartphone with high-resolution camera and long-lasting battery.",
+        "vendor": "Alpha Electronics",
+        "stock_quantity": "150",
+        "category": "Electronics"
+    },
+    {
+        "name": "Bravo Laptop",
+        "item_id": "12002",
+        "price": "999.99",
+        "url": "https://example.com/bravo-laptop",
+        "description": "Bravo Laptop with 16GB RAM and 1TB SSD for high performance.",
+        "vendor": "Bravo Computing",
+        "stock_quantity": "75",
+        "category": "Computers"
+    },
+    {
+        "name": "Charlie Wireless Headphones",
+        "item_id": "12003",
+        "price": "129.99",
+        "url": "https://example.com/charlie-headphones",
+        "description": "Charlie Wireless Headphones with noise cancellation and 12-hour battery life.",
+        "vendor": "Charlie Audio",
+        "stock_quantity": "200",
+        "category": "Audio"
+    },
+    {
+        "name": "Delta Smartwatch",
+        "item_id": "12004",
+        "price": "299.99",
+        "url": "https://example.com/delta-smartwatch",
+        "description": "Delta Smartwatch with heart-rate monitor and GPS.",
+        "vendor": "Delta Wearables",
+        "stock_quantity": "120",
+        "category": "Wearables"
+    },
+    {
+        "name": "Echo Blender",
+        "item_id": "12005",
+        "price": "89.99",
+        "url": "https://example.com/echo-blender",
+        "description": "Echo Blender with multiple speed settings and durable design.",
+        "vendor": "Echo Kitchenware",
+        "stock_quantity": "80",
+        "category": "Home Appliances"
+    },
+    {
+        "name": "Foxtrot Electric Scooter",
+        "item_id": "12006",
+        "price": "450.00",
+        "url": "https://example.com/foxtrot-scooter",
+        "description": "Foxtrot Electric Scooter with 15-mile range and foldable design.",
+        "vendor": "Foxtrot Mobility",
+        "stock_quantity": "40",
+        "category": "Transportation"
+    },
+    {
+        "name": "Golf Waterproof Jacket",
+        "item_id": "12007",
+        "price": "99.99",
+        "url": "https://example.com/golf-jacket",
+        "description": "Golf Waterproof Jacket with breathable fabric and adjustable hood.",
+        "vendor": "Golf Outdoors",
+        "stock_quantity": "180",
+        "category": "Apparel"
+    },
+    {
+        "name": "Hotel Bed Sheets",
+        "item_id": "12008",
+        "price": "59.99",
+        "url": "https://example.com/hotel-sheets",
+        "description": "Hotel Bed Sheets set, 100% cotton and ultra-soft.",
+        "vendor": "Hotel Home Goods",
+        "stock_quantity": "250",
+        "category": "Home Textiles"
+    },
+    {
+        "name": "India Table Lamp",
+        "item_id": "12009",
+        "price": "45.00",
+        "url": "https://example.com/india-lamp",
+        "description": "India Table Lamp with modern design and LED bulb included.",
+        "vendor": "India Lighting",
+        "stock_quantity": "90",
+        "category": "Lighting"
+    },
+    {
+        "name": "Juliet Coffee Maker",
+        "item_id": "12010",
+        "price": "120.00",
+        "url": "https://example.com/juliet-coffeemaker",
+        "description": "Juliet Coffee Maker with programmable timer and built-in grinder.",
+        "vendor": "Juliet Kitchen",
+        "stock_quantity": "60",
+        "category": "Kitchen Electronics"
+    },
+    {
+        "name": "Kilo Yoga Mat",
+        "item_id": "12011",
+        "price": "35.00",
+        "url": "https://example.com/kilo-yogamat",
+        "description": "Kilo Yoga Mat with non-slip surface and carrying strap.",
+        "vendor": "Kilo Fitness",
+        "stock_quantity": "150",
+        "category": "Fitness"
+    }
+]
