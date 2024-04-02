@@ -1,10 +1,10 @@
 import './App.css';
-import { ShoppingCartPage } from './components/ShoppingCartPage';
+import { BsTrash } from 'react-icons/bs';
 
 function App() {
   return(
     <div>
-      <ShoppingCartPage />
+      <BsTrash />
     </div>
   )
 }

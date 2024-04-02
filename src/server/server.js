@@ -128,7 +128,12 @@ const AdminSchema = new mongoose.Schema({
 
 const Admin = mongoose.model("Admin", AdminSchema);
 
+app.post('/all-cart-items', async (req, res) => {
+    const {user_id} = req.body;
 
+    const user = User.findOne({user_id);
+
+})
 
 });
 

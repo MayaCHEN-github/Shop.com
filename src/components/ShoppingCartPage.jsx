@@ -4,10 +4,18 @@ export function ShoppingCartPage(){
     const [total, setTotal] = useState(0);
     const [fetched, setFetched] = useState([]);
 
+    const user_id = "001";
+
     useEffect(() => {
         async function fetchData() {
           try {
-            const response = await fetch('/src/mockdata/mockitems.json');
+            const data = {
+              "user_id" : user_id
+            };
+            const response = await fetch('/all-cart-items',{
+              method : 'POST',
+              body: JSON.stringify(data)
+            });
             if (!response.ok) {
               throw new Error('Error');
             }
