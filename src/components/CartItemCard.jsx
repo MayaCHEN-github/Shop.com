@@ -55,3 +55,13 @@ export function CartItemCard ({product}){
 }
 
 export default CartItemCard;
+
+/*
+to-do
+
+1. setup db connection
+2. define product schemas
+3. expand on fcns requiring db operations(+/1)
+4.
+
+*/
