@@ -30,12 +30,12 @@ export function CartItemCard ({product}){
                     throw new Error('Error updating quantity of shopping cart item');
                   }
                 
-                const data = await response.json();
+                const result = await response.json();
 
-                  setPurchased(purchased - 1);
+                setPurchased(result.purchased);
+                setSubtotal(result.subtotal);
             }catch(err) {console.log(err)}
         }
-        setPurchased(purchased + 1);
     }
 
     const QuantityMinusOne = async () =>{
@@ -74,8 +74,8 @@ export function CartItemCard ({product}){
                         "item_id": product.item_id
                     };        
 
-                    const response = await fetch('/quantity-add-one',{
-                        method: 'POST',
+                    const response = await fetch('/delete-item',{
+                        method: 'DELETE',
                         headers : {
                             'Content-Type':'application/json'
                         },
@@ -87,7 +87,7 @@ export function CartItemCard ({product}){
                         throw new Error('Error updating quantity of shopping cart item');
                     }
                     
-                    setPurchased(purchased - 1);
+                    
                 }catch(err) {console.log(err)}
         }
     }

@@ -5,15 +5,14 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const bodyParser = require('body-parser');
-
+ 
 app.use(cors());
 app.use(express.json());
 
 const PORT = process.env.PORT || 3000; 
 
 const mongoose = require('mongoose');
-const uri = 'mongodb+srv://Shop_com:iD5HFvC4Ly9YKb2j@shop-comdb.rn4suxq.mongodb.net/Shop_com';
+const uri = 'mongodb+srv://Shop_com:iD5HFvC4Ly9YKb2j@shop-comdb.rn4suxq.mongodb.net/Shop_com'
 
 mongoose.connect(uri).then(() => {
     console.log('MongoDB Connected…')
@@ -99,7 +98,7 @@ db.once('open', () => {
                     ref: 'Item',
                     required: true
                 },
-                quantity: {
+                purchased: {
                     type: Number,
                     required: true,
                     min: 1
@@ -127,17 +126,29 @@ db.once('open', () => {
         }
     })
 
+   
     const Admin = mongoose.model("Admin", AdminSchema);
+    
+    // =================================================================
+    app.get('/all-products',async (req, res)=>{
+        try{
+            const items = await Item.find({});
+            res.status(200).json(items);
+        }catch(err){
+            res.status(500).send('Failed fetching items');
+        }
+    });
 
     app.post('/all-cart-items', async (req, res) => {
         const {user_id} = req.body;
 
         try{
-            const user = await User.findOne({user_id : user_id}).populate('shopping_cart');
+            const user = await User.findOne({user_id : user_id}).populate('shopping_cart.item');
 
             const user_cart = user.shopping_cart;
 
-            const total = user_cart.reduce((sum, item) =>   sum + parseFloat(item.price) * parseInt(item.purchased, 10), 0).toFixed(2);
+            const total = user_cart.reduce((sum, item) =>   sum + parseFloat(item.item.price) * parseInt(item.purchased, 10), 0).toFixed(2);
+            
             if(user_cart && user){
                 res.json({
                     items: user_cart,
@@ -147,31 +158,43 @@ db.once('open', () => {
                 res.status(404).send('Error retrieving cart');
             }
         }catch(err){
-            res.status(500).send(err,'Error fetching users cart');
+            res.status(500).send(err,'Error fetching user\'s cart');
         }
 
     });
 
+
     //Quantity +1 handler
     app.post('/quantity-plus-one', async (req,res)=>{
         const {user_id, item_id} = req.body;
-        const user = await User.findOne({user_id : user_id}).populate('shopping_cart');
+        try{
+        const user = await User.findOne({user_id : user_id}).populate('shopping_cart.item');
 
-        const target_item_index = user.shopping_cart.find((item) => item.item_id.toString() === item_id);
+        const target_item_index = user.shopping_cart.findIndex((item) => item.item_id.toString() === item_id);
 
         if (target_item_index !== -1) {
-            const item = await Item.findOne({item_id:item_id});
-            const stock_quantity = item.stock_quantity;
+            const stock_quantity = user.shopping_cart[target_item_index].item.stock_quantity;
 
             if(stock_quantity > user.shopping_cart[target_item_index].purchased){
                user.shopping_cart[target_item_index].purchased += 1;
-                await user.save();             
-                res.status(200).send(`Item ${item_id} quantity increased by 1`);
+                await user.save(); 
+                
+                const subtotal = user.shopping_cart[target_item_index].purchased * user.shopping_cart[target_item_index].item.price;
+                const updated_result = {
+                    purchased: user.shopping_cart[target_item_index].purchased,
+                    subtotal: subtotal
+                }
+
+                res.status(200).json(updated_result);
             }else{
-                res.status(404).send(`Item ${item_id} purchased quantity exceeded stock quantiy`);
+                res.status(400).send(`Item ${item_id} purchased quantity exceeded stock quantiy`);
             }
         } else {
             res.status(404).send('Item not found in shopping cart');
+        }
+        }catch(err){
+            console.log(err);
+            res.status(500).send('Failed updating quantity on shopping cart')
         }
     });
 
@@ -179,18 +202,25 @@ db.once('open', () => {
     app.post('/quantity-minus-one', async (req,res)=>{
         const {user_id, item_id} = req.body;
         try{
-            const user = await User.findOne({user_id : user_id}).populate('shopping_cart');
+            const user = await User.findOne({user_id : user_id}).populate('shopping_cart.item');
 
-            const target_item_index = user.shopping_cart.find((item) => item.item_id.toString() === item_id);
+            const target_item_index = user.shopping_cart.findIndex((item) => item.item_id.toString() == item_id);
 
             if (target_item_index !== -1) {
                 if(Number(user.shopping_cart[target_item_index].purchased) >= 1){
                     if(Number(user.shopping_cart[target_item_index].purchased) > 1){
                         user.shopping_cart[target_item_index].purchased -= 1;
-                        await user.save();             
-                        res.status(202).send(`Item ${item_id} quantity decreased by 1`);
-                    }else if(Number(user.shopping_cart[target_item_index].purchased) === 1){ 
-                        user.shopping_cart.splice(target_item_index-1,1);
+                        await user.save();   
+                                  
+                        const subtotal = user.shopping_cart[target_item_index].purchased * user.shopping_cart[target_item_index].item.price;
+                        const updated_result = {
+                            purchased: user.shopping_cart[target_item_index].purchased,
+                            subtotal: subtotal
+                        }
+        
+                        res.status(200).json(updated_result);
+                    }else{ 
+                        user.shopping_cart.splice(target_item_index,1);
                         await user.save();             
                         res.status(202).send(`Item ${item_id} deleted from cart`);
                     }
@@ -202,6 +232,7 @@ db.once('open', () => {
             }
         }catch(err){
             console.log(err);
+            res.status(500).send('Failed updating quantity on shopping cart')
         }
     });
 
@@ -211,31 +242,33 @@ db.once('open', () => {
         try{
         const user = await User.findOne({user_id : user_id}).populate('shopping_cart');
 
-        const target_item_index = user.shopping_cart.find((item) => item.item_id.toString() === item_id);
+        const target_item_index = user.shopping_cart.findIndex((item) => item.item_id.toString() === item_id);
 
         if (target_item_index !== -1) {
-            user.shopping_cart.splice(target_item_index-1,1);
+            user.shopping_cart.splice(target_item_index,1);
             await user.save();             
             res.status(202).send(`Item ${item_id} deleted from cart`);
         }else {
             res.status(404).send('Item not found in shopping cart');
         }
-    }catch((err)=>{console.log(err)});
+    }catch(err){
+            console.log(err);
+            res.status(500).send('Failed updating quantity on shopping cart')
+        }
 
     });
-
-    });
-
-
-
-
-
-
-
-
-
 
 });
+
+
+
+
+
+
+
+
+
+
 
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);
