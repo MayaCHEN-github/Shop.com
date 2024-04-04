@@ -4,7 +4,7 @@ export function ShoppingCartPage(){
     const [total, setTotal] = useState(0);
     const [fetched, setFetched] = useState([]);
 
-    const user_id = "001";
+    const user_id = "001"; // delete this line after setting up account management
 
     useEffect(() => {
         async function fetchData() {
@@ -16,12 +16,14 @@ export function ShoppingCartPage(){
               method : 'POST',
               body: JSON.stringify(data)
             });
+
             if (!response.ok) {
-              throw new Error('Error');
+              throw new Error('Error fetching shopping cart of user');
             }
-            const products = await response.json();
-            setFetched(products);
-            setTotal(products.reduce((sum, product) => sum + parseFloat(product.price) * parseInt(product.purchased, 10), 0).toFixed(2)); //include purchased quantity later
+
+            const items = await response.json();
+            setFetched(items.items);
+            setTotal(items.total); 
           } catch (err) {
             console.error(err);
           }

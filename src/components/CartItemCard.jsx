@@ -8,22 +8,87 @@ export function CartItemCard ({product}){
     const [purchased, setPurchased] = useState(product.purchased);
     const [subtotal, setSubtotal] = useState((product.purchased * product.price).toFixed(2));
 
-    const QuantityPlusOne =  () =>{
-        //add changes to db shopping cart
+    const user_id = "001";
+
+    const QuantityPlusOne = async () =>{
+        if(purchased >= 1){
+            try{
+                const params = {
+                    "user_id": user_id,
+                    "item_id": product.item_id
+                };        
+
+                const response = await fetch('/quantity-plus-one',{
+                    method: 'POST',
+                    headers : {
+                        'Content-Type':'application/json'
+                    },
+                    body : JSON.stringify(params)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error updating quantity of shopping cart item');
+                  }
+                
+                const data = await response.json();
+
+                  setPurchased(purchased - 1);
+            }catch(err) {console.log(err)}
+        }
         setPurchased(purchased + 1);
     }
 
-    const QuantityMinusOne =  () =>{
+    const QuantityMinusOne = async () =>{
         if(purchased >= 1){
-            //add changes to db shopping cart        
-            setPurchased(purchased - 1);
+            try{
+                const params = {
+                    "user_id": user_id,
+                    "item_id": product.item_id
+                };        
+
+                const response = await fetch('/quantity-add-one',{
+                    method: 'POST',
+                    headers : {
+                        'Content-Type':'application/json'
+                    },
+                    body : JSON.stringify(params)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error updating quantity of shopping cart item');
+                  }
+                
+                const data = await response.json();
+
+                  setPurchased(purchased - 1);
+            }catch(err) {console.log(err)}
         }
     }
   
-    const DeleteFromCart =  () =>{
-        if(purchased > 0){
-            //add changes to db shopping cart        
-            setPurchased(0);
+    const DeleteFromCart =  async() =>{
+        if(confirm("Are you sure you want to delete this item from cart? \n(This action is irreversible)")){
+            if(purchased > 0){
+                try{
+                    const data = {
+                        "user_id": user_id,
+                        "item_id": product.item_id
+                    };        
+
+                    const response = await fetch('/quantity-add-one',{
+                        method: 'POST',
+                        headers : {
+                            'Content-Type':'application/json'
+                        },
+                        body : JSON.stringify(data)
+                    });
+
+
+                    if (!response.ok) {
+                        throw new Error('Error updating quantity of shopping cart item');
+                    }
+                    
+                    setPurchased(purchased - 1);
+                }catch(err) {console.log(err)}
         }
     }
  
