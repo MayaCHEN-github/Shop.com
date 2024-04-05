@@ -24,8 +24,8 @@ db.once('open', () => {
   console.log("Connection is open...");
 
   const ItemSchema = new mongoose.Schema({
-    product_id:{
-        type: Number,
+    item_id:{
+        type: String,
         required: true,
         unique: true
     },
@@ -50,7 +50,7 @@ db.once('open', () => {
         type: [String],
         required: true
     },
-    image_url:{
+    url:{
         type: [String]
     },
     comments:[{
@@ -73,7 +73,7 @@ db.once('open', () => {
 
     const UserSchema = new mongoose.Schema({
         user_id:{
-            type: Number,
+            type: String,
             required: true,
             unique: true
         },
@@ -88,7 +88,6 @@ db.once('open', () => {
         },
         email: {
             type: String,
-            required: [true, "Email is required"],
             unique: true,
         },
         shopping_cart:[
@@ -130,7 +129,7 @@ db.once('open', () => {
     const Admin = mongoose.model("Admin", AdminSchema);
     
     // =================================================================
-    app.get('/all-products',async (req, res)=>{
+    app.get('/all-items',async (req, res)=>{
         try{
             const items = await Item.find({});
             res.status(200).json(items);
@@ -141,16 +140,25 @@ db.once('open', () => {
 
     app.post('/all-cart-items', async (req, res) => {
         const {user_id} = req.body;
-
         try{
-            const user = await User.findOne({user_id : user_id}).populate('shopping_cart.item');
+            const user = await User.findOne({"user_id" : user_id}).populate('shopping_cart.item');
+
+            if (!user) {
+                res.status(404).send('User not found');
+                return;
+            }
 
             const user_cart = user.shopping_cart;
 
+            if (!user_cart) {
+                res.status(404).send('Unable to fetch user\'s cart');
+                return;
+            }
+ 
             const total = user_cart.reduce((sum, item) =>   sum + parseFloat(item.item.price) * parseInt(item.purchased, 10), 0).toFixed(2);
             
             if(user_cart && user){
-                res.json({
+                res.status(200).json({
                     items: user_cart,
                     total: total,
                 });
@@ -170,24 +178,30 @@ db.once('open', () => {
         try{
         const user = await User.findOne({user_id : user_id}).populate('shopping_cart.item');
 
-        const target_item_index = user.shopping_cart.findIndex((item) => item.item_id.toString() === item_id);
+        if(!user){
+            res.status(404).send('Failed fetching user');
+        }
+
+        const target_item_index = user.shopping_cart.findIndex((item) => item.item.item_id.toString() === item_id);
+
+        const target_item = user.shopping_cart[target_item_index];
 
         if (target_item_index !== -1) {
-            const stock_quantity = user.shopping_cart[target_item_index].item.stock_quantity;
+            const stock_quantity = target_item.item.stock_quantity;
 
-            if(stock_quantity > user.shopping_cart[target_item_index].purchased){
-               user.shopping_cart[target_item_index].purchased += 1;
+            if(stock_quantity > target_item.purchased){
+                target_item.purchased += 1;
                 await user.save(); 
                 
-                const subtotal = user.shopping_cart[target_item_index].purchased * user.shopping_cart[target_item_index].item.price;
+                const subtotal = target_item.purchased * target_item.item.price;
                 const updated_result = {
-                    purchased: user.shopping_cart[target_item_index].purchased,
+                    purchased: target_item.purchased,
                     subtotal: subtotal
                 }
 
                 res.status(200).json(updated_result);
             }else{
-                res.status(400).send(`Item ${item_id} purchased quantity exceeded stock quantiy`);
+                res.status(400).json({"message":`Item ${item_id} purchased quantity exceeded stock quantity`});
             }
         } else {
             res.status(404).send('Item not found in shopping cart');
@@ -204,17 +218,23 @@ db.once('open', () => {
         try{
             const user = await User.findOne({user_id : user_id}).populate('shopping_cart.item');
 
-            const target_item_index = user.shopping_cart.findIndex((item) => item.item_id.toString() == item_id);
+            if(!user){
+                res.status(404).send('Failed fetching user');
+            }
 
+            const target_item_index = user.shopping_cart.findIndex((item) => item.item.item_id.toString() == item_id);
+            
+            const target_item = user.shopping_cart[target_item_index];
+            
             if (target_item_index !== -1) {
-                if(Number(user.shopping_cart[target_item_index].purchased) >= 1){
-                    if(Number(user.shopping_cart[target_item_index].purchased) > 1){
-                        user.shopping_cart[target_item_index].purchased -= 1;
+                if(target_item.purchased>= 1){
+                    if(target_item.purchased > 1){
+                        target_item.purchased -= 1;
                         await user.save();   
                                   
-                        const subtotal = user.shopping_cart[target_item_index].purchased * user.shopping_cart[target_item_index].item.price;
+                        const subtotal = target_item.purchased * target_item.item.price;
                         const updated_result = {
-                            purchased: user.shopping_cart[target_item_index].purchased,
+                            purchased: target_item.purchased,
                             subtotal: subtotal
                         }
         
@@ -240,9 +260,13 @@ db.once('open', () => {
     app.delete('/delete-item', async (req,res)=>{
         const {user_id, item_id} = req.body;
         try{
-        const user = await User.findOne({user_id : user_id}).populate('shopping_cart');
+        const user = await User.findOne({user_id : user_id}).populate('shopping_cart.item');
+       
+        if(!user){
+            res.status(404).send('Failed fetching user');
+        }
 
-        const target_item_index = user.shopping_cart.findIndex((item) => item.item_id.toString() === item_id);
+        const target_item_index = user.shopping_cart.findIndex((item) => item.item.item_id.toString() === item_id);
 
         if (target_item_index !== -1) {
             user.shopping_cart.splice(target_item_index,1);
@@ -253,7 +277,7 @@ db.once('open', () => {
         }
     }catch(err){
             console.log(err);
-            res.status(500).send('Failed updating quantity on shopping cart')
+            res.status(500).send(`Failed deleting item ${item_id} from shopping cart`)
         }
 
     });
@@ -261,7 +285,11 @@ db.once('open', () => {
 });
 
 
+/*
 
+2.delete cart
+3. 1-1
+*/
 
 
 

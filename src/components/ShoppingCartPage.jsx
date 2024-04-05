@@ -12,16 +12,27 @@ export function ShoppingCartPage(){
             const data = {
               "user_id" : user_id
             };
-            const response = await fetch('/all-cart-items',{
+
+            const response = await fetch('http://localhost:3001/all-cart-items',{
               method : 'POST',
+              headers:{
+                'Content-Type': 'application/json'
+              },
               body: JSON.stringify(data)
             });
 
             if (!response.ok) {
-              throw new Error('Error fetching shopping cart of user');
+              throw new Error(`Error: ${response.status} ${response.statusText}`);
             }
 
             const items = await response.json();
+            /*
+            items=
+              {         
+                    items: user_cart,
+                    total: total,
+              }
+            */
             setFetched(items.items);
             setTotal(items.total); 
           } catch (err) {
@@ -36,7 +47,7 @@ export function ShoppingCartPage(){
         <>
             <h1>Shopping Cart</h1>
             {fetched.map((item) => (
-                <CartItemCard key={item.item_id} product={item} />
+                <CartItemCard key={item.item.item_id} item={item} />
             ))}            
             <div className="text-end" style={{ fontSize: '1.25rem'} }><p>Total Price &#58; &#36;  {total}</p></div>
             <div className="text-end" ><button className="btn btn-info hover">Checkout</button></div>

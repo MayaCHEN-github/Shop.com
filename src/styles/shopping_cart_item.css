@@ -1,4 +1,4 @@
-.product-name{
+.item-name{
     font-size: 1.5rem;
 }
 
@@ -12,4 +12,16 @@
 
 .card-item{
     background-color: pink;
+}
+
+.plus-one, .minus-one, .trash-can:hover{
+    cursor: pointer;
+}
+
+.plus-one:hover{
+    color: green;
+}
+
+.minus-one:hover, .trash-can:hover{
+    color: red;
 }
