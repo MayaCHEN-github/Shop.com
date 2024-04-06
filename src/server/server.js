@@ -10,11 +10,13 @@ const cors = require('cors');
 app.use(cors());
 app.use(express.json());
 
-const PORT = process.env.PORT || 3000; 
+const PORT = 3001 ; 
+//3001
 
 const mongoose = require('mongoose');
-const uri = 'mongodb+srv://Shop_com:iD5HFvC4Ly9YKb2j@shop-comdb.rn4suxq.mongodb.net/Shop_com'
+const uri = 'mongodb+srv://Shop_com:iD5HFvC4Ly9YKb2j@shop-comdb.rn4suxq.mongodb.net/Shop_com';
 
+//
 mongoose.connect(uri).then(() => {
     console.log('MongoDB Connected…')
 }).catch(err => console.log(err));
@@ -315,14 +317,7 @@ db.once('open', () => {
 });
 
 
-/*
-
-2.delete cart
-3. 1-1
-*/
-
-
-
+ 
 
 
 
