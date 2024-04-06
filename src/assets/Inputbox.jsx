@@ -5,6 +5,9 @@ const Inputbox = (props) => {
 
     const handleChange = (event) => {
         setValue(event.target.value);
+        if (props.onChange) { 
+            props.onChange(event); 
+        }
     }
 
     const style = {

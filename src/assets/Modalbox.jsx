@@ -1,21 +1,15 @@
 import React, { useState } from 'react';
 
-const Modalbox = ({ children }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const handleClose = () => {
-    setIsOpen(false);
-  };
+const Modalbox = ({ children, onClose, isOpen }) => { 
 
   return (
     <div>
-      <button onClick={() => setIsOpen(true)}>Open Test Modalbox</button>
-      {isOpen && (
+      {isOpen && ( 
         <div style={styles.overlay}>
           <div style={styles.modal}>
-            <button style={styles.closeButton} onClick={handleClose}>
+            <button style={styles.closeButton} onClick={onClose}> 
               <img src="src/assets/Close.svg" alt="Close" style={styles.icon}/>
-              </button>
+            </button>
             {children}
           </div>
         </div>
@@ -45,7 +39,6 @@ const styles = {
       boxShadow: '6px 6px 4px rgba(0, 0, 0, 0.5)',
       width: '80%',
       minHeight: '200px',
-      maxHeight: '80%',
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'space-between',
@@ -55,6 +48,7 @@ const styles = {
     },
     closeButton: {
       alignSelf: 'flex-end',
+      border: 'none',
     },
     icon: {
       width: '30px', 

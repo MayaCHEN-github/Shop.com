@@ -1,6 +1,6 @@
 import React from 'react';
-import Searchbox from './Searchbox';
-import ButtonBar from './ButtonBar';
+import Searchbox from './SearchboxAdmin';
+import ButtonBar from '../../assets/ButtonBar';
 
 /*  You can use this component like this:
 
@@ -12,13 +12,13 @@ import ButtonBar from './ButtonBar';
     ↑Please add this div since the Headbar is fixed and it will overlay on other component.
 */
 
-const Headbar = () => (
+const Headbar = (props) => (
   <div style={styles.headbar}>
     <div style={styles.headbarSection1}>
       <img src="src\assets\shop_com.png" alt="Shop.com logo" style={styles.logo} />
     </div>
     <div style={styles.headbarSection2}>
-      <Searchbox style={styles.searchbox}/>
+      <Searchbox style={styles.searchbox} onSearch={props.setSearchTerm}/>
       <ButtonBar buttons={[
                 { label: 'User Management', onClick: () => console.log('clicked') },
                 { label: 'Product Management', onClick: () => console.log('clicked') },

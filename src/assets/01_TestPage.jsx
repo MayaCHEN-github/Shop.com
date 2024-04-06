@@ -3,7 +3,7 @@ import Inputbox from "./Inputbox.jsx";
 import Title from "./Title.jsx";
 import Modalbox from "./Modalbox.jsx";
 import CustomButton from "./CustomButton.jsx";
-import SearchBox from "./Searchbox.jsx";
+import SearchBox from "../components/AdminPages/SearchboxAdmin.jsx";
 import ButtonBar from "./ButtonBar.jsx";
 import Headbar from "./HeadBar.jsx";
 

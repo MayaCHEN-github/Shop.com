@@ -1,8 +1,8 @@
 import React from 'react';
 
-const CustomButton = ({ styleType='style1', buttonText = 'Button' }) => {
+const CustomButton = ({ styleType='style1', buttonText = 'Button', onClick }) => {
   return (
-    <button style={{ ...styles.button, ...styles[styleType] }}>
+    <button style={{ ...styles.button, ...styles[styleType] }} onClick={onClick}> 
       {buttonText}
     </button>
   );

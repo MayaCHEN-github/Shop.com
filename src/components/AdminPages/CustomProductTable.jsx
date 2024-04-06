@@ -1,33 +1,35 @@
 import React from 'react';
 
 const CustomUserTable = ({ data, onDelete, onEdit }) => {
-
-
   return (
     <div>
       <style>@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap')</style>
       <table style={styles.table}>
         <thead style={styles.thead}>
           <tr>
-            <th style={styles.td}>UserID</th>
-            <th style={styles.td}>UserName</th>
-            <th style={styles.td}>UserPassword</th>
+            <th style={styles.td}>ID</th>
+            <th style={styles.td}>Image</th>
+            <th style={styles.td}>ProductName</th>
+            <th style={styles.td}>Price</th>
+            <th style={styles.td}>Stock</th>
             <th style={styles.td}>Delete</th>
-            <th style={styles.td}>Edit</th>
+            <th style={styles.td}>Detail</th>
           </tr>
         </thead>
         <tbody>
           {data.map((item, index) => (
             <tr key={index} style={styles.tr(index)}>
-              <td style={styles.td1}>{item.UserID}</td>
-              <td style={styles.td2}>{item.UserName}</td>
-              <td style={styles.td3}>{item.UserPassword}</td>
-              <td style={styles.td4}>
+              <td style={styles.td1}>{item.item_id}</td>
+              <td style={styles.td2}><img src={item.url} alt={item.name} style={styles.image} /></td>
+              <td style={styles.td3}>{item.name}</td>
+              <td style={styles.td4}>{item.price}</td>
+              <td style={styles.td5}>{item.stock_quantity}</td>
+              <td style={styles.td6}>
                 <button style={styles.Button}>
                   <img src="src/assets/Delete.svg" alt="Delete" style={styles.icon} onClick={() => onDelete(index)}/>
                 </button>
               </td>
-              <td style={styles.td5}>
+              <td style={styles.td7}>
                 <button style={styles.Button}>
                   <img src="src/assets/Edit.svg" alt="Edit" style={styles.icon} onClick={() => onEdit(index)}/>
                 </button>
@@ -36,10 +38,11 @@ const CustomUserTable = ({ data, onDelete, onEdit }) => {
           ))}
         </tbody>
       </table>
-  </div>
-    
+    </div>
   );
 };
+
+
 
 const styles = {
   table: {
@@ -59,24 +62,24 @@ const styles = {
     fontFamily: 'comfortaa',
     fontSize: '20px',
     textAlign: 'center',
-    height: '40px',
+    height: '120px',
   }),
   td1: {
-    width: '15%',
+    width: '10%',
     fontFamily: 'comfortaa',
     display: 'table-cell',
     verticalAlign: 'middle',
     textAlign: 'center',
   },
   td2: {
-    width: '25%',
+    width: '15%',
     fontFamily: 'comfortaa',
     display: 'table-cell',
     verticalAlign: 'middle',
     textAlign: 'center',
   },
   td3: {
-    width: '40%',
+    width: '35%',
     fontFamily: 'comfortaa',
     display: 'table-cell',
     verticalAlign: 'middle',
@@ -90,6 +93,20 @@ const styles = {
     textAlign: 'center',
   },
   td5: {
+    width: '10%',
+    fontFamily: 'comfortaa',
+    display: 'table-cell',
+    verticalAlign: 'middle',
+    textAlign: 'center',
+  },
+  td6: {
+    width: '10%',
+    fontFamily: 'comfortaa',
+    display: 'table-cell',
+    verticalAlign: 'middle',
+    textAlign: 'center',
+  },
+  td7: {
     width: '10%',
     fontFamily: 'comfortaa',
     display: 'table-cell',
@@ -110,6 +127,10 @@ const styles = {
     justifyContent: 'center',
     textAlign: 'center', 
     border: 'none',
+  },
+  image: {
+    width: '50px', 
+    height: '50px',
   },
 };
 
