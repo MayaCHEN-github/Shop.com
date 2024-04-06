@@ -5,11 +5,11 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const cors = require('cors');
-
+import Decimal from 'decimal.js';
 
 app.use(cors());
 app.use(express.json());
-
+ 
 const PORT = process.env.PORT || 3000; 
 
 const mongoose = require('mongoose');
@@ -156,7 +156,20 @@ db.once('open', () => {
                 return;
             }
  
-            const total = user_cart.reduce((sum, item) =>   sum + parseFloat(item.item.price) * parseInt(item.purchased, 10), 0).toFixed(2);
+            
+            const total = user_cart.reduce((sum, item) =>  {
+                const price = new Decimal(item.item.price);
+                const purchased  = new Decimal(parseInt(item.purchased, 10));
+                const subtotal = price.times(purchased); 
+
+                if (!item || !item.item || !item.item.price || !item.purchased) {
+                    // Handle the case where item or item properties are undefined
+                    console.error('Undefined item or properties:', item);
+                    return sum;
+                  }
+                  
+                sum.plus(subtotal);
+            } , new Decimal(0));
             
             if(user_cart && user){
                 res.status(200).json({
@@ -194,7 +207,11 @@ db.once('open', () => {
                 target_item.purchased += 1;
                 await user.save(); 
                 
-                const subtotal = target_item.purchased * target_item.item.price;
+                const purchased = new Decimal(parseInt(target_item.purchased));
+                const price = new Decimal(target_item.item.price);
+
+                const subtotal = purchased.times(price);
+
                 const user_cart = user.shopping_cart;
 
                 if (!user_cart) {
@@ -202,7 +219,14 @@ db.once('open', () => {
                     return;
                 }
      
-                const total = user_cart.reduce((sum, item) =>   sum + parseFloat(item.item.price) * parseInt(item.purchased, 10), 0).toFixed(2);
+                const total = user_cart.reduce((sum, item) =>  {
+                    const price = new Decimal(item.item.price);
+                    const purchased  = new Decimal(parseInt(item.purchased, 10));
+                    const subtotal = price.times(purchased); 
+                    
+                    sum.plus(subtotal);
+                } , new Decimal(0));
+            
 
                 const updated_result = {
                     purchased: target_item.purchased,
@@ -243,7 +267,11 @@ db.once('open', () => {
                         target_item.purchased -= 1;
                         await user.save();   
                                   
-                        const subtotal = target_item.purchased * target_item.item.price;
+                        const purchased = new Decimal(parseInt(target_item.purchased));
+                        const price = new Decimal(target_item.item.price);
+        
+                        const subtotal = purchased.times(price);
+        
                         const user_cart = user.shopping_cart;
 
                         if (!user_cart) {
@@ -299,8 +327,14 @@ db.once('open', () => {
                 return;
             }
      
-            const total = user_cart.reduce((sum, item) =>   sum + parseFloat(item.item.price) * parseInt(item.purchased, 10), 0).toFixed(2);
-             
+            const total = user_cart.reduce((sum, item) =>  {
+                const price = new Decimal(item.item.price);
+                const purchased  = new Decimal(parseInt(item.purchased, 10));
+                const subtotal = price.times(purchased); 
+                
+                sum.plus(subtotal);
+            } , new Decimal(0));
+
             res.status(202).json({"total":total});
         }else {
             res.status(404).send('Item not found in shopping cart');
@@ -315,11 +349,7 @@ db.once('open', () => {
 });
 
 
-/*
 
-2.delete cart
-3. 1-1
-*/
 
 
 
