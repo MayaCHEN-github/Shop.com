@@ -2,6 +2,7 @@ import react, {useState, useEffect} from 'react';
 import { FiPlusCircle, FiMinusCircle} from "react-icons/fi";
 import { BsTrash } from "react-icons/bs";
 import "../styles/shopping_cart_item.css";
+import 'animate.css';
 
 export function CartItemCard ({product, onUpdateTotal}){
 
@@ -106,12 +107,12 @@ export function CartItemCard ({product, onUpdateTotal}){
 }
  
     return (
-        <div className={`row card-item  rounded-2 my-2 ${invisible ? 'd-none' : ''}`}>
-            <div className="col col-md-2">
-                <img src='' alt={product.item.name}/>
+        <div className={`row card-item rounded-3  my-2 ${invisible ? 'd-none' : ''}`}>
+            <div className="col col-md-2 d-flex justify-content-center align-items-center overflow-hidden">
+                <img src={product.item.url} alt={product.item.name} style={{maxWidth: '75%', maxHeight: '75%', objectFit: 'contain'}}/>
             </div>
-            <div className="col col-md-10">
-                <div className='row'>
+            <div className="col col-md-10  card-item-details">
+                <div className='row '>
                     <div className="col col-md-9 text-start">
                         <p className="item-name mb-0">{product.item.name} </p>
                         <p className="vendor-name">{product.item.vendor}</p>
@@ -124,7 +125,7 @@ export function CartItemCard ({product, onUpdateTotal}){
                                 <div className="minus-one"><FiMinusCircle onClick={QuantityMinusOne}/></div>
                                 <div className="mx-2 trash-can"><BsTrash onClick={DeleteFromCart}/></div>
                         </div>
-                        <p>Subtotal &#58; &#36; {subtotal}</p>
+                        <p  >Subtotal &#58; &#36; {subtotal}</p>
                     </div>
                 </div>
             </div>
