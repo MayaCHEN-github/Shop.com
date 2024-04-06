@@ -156,7 +156,7 @@ db.once('open', () => {
                 return;
             }
  
-            const total = user_cart.reduce((sum, item) =>   sum + parseFloat(item.item.price) * parseInt(item.purchased, 10), 0).toFixed(2);
+            const total = user_cart.reduce((sum, item) =>   sum + 100 * parseFloat(item.item.price) * parseInt(item.purchased, 10), 0)/100;
             
             if(user_cart && user){
                 res.status(200).json({
@@ -194,15 +194,15 @@ db.once('open', () => {
                 target_item.purchased += 1;
                 await user.save(); 
                 
-                const subtotal = target_item.purchased * target_item.item.price;
-                const user_cart = user.shopping_cart;
+                const subtotal = (100  * target_item.item.price) * target_item.purchased / 100;
+                const user_cart = user.shopping_cart; 
 
                 if (!user_cart) {
                     res.status(404).send('Unable to fetch user\'s cart');
                     return;
                 }
      
-                const total = user_cart.reduce((sum, item) =>   sum + parseFloat(item.item.price) * parseInt(item.purchased, 10), 0).toFixed(2);
+                const total = user_cart.reduce((sum, item) =>   sum + (100 * parseFloat(item.item.price) )* parseInt(item.purchased, 10), 0)/ 100;
 
                 const updated_result = {
                     purchased: target_item.purchased,
@@ -243,7 +243,7 @@ db.once('open', () => {
                         target_item.purchased -= 1;
                         await user.save();   
                                   
-                        const subtotal = target_item.purchased * target_item.item.price;
+                        const subtotal = (100  * target_item.item.price) * target_item.purchased / 100;
                         const user_cart = user.shopping_cart;
 
                         if (!user_cart) {
@@ -251,7 +251,7 @@ db.once('open', () => {
                             return;
                         }
             
-                        const total = user_cart.reduce((sum, item) =>   sum + parseFloat(item.item.price) * parseInt(item.purchased, 10), 0).toFixed(2);
+                        const total = user_cart.reduce((sum, item) =>   sum + 100 * parseFloat(item.item.price) * parseInt(item.purchased, 10), 0) / 100;
 
                         const updated_result = {
                             purchased: target_item.purchased,
@@ -299,7 +299,7 @@ db.once('open', () => {
                 return;
             }
      
-            const total = user_cart.reduce((sum, item) =>   sum + parseFloat(item.item.price) * parseInt(item.purchased, 10), 0).toFixed(2);
+            const total = user_cart.reduce((sum, item) =>   sum + 100 * parseFloat(item.item.price) * parseInt(item.purchased, 10), 0)/100;
              
             res.status(202).json({"total":total});
         }else {
