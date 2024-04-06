@@ -3,10 +3,11 @@ import { FiPlusCircle, FiMinusCircle} from "react-icons/fi";
 import { BsTrash } from "react-icons/bs";
 import "../styles/shopping_cart_item.css";
 
-export function CartItemCard ({product}){
+export function CartItemCard ({product, onUpdateTotal}){
 
     const [purchased, setPurchased] = useState(product.purchased);
     const [subtotal, setSubtotal] = useState((product.purchased * product.item.price).toFixed(2));
+    const [invisible, setInvisible] = useState(false);
 
     const user_id = "001";
 
@@ -34,6 +35,7 @@ export function CartItemCard ({product}){
                 if(response.ok){
                     setPurchased(result.purchased);
                     setSubtotal(result.subtotal);
+                    onUpdateTotal(result.total);
                 } else {
                     if(response.status === 400){
                         alert(`${result.message}`);
@@ -67,6 +69,7 @@ export function CartItemCard ({product}){
 
                 setPurchased(result.purchased);
                 setSubtotal(result.subtotal);
+                onUpdateTotal(result.total);
             }catch(err) {console.log(err)}
         }
     }
@@ -93,7 +96,9 @@ export function CartItemCard ({product}){
                         throw new Error('Error deleting shopping cart item');
                     }
                     
-                    
+                    const result = await response.json();
+                    onUpdateTotal(result.total);
+                    setInvisible(true);
                     
                 }catch(err) {console.log(err)}
         }
@@ -101,14 +106,14 @@ export function CartItemCard ({product}){
 }
  
     return (
-        <div className="row card-item hover-shadow rounded-2 my-1">
+        <div className={`row card-item  rounded-2 my-2 ${invisible ? 'd-none' : ''}`}>
             <div className="col col-md-2">
                 <img src='' alt={product.item.name}/>
             </div>
             <div className="col col-md-10">
                 <div className='row'>
                     <div className="col col-md-9 text-start">
-                        <p className="product-name mb-0">{product.item.name} </p>
+                        <p className="item-name mb-0">{product.item.name} </p>
                         <p className="vendor-name">{product.item.vendor}</p>
                     </div>
                     <div className="col col-md-3 text-end ">

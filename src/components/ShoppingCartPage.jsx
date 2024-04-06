@@ -6,6 +6,10 @@ export function ShoppingCartPage(){
 
     const user_id = "001"; // delete this line after setting up account management
 
+    const updateTotal = (newTotal) => {
+      setTotal(newTotal);
+    };
+
     useEffect(() => {
         async function fetchData() {
           try {
@@ -47,7 +51,7 @@ export function ShoppingCartPage(){
         <>
             <h1>Shopping Cart</h1>
             {fetched.map((item) => (
-                <CartItemCard key={item.item.item_id} product={item} />
+                <CartItemCard key={item.item.item_id} product={item} onUpdateTotal={updateTotal} />
             ))}            
             <div className="text-end" style={{ fontSize: '1.25rem'} }><p>Total Price &#58; &#36;  {total}</p></div>
             <div className="text-end" ><button className="btn btn-info hover">Checkout</button></div>

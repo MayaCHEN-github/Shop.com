@@ -5,7 +5,8 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const cors = require('cors');
- 
+
+
 app.use(cors());
 app.use(express.json());
 
@@ -194,9 +195,19 @@ db.once('open', () => {
                 await user.save(); 
                 
                 const subtotal = target_item.purchased * target_item.item.price;
+                const user_cart = user.shopping_cart;
+
+                if (!user_cart) {
+                    res.status(404).send('Unable to fetch user\'s cart');
+                    return;
+                }
+     
+                const total = user_cart.reduce((sum, item) =>   sum + parseFloat(item.item.price) * parseInt(item.purchased, 10), 0).toFixed(2);
+
                 const updated_result = {
                     purchased: target_item.purchased,
-                    subtotal: subtotal
+                    subtotal: subtotal,
+                    total:total
                 }
 
                 res.status(200).json(updated_result);
@@ -233,9 +244,19 @@ db.once('open', () => {
                         await user.save();   
                                   
                         const subtotal = target_item.purchased * target_item.item.price;
+                        const user_cart = user.shopping_cart;
+
+                        if (!user_cart) {
+                            res.status(404).send('Unable to fetch user\'s cart');
+                            return;
+                        }
+            
+                        const total = user_cart.reduce((sum, item) =>   sum + parseFloat(item.item.price) * parseInt(item.purchased, 10), 0).toFixed(2);
+
                         const updated_result = {
                             purchased: target_item.purchased,
-                            subtotal: subtotal
+                            subtotal: subtotal,
+                            total: total
                         }
         
                         res.status(200).json(updated_result);
@@ -270,8 +291,17 @@ db.once('open', () => {
 
         if (target_item_index !== -1) {
             user.shopping_cart.splice(target_item_index,1);
-            await user.save();             
-            res.status(202).send(`Item ${item_id} deleted from cart`);
+            await user.save();
+            const user_cart = user.shopping_cart;
+
+            if (!user_cart) {
+                res.status(404).send('Unable to fetch user\'s cart');
+                return;
+            }
+     
+            const total = user_cart.reduce((sum, item) =>   sum + parseFloat(item.item.price) * parseInt(item.purchased, 10), 0).toFixed(2);
+             
+            res.status(202).json({"total":total});
         }else {
             res.status(404).send('Item not found in shopping cart');
         }
