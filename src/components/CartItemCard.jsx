@@ -121,7 +121,7 @@ export function CartItemCard ({product, onUpdateTotal}){
                         <p className="price mb-0">Price &#58; &#36; {product.item.price}</p>
                         <div className="d-flex justify-content-end ">
                                 <div className="plus-one"><FiPlusCircle onClick={QuantityPlusOne}/></div>
-                                <div className="mx-1"><p>Quantity {purchased} </p></div>
+                                <div className="mx-1"><p>Quantity&#58; {purchased} </p></div>
                                 <div className="minus-one"><FiMinusCircle onClick={QuantityMinusOne}/></div>
                                 <div className="mx-2 trash-can"><BsTrash onClick={DeleteFromCart}/></div>
                         </div>
