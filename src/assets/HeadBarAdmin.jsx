@@ -2,6 +2,40 @@ import React from 'react';
 import Searchbox from './Searchbox';
 import ButtonBar from './ButtonBar';
 
+/*  You can use this component like this:
+
+    <div>
+        <Headbar/>
+    </div>
+    <div style={{ marginTop: '130px' }}></div>
+
+    ↑Please add this div since the Headbar is fixed and it will overlay on other component.
+*/
+
+const Headbar = () => (
+  <div style={styles.headbar}>
+    <div style={styles.headbarSection1}>
+      <img src="src\assets\shop_com.png" alt="Shop.com logo" style={styles.logo} />
+    </div>
+    <div style={styles.headbarSection2}>
+      <Searchbox style={styles.searchbox}/>
+      <ButtonBar buttons={[
+                { label: 'User Management', onClick: () => console.log('clicked') },
+                { label: 'Product Management', onClick: () => console.log('clicked') },
+            ]}
+        />
+    </div>
+    <div style={styles.headbarSection3}>
+        <ButtonBar buttons={[
+                { label: 'view cart', onClick: () => console.log('clicked') },
+                { label: 'Welcome, username', onClick: () => console.log('clicked') /* Username: to be completed */},
+                
+            ]}
+        />
+    </div>
+  </div>
+);
+
 const styles = {
   headbar: {
     display: 'flex',
@@ -42,29 +76,5 @@ const styles = {
         width: '150%',
     },
 }
-
-const Headbar = () => (
-  <div style={styles.headbar}>
-    <div style={styles.headbarSection1}>
-      <img src="src\assets\shop_com.png" alt="Shop.com logo" style={styles.logo} />
-    </div>
-    <div style={styles.headbarSection2}>
-      <Searchbox style={styles.searchbox}/>
-      <ButtonBar buttons={[
-                { label: 'User Management', onClick: () => console.log('clicked') },
-                { label: 'Product Management', onClick: () => console.log('clicked') },
-            ]}
-        />
-    </div>
-    <div style={styles.headbarSection3}>
-        <ButtonBar buttons={[
-                { label: 'view cart', onClick: () => console.log('clicked') },
-                { label: 'Welcome, username', onClick: () => console.log('clicked') /* Username: to be completed */},
-                
-            ]}
-        />
-    </div>
-  </div>
-);
 
 export default Headbar;
