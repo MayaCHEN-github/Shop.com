@@ -36,6 +36,7 @@ const styles = {
         alignItems: 'center',
         justifyContent: 'space-between',
         outline: 'none',
+        width: '100%',
     },
     filterButton: {
         backgroundColor: 'transparent',

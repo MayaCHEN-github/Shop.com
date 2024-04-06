@@ -1,11 +1,16 @@
 import React from 'react';
 import CustomUserTable from "./CustomUserTable";
-import Title from "./Title";
-import CustomButton from "./CustomButton";
+import Title from "../../assets/Title";
+import CustomButton from "../../assets/CustomButton";
+import Headbar from '../../assets/HeadBarAdmin';
 
 export const AdminUserPage = () => {
     return (
         <div>
+            <div>
+                <Headbar/>
+            </div>
+            <div style={{ marginTop: '130px' }}></div>
             <div style={styles.padding}>
                 <Title value='User management' fontWeight='Bold'></Title>
             </div>
