@@ -314,18 +314,31 @@ db.once('open', () => {
 
     });
 
+    // ===Admin Functions:==============================================================
+
+    app.get('/all-users', async (req, res) => {
+      try {
+          const users = await User.find({});
+          res.status(200).json(users);
+      } catch (err) {
+          console.error(err); 
+          res.status(500).send('Failed fetching users');
+      }
+    });
+
+    app.get('/all-products', async (req, res) => {
+      try {
+          const items = await Item.find({});
+          res.status(200).json(items);
+      } catch (err) {
+          console.error(err); 
+          res.status(500).send('Failed fetching items');
+      }
+    });
+
 });
 
-// ===Admin Functions:==============================================================
 
-app.get('/all-users', async (req, res) => {
-  try {
-      const users = await User.find({});
-      res.status(200).json(users);
-  } catch (err) {
-      res.status(500).send('Failed fetching users');
-  }
-});
 
  
 

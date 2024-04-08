@@ -16,36 +16,18 @@ export const AdminUserPage = () => {
     const [passwordError, setPasswordError] = useState(false); 
     const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState(false);
-    
-    const [data, setData] = useState([
-        {
-            "_id": {
-              "$oid": "660e6facc9c1389123db0e34"
-            },
-            "user_id": "001",
-            "username": "hellouser",
-            "password": "qwerty",
-            "shopping_cart": [
-              {
-                "_id": {
-                  "$oid": "6611587b68b82b50fefb76a3"
-                },
-                "item": {
-                  "$oid": "660be193560e2d2fb3aec50e"
-                },
-                "purchased": 7
-              }
-            ],
-            "__v": 7,
-            "email": "123@gmail.com"
-          },
-    ]); 
+    const [data, setData] = useState([]);
+
     const [editIndex, setEditIndex] = useState(null);
     const [isAddUserOpen, setIsAddUserOpen] = useState(false);
     const [isEditUserOpen, setIsEditUserOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
 
-
+    useEffect(() => {
+        fetch('http://localhost:3001/all-users')
+            .then(response => response.json())
+            .then(data => setData(data));
+    }, []);
 
     const handleOpenAddUserModal = () => {
         setUsername('');

@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import CustomProductTable from "./CustomProductTable";
 import Title from "../../assets/Title";
 import CustomButton from "../../assets/CustomButton";
@@ -10,67 +10,7 @@ import e from 'cors';
 export const AdminProductPage = () => {
 
     const [isOpen, setIsOpen] = useState(false); 
-    const [data, setData] = useState([
-        {
-            "_id": {
-              "$oid": "660be193560e2d2fb3aec510"
-            },
-            "name": "Echo Blender",
-            "item_id": "12005",
-            "price": "89.99",
-            "url": "https://images2.europris.no/produkter/vw800/19/195656/195656_main.webp",
-            "description": "Echo Blender with multiple speed settings and durable design.",
-            "vendor": "Echo Kitchenware",
-            "stock_quantity": "80",
-            "category": "Home Appliances",
-            "comments": []
-        },
-        {
-            "_id": {
-              "$oid": "660be193560e2d2fb3aec50e"
-            },
-            "name": "Charlie Wireless Headphones",
-            "item_id": "12003",
-            "price": "129.99",
-            "url": "https://store.storeimages.cdn-apple.com/8756/as-images.apple.com/is/MX442?wid=1144&hei=1144&fmt=jpeg&qlt=95&.v=1686764365861",
-            "description": "Charlie Wireless Headphones with noise cancellation and 12-hour battery life.",
-            "vendor": "Charlie Audio",
-            "stock_quantity": "200",
-            "category": "Audio",
-            "comments": []
-          },
-        {
-            "_id": {
-              "$oid": "660be193560e2d2fb3aec511"
-            },
-            "name": "Foxtrot Electric Scooter",
-            "item_id": "12006",
-            "price": "450.00",
-            "url": "https://example.com/foxtrot-scooter",
-            "description": "Foxtrot Electric Scooter with 15-mile range and foldable design.",
-            "vendor": "Foxtrot Mobility",
-            "stock_quantity": "4",
-            "category": "Transportation",
-            "comments": []
-          },
-        {
-            "_id": {
-              "$oid": "660be193560e2d2fb3aec50d"
-            },
-            "name": "Bravo Laptop",
-            "item_id": "12002",
-            "price": "999.99",
-            "url": "https://example.com/bravo-laptop",
-            "description": "Bravo Laptop with 16GB RAM and 1TB SSD for high performance.",
-            "vendor": "Bravo Computing",
-            "stock_quantity": "75",
-            "category": "Computers",
-            "comments": []
-        },
-        
-
-    ]);
-    
+    const [data, setData] = useState([]);
     
     const [editIndex, setEditIndex] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
@@ -96,6 +36,11 @@ export const AdminProductPage = () => {
     const [categoryError, setCategoryError] = useState(false);
 
 
+    useEffect(() => {
+        fetch('http://localhost:3001/all-products')
+            .then(response => response.json())
+            .then(data => setData(data));
+    }, []);
 
     const handleOpenAddProductModal = () => {
         setImage('');
