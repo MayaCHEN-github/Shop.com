@@ -10,6 +10,65 @@ export function ShoppingCartPage(){
       setTotal(newTotal);
     };
 
+    /**
+    import jwt_decode from 'jwt_decode'
+
+    const fetchUserId = ()=>{
+      const token = localStorage.getItem('token');
+      if(token){
+          decoded_token = jwt_decode(token);
+          user_id = decoded_token.user_id;
+
+          return user_id;  
+        }else{
+          return null;
+        }
+    }
+     
+     const checkLoggedIn = () =>{
+        const token = localStorage.getItem('token');
+        return token !== null
+     }
+
+     
+         useEffect(() => {
+          if(checkLoggedIn){
+            const user_id = fetchUserId();
+            async function fetchData() {
+              try {
+                const data = {
+                  "user_id" : user_id
+                };
+
+                const response = await fetch('http://localhost:3001/all-cart-items',{
+                  method : 'POST',
+                  headers:{
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                  throw new Error(`Error: ${response.status} ${response.statusText}`);
+                }
+
+                const items = await response.json();
+              
+                  setFetched(items.items);
+                  setTotal(items.total); 
+                } catch (err) {
+                  console.error(err);
+                }
+              }
+      
+              fetchData();
+          }else{
+            navigate('/login');
+          }    
+      },[navigate]);
+
+     */
+
     useEffect(() => {
         async function fetchData() {
           try {
@@ -58,3 +117,10 @@ export function ShoppingCartPage(){
         </>
     )
 }
+
+/*TO-DO
+1. redirect user to login page when not logged in when they try to access the shopping cart
+2. set a value of user_id to actual user's id in token
+3.
+
+*/
