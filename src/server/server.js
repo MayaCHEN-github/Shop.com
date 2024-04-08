@@ -32,6 +32,13 @@ db.once('open', () => {
         required: true,
         unique: true
     },
+<<<<<<< HEAD
+=======
+    name: {
+        type: String,
+        required: true
+    },
+>>>>>>> origin/Maya
     description: {
         type: String,
         required: true
@@ -314,9 +321,103 @@ db.once('open', () => {
 
     });
 
+<<<<<<< HEAD
 });
 
 
+=======
+    // ===Admin Functions:==============================================================
+
+    app.get('/all-users', async (req, res) => {
+      try {
+          const users = await User.find({});
+          res.status(200).json(users);
+      } catch (err) {
+          console.error(err); 
+          res.status(500).send('Admin Functions: Failed fetching users.');
+      }
+    });
+
+    app.get('/all-products', async (req, res) => {
+      try {
+          const items = await Item.find({});
+          res.status(200).json(items);
+      } catch (err) {
+          console.error(err); 
+          res.status(500).send('Admin Functions: Failed fetching items.');
+      }
+    });
+
+
+    app.post('/add-user', async (req, res) => {
+    const newUser = new User(req.body);
+    try {
+        await newUser.save();
+        res.status(201).json(newUser);
+    } catch (err) {
+        res.status(500).send('Admin Functions: Failed to add user.');
+    }
+    });
+
+    app.put('/edit-user/:id', async (req, res) => {
+      try {
+          const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
+          res.status(200).json(updatedUser);
+      } catch (err) {
+          res.status(500).send('Admin Functions: Failed to edit user.');
+      }
+    });
+
+    app.delete('/delete-user/:id', async (req, res) => {
+        try {
+            await User.findByIdAndDelete(req.params.id);
+            res.status(200).send('User deleted');
+        } catch (err) {
+            res.status(500).send('Failed to delete user');
+        }
+    });
+
+    
+    app.post('/add-product', async (req, res) => {
+        const newItem = new Item(req.body);
+        try {
+            await newItem.save();
+            res.status(201).json(newItem);
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Admin Functions: Failed to add product.');
+        }
+    });
+
+
+    app.put('/edit-product/:id', async (req, res) => {
+        try {
+            const updatedItem = await Item.findByIdAndUpdate(req.params.id, req.body, { new: true });
+            res.status(200).json(updatedItem);
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Admin Functions: Failed to edit product.');
+        }
+    });
+
+
+    app.delete('/delete-product/:id', async (req, res) => {
+        try {
+            await Item.findByIdAndDelete(req.params.id);
+            res.status(200).send('Product deleted');
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Admin Functions: Failed to delete product.');
+        }
+    });
+
+
+
+});
+
+
+
+>>>>>>> origin/Maya
  
 
 
