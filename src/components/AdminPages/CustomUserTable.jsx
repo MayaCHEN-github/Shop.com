@@ -19,9 +19,9 @@ const CustomUserTable = ({ data, onDelete, onEdit }) => {
         <tbody>
           {data.map((item, index) => (
             <tr key={index} style={styles.tr(index)}>
-              <td style={styles.td1}>{item.UserID}</td>
-              <td style={styles.td2}>{item.UserName}</td>
-              <td style={styles.td3}>{item.UserPassword}</td>
+              <td style={styles.td1}>{item.user_id}</td>
+              <td style={styles.td2}>{item.username}</td>
+              <td style={styles.td3}>{item.password}</td>
               <td style={styles.td4}>
                 <button style={styles.Button}>
                   <img src="src/assets/Delete.svg" alt="Delete" style={styles.icon} onClick={() => onDelete(index)}/>

@@ -2,13 +2,20 @@ import { useState,useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
- 
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import AdminUserPage from './components/AdminPages/AdminUserPage';
+import AdminProductPage from './components/AdminPages/AdminProductPage';
+
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
+      <Router>
+        <Route path="/AdminUserPage" component={AdminUserPage} />
+        <Route path="/AdminProductPage" component={AdminProductPage} />
+      </Router>
       <div>
         <a href="https://vitejs.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />

@@ -1,10 +1,11 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import CustomUserTable from "./CustomUserTable";
 import Title from "../../assets/Title";
 import CustomButton from "../../assets/CustomButton";
 import Headbar from './HeadBarAdmin';
 import Modalbox from '../../assets/Modalbox';
 import Inputbox from '../../assets/Inputbox';
+import e from 'cors';
 
 export const AdminUserPage = () => {
 
@@ -13,17 +14,31 @@ export const AdminUserPage = () => {
     const [password, setPassword] = useState('');
     const [usernameError, setUsernameError] = useState(false);
     const [passwordError, setPasswordError] = useState(false); 
+    const [email, setEmail] = useState('');
+    const [emailError, setEmailError] = useState(false);
+    
     const [data, setData] = useState([
         {
-            UserID: '1',
-            UserName: 'Alice',
-            UserPassword: 'password1'
-        },
-        {
-            UserID: '2',
-            UserName: 'Bob',
-            UserPassword: 'password2'
-        },
+            "_id": {
+              "$oid": "660e6facc9c1389123db0e34"
+            },
+            "user_id": "001",
+            "username": "hellouser",
+            "password": "qwerty",
+            "shopping_cart": [
+              {
+                "_id": {
+                  "$oid": "6611587b68b82b50fefb76a3"
+                },
+                "item": {
+                  "$oid": "660be193560e2d2fb3aec50e"
+                },
+                "purchased": 7
+              }
+            ],
+            "__v": 7,
+            "email": "123@gmail.com"
+          },
     ]); 
     const [editIndex, setEditIndex] = useState(null);
     const [isAddUserOpen, setIsAddUserOpen] = useState(false);
@@ -35,8 +50,10 @@ export const AdminUserPage = () => {
     const handleOpenAddUserModal = () => {
         setUsername('');
         setPassword('');
+        setEmail('');
         setUsernameError(false);
         setPasswordError(false);
+        setEmailError(false);
         setIsAddUserOpen(true);
     };
     
@@ -45,10 +62,12 @@ export const AdminUserPage = () => {
     };
 
     const handleOpenEditUserModal = (index) => {
-        setUsername(data[index].UserName);
-        setPassword(data[index].UserPassword);
+        setUsername(data[index].username);
+        setPassword(data[index].password);
+        setEmail(data[index].email);
         setUsernameError(false);
         setPasswordError(false);
+        setEmailError(false);
         setEditIndex(index);
         setIsEditUserOpen(true);
     };
@@ -57,35 +76,56 @@ export const AdminUserPage = () => {
         setIsEditUserOpen(false);
     };
 
+
+    const checkEmptyInput = (input, setInputError) => {
+        if (!input.trim()) {
+            setInputError(true);
+            return true;
+        } else {
+            setInputError(false);
+            return false;
+        }
+    };
+
     const handleOkClick = () => {
-        if (username.trim() === '' && password.trim() === ''){
-            setUsernameError(true);
-            setPasswordError(true);
-            return;
-        }
-        if (username.trim() === ''){
-            setUsernameError(true);
-            setPasswordError(false);
-            return;
-        }
-        if (password.trim() === ''){
-            setPasswordError(true);
-            setUsernameError(false);
+
+        const isusernameEmpty = checkEmptyInput(username, setUsernameError);
+        const ispasswordEmpty = checkEmptyInput(password, setPasswordError);
+        const isemailEmpty = checkEmptyInput(email, setEmailError);
+
+        if (isusernameEmpty || ispasswordEmpty || isemailEmpty) {
             return;
         }
     
+        const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        if (!isEmailValid) {
+            setEmailError(true);
+            return;
+        } else {
+            setEmailError(false);
+        }
+    
+        let newUserId;
+        if (data.length === 0) {
+            newUserId = '001';
+        } else {
+            const maxUserId = Math.max(...data.map(item => Number(item.user_id)));
+            newUserId = String(maxUserId + 1).padStart(3, '0');
+        }
+
+    
         const newData = [...data];
         if (isEditUserOpen) { // edit user
-            newData[editIndex] = { UserID: newData[editIndex].UserID, UserName: username, UserPassword: password };
+            newData[editIndex] = { user_id: newData[editIndex].user_id, username: username, password: password, email: email};
             setIsEditUserOpen(false);
         } else if (isAddUserOpen) { // add new user
-            const newUserID = String(newData.length + 1);
-            newData.push({ UserID: newUserID, UserName: username, UserPassword: password });
+            newData.push({ user_id: newUserId, username: username, password: password, email: email});
             setIsAddUserOpen(false);
         }
         setData(newData);
-        setEditIndex(null); // reset editIndex after updating data
+        setEditIndex(null); 
     };
+    
     
 
     const handleDelete = (index) => { // delete user
@@ -93,6 +133,8 @@ export const AdminUserPage = () => {
         newData.splice(index, 1);
         setData(newData);
     };
+
+    //console.log(data.map(user => user.username));
 
     return (
         <div>
@@ -107,7 +149,7 @@ export const AdminUserPage = () => {
                 <CustomButton styleType="style4" buttonText = 'add new user +' onClick={handleOpenAddUserModal}/>
             </div>
             <div style={styles.padding}>
-                <CustomUserTable data={data.filter(user => user.UserName.includes(searchTerm))} onDelete={handleDelete} onEdit={handleOpenEditUserModal}/>
+                <CustomUserTable data={data.filter(user => user.username.includes(searchTerm))} onDelete={handleDelete} onEdit={handleOpenEditUserModal}/>
             </div>
 
             <Modalbox onClose={handleCloseAddUserModal} isOpen={isAddUserOpen}> 
@@ -120,6 +162,9 @@ export const AdminUserPage = () => {
                 <Title value='Password'></Title>
                 <Inputbox onChange={e => setPassword(e.target.value)}/>
                     {passwordError && <Title value='Password cannot be empty.' color='red' fontSize='14px'></Title>} 
+                <Title value='Email'></Title>  
+                <Inputbox onChange={e => setEmail(e.target.value)}/>
+                    {emailError && <Title value='Email cannot be empty and email must be in format example@domain.com.' color='red' fontSize='14px'></Title>} 
                 <CustomButton buttonText="OK" onClick={handleOkClick}></CustomButton>
             </Modalbox>
 
@@ -128,12 +173,17 @@ export const AdminUserPage = () => {
                     <Title value='Edit user' fontWeight='bold' fontSize='30px'></Title>
                 </div>
                 <Title value='Username'></Title>
-                <Inputbox onChange={e => setUsername(e.target.value)}/>
-                    {usernameError && <Title value='Username cannot be empty.' color='red' fontSize='14px'></Title>} 
+                <Inputbox value={username} onChange={e => setUsername(e.target.value)}/>
+                        {usernameError && <Title value='Username cannot be empty.' color='red' fontSize='14px'></Title>} 
+
                 <Title value='Password'></Title>
-                <Inputbox onChange={e => setPassword(e.target.value)}/>
-                    {passwordError && <Title value='Password cannot be empty.' color='red' fontSize='14px'></Title>} 
+                <Inputbox value={password} onChange={e => setPassword(e.target.value)}/>
+                        {passwordError && <Title value='Password cannot be empty.' color='red' fontSize='14px'></Title>} 
+                <Title value='Email'></Title>  
+                <Inputbox value={email} onChange={e => setEmail(e.target.value)}/>
+                    {emailError && <Title value='Email must be in format example@domain.com.' color='red' fontSize='14px'></Title>} 
                 <CustomButton buttonText="OK" onClick={handleOkClick}></CustomButton>
+                
             </Modalbox>
         </div>
     );
@@ -150,3 +200,5 @@ const styles = {
         textAlign: 'center',
     },
 };
+
+export default AdminUserPage;

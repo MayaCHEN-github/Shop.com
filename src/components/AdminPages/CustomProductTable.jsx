@@ -1,6 +1,6 @@
 import React from 'react';
 
-const CustomUserTable = ({ data, onDelete, onEdit }) => {
+const CustomProductTable = ({ data, onDelete, onEdit }) => {
   return (
     <div>
       <style>@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap')</style>
@@ -20,7 +20,12 @@ const CustomUserTable = ({ data, onDelete, onEdit }) => {
           {data.map((item, index) => (
             <tr key={index} style={styles.tr(index)}>
               <td style={styles.td1}>{item.item_id}</td>
-              <td style={styles.td2}><img src={item.url} alt={item.name} style={styles.image} /></td>
+              <td style={styles.td2}><img src={item.url} 
+                                          alt={item.name} 
+                                          style={styles.image} 
+                                          onError={(e) => {e.target.onerror = null; 
+                                                           e.target.src="src/assets/Product_default_image.svg"
+                                                           }}/></td>
               <td style={styles.td3}>{item.name}</td>
               <td style={styles.td4}>{item.price}</td>
               <td style={styles.td5}>{item.stock_quantity}</td>
@@ -129,9 +134,10 @@ const styles = {
     border: 'none',
   },
   image: {
-    width: '50px', 
-    height: '50px',
+    width: '100px', 
+    height: '100px',
+    
   },
 };
 
-export default CustomUserTable;
+export default CustomProductTable;

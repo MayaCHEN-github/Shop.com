@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 
 const Inputbox = (props) => {
-    const [value, setValue] = useState('');
-
     const handleChange = (event) => {
-        setValue(event.target.value);
+        // console.log("Input value: ", event.target.value); 
         if (props.onChange) { 
             props.onChange(event); 
         }
+
+        
     }
 
     const style = {
@@ -23,7 +23,7 @@ const Inputbox = (props) => {
     return (
         <input
             type={ props.type ||"text" }
-            value={value}
+            value={props.value}
             style={style}
             onChange={handleChange}
         />

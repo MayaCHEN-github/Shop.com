@@ -1,6 +1,9 @@
 import React from 'react';
 import Searchbox from './SearchboxAdmin';
 import ButtonBar from '../../assets/ButtonBar';
+import { Link } from 'react-router-dom';
+
+
 
 /*  You can use this component like this:
 
@@ -20,15 +23,14 @@ const Headbar = (props) => (
     <div style={styles.headbarSection2}>
       <Searchbox style={styles.searchbox} onSearch={props.setSearchTerm}/>
       <ButtonBar buttons={[
-                { label: 'User Management', onClick: () => console.log('clicked') },
-                { label: 'Product Management', onClick: () => console.log('clicked') },
-            ]}
-        />
+        { label: 'User Management', onClick: () => <Link to="/AdminUserPage">User Management</Link> },
+        { label: 'Product Management', onClick: () => <Link to="/AdminProductPage">Product Management</Link> },
+      ]} />
     </div>
     <div style={styles.headbarSection3}>
         <ButtonBar buttons={[
-                { label: 'view cart', onClick: () => console.log('clicked') },
-                { label: 'Welcome, username', onClick: () => console.log('clicked') /* Username: to be completed */},
+                { label: 'logout', onClick: () => console.log('clicked') },
+                { label: 'Welcome, AdminUser', onClick: () => console.log('clicked') /* Username: to be completed */},
                 
             ]}
         />

@@ -10,6 +10,6 @@ import { TestPage } from './assets/01_TestPage.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <AdminProductPage/>
+    <AdminUserPage/>
   </React.StrictMode>,
 )
