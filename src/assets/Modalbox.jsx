@@ -22,7 +22,7 @@ const styles = {
     overlay: {
       zIndex: 1000, 
       position: 'fixed',
-      top: 0,
+      top: "1%",
       left: 0,
       width: '100%',
       height: '100%',

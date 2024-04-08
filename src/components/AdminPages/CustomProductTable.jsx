@@ -27,8 +27,8 @@ const CustomProductTable = ({ data, onDelete, onEdit }) => {
                                                            e.target.src="src/assets/Product_default_image.svg"
                                                            }}/></td>
               <td style={styles.td3}>{item.name}</td>
-              <td style={styles.td4}>{item.price}</td>
-              <td style={styles.td5}>{item.stock_quantity}</td>
+              <td style={item.price === 0 ? styles.td4ZeroPrice : styles.td4}>{item.price}</td>
+              <td style={item.stock_quantity === 0 ? styles.td5ZeroStock : styles.td5}>{item.stock_quantity}</td>
               <td style={styles.td6}>
                 <button style={styles.Button}>
                   <img src="src/assets/Delete.svg" alt="Delete" style={styles.icon} onClick={() => onDelete(index)}/>
@@ -97,12 +97,28 @@ const styles = {
     verticalAlign: 'middle',
     textAlign: 'center',
   },
+  td4ZeroPrice: {
+    width: '10%',
+    fontFamily: 'comfortaa',
+    display: 'table-cell',
+    verticalAlign: 'middle',
+    textAlign: 'center',
+    color: 'red',
+  },
   td5: {
     width: '10%',
     fontFamily: 'comfortaa',
     display: 'table-cell',
     verticalAlign: 'middle',
     textAlign: 'center',
+  },
+  td5ZeroStock: {
+    width: '10%',
+    fontFamily: 'comfortaa',
+    display: 'table-cell',
+    verticalAlign: 'middle',
+    textAlign: 'center',
+    color: 'red',
   },
   td6: {
     width: '10%',

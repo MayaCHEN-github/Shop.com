@@ -1,7 +1,14 @@
 import React from 'react';
+import { useState } from 'react';
 
 const CustomUserTable = ({ data, onDelete, onEdit }) => {
 
+  const [showPassword, setShowPassword] = useState(Array(data.length).fill(false));
+  const togglePassword = index => {
+    const newShowPassword = [...showPassword];
+    newShowPassword[index] = !newShowPassword[index];
+    setShowPassword(newShowPassword);
+  };
 
   return (
     <div>
@@ -12,8 +19,9 @@ const CustomUserTable = ({ data, onDelete, onEdit }) => {
             <th style={styles.td}>UserID</th>
             <th style={styles.td}>UserName</th>
             <th style={styles.td}>UserPassword</th>
+            <th style={styles.td}>  </th>
             <th style={styles.td}>Delete</th>
-            <th style={styles.td}>Edit</th>
+            <th style={styles.td}>Detail</th>
           </tr>
         </thead>
         <tbody>
@@ -21,7 +29,12 @@ const CustomUserTable = ({ data, onDelete, onEdit }) => {
             <tr key={index} style={styles.tr(index)}>
               <td style={styles.td1}>{item.user_id}</td>
               <td style={styles.td2}>{item.username}</td>
-              <td style={styles.td3}>{item.password}</td>
+              <td style={styles.td3}>{showPassword[index] ? item.password : '***************************'}</td>
+              <td style={styles.tdToggle}>
+                <button style={styles.Button} onClick={() => togglePassword(index)}>
+                  <img src={showPassword[index] ? "src/assets/EyeOpen.svg" : "src/assets/EyeClosed.svg"} alt="Toggle password visibility" style={styles.icon} />
+                </button>
+              </td>
               <td style={styles.td4}>
                 <button style={styles.Button}>
                   <img src="src/assets/Delete.svg" alt="Delete" style={styles.icon} onClick={() => onDelete(index)}/>
@@ -76,7 +89,7 @@ const styles = {
     textAlign: 'center',
   },
   td3: {
-    width: '40%',
+    width: '30%',
     fontFamily: 'comfortaa',
     display: 'table-cell',
     verticalAlign: 'middle',
@@ -90,6 +103,13 @@ const styles = {
     textAlign: 'center',
   },
   td5: {
+    width: '10%',
+    fontFamily: 'comfortaa',
+    display: 'table-cell',
+    verticalAlign: 'middle',
+    textAlign: 'center',
+  },
+  tdToggle: {
     width: '10%',
     fontFamily: 'comfortaa',
     display: 'table-cell',

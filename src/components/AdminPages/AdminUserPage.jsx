@@ -28,6 +28,7 @@ export const AdminUserPage = () => {
             .then(response => response.json())
             .then(data => setData(data));
     }, []);
+    
 
     const handleOpenAddUserModal = () => {
         setUsername('');
@@ -74,7 +75,7 @@ export const AdminUserPage = () => {
         const isusernameEmpty = checkEmptyInput(username, setUsernameError);
         const ispasswordEmpty = checkEmptyInput(password, setPasswordError);
         const isemailEmpty = checkEmptyInput(email, setEmailError);
-
+    
         if (isusernameEmpty || ispasswordEmpty || isemailEmpty) {
             return;
         }
@@ -87,33 +88,74 @@ export const AdminUserPage = () => {
             setEmailError(false);
         }
     
-        let newUserId;
-        if (data.length === 0) {
-            newUserId = '001';
-        } else {
-            const maxUserId = Math.max(...data.map(item => Number(item.user_id)));
-            newUserId = String(maxUserId + 1).padStart(3, '0');
-        }
-
-    
-        const newData = [...data];
+        let user;
         if (isEditUserOpen) { // edit user
-            newData[editIndex] = { user_id: newData[editIndex].user_id, username: username, password: password, email: email};
-            setIsEditUserOpen(false);
+            user = { user_id: data[editIndex].user_id, username: username, password: password, email: email};
         } else if (isAddUserOpen) { // add new user
-            newData.push({ user_id: newUserId, username: username, password: password, email: email});
-            setIsAddUserOpen(false);
+            let newUserId;
+            if (data.length === 0) {
+                newUserId = '001';
+            } else {
+                const maxUserId = Math.max(...data.map(item => Number(item.user_id)));
+                newUserId = String(maxUserId + 1).padStart(3, '0');
+            }
+            user = { user_id: newUserId, username: username, password: password, email: email};
         }
-        setData(newData);
-        setEditIndex(null); 
-    };
+    
+        if (isEditUserOpen) { // edit user
+            fetch(`http://localhost:3001/edit-user/${data[editIndex]._id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(user),
+            })
+            .then(response => response.json())
+            .then(updatedUser => {
+                const newData = [...data];
+                newData[editIndex] = updatedUser;
+                setData(newData);
+                setIsEditUserOpen(false);
+                setEditIndex(null); 
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        } else if (isAddUserOpen) { // add new user
+            fetch('http://localhost:3001/add-user', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(user),
+            })
+            .then(response => response.json())
+            .then(newUser => {
+                setData(prevData => [...prevData, newUser]);
+                setIsAddUserOpen(false);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+    }
+    
+    
     
     
 
-    const handleDelete = (index) => { // delete user
-        const newData = [...data];
-        newData.splice(index, 1);
-        setData(newData);
+    const handleDelete = (index) => {
+        fetch(`http://localhost:3001/delete-user/${data[index]._id}`, {
+            method: 'DELETE',
+        })
+        .then(() => {
+            const newData = [...data];
+            newData.splice(index, 1);
+            setData(newData);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
     };
 
     //console.log(data.map(user => user.username));

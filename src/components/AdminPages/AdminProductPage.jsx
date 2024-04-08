@@ -94,6 +94,7 @@ export const AdminProductPage = () => {
     
 
     const checkEmptyInput = (input, setInputError) => {
+        input = String(input);
         if (!input.trim()) {
             setInputError(true);
             return true;
@@ -104,6 +105,7 @@ export const AdminProductPage = () => {
     };
 
     const checkNumberInput = (input, setInputError) => {
+        input = String(input);
         if (isNaN(input) || input.trim() === '') {
             setInputError(true);
             return true;
@@ -114,6 +116,7 @@ export const AdminProductPage = () => {
     };
 
     const checkIntegerInput = (input, setInputError) => {
+        input = String(input);
         if (!Number.isInteger(Number(input)) || input.trim() === '') {
             setInputError(true);
             return true;
@@ -123,21 +126,20 @@ export const AdminProductPage = () => {
         }
     };
     
-
-
     const handleAddProductOkClick = () => {
-        console.log("Add product clicked");
         const isProductNameEmpty = checkEmptyInput(productName, setProductNameError);
         const isPriceEmpty = checkEmptyInput(price, setPriceError);
         const isStockEmpty = checkEmptyInput(stock, setStockError);
         const isCategoryEmpty = checkEmptyInput(category, setCategoryError);
         const isPriceNotNumber = checkNumberInput(price, setPriceError);
         const isStockNotInteger = checkIntegerInput(stock, setStockError);
-
-        if (isProductNameEmpty || isPriceEmpty || isStockEmpty || isCategoryEmpty || isPriceNotNumber || isStockNotInteger ) {
+        const isDescriptionEmpty = checkEmptyInput(description, setDescriptionError); 
+        const isVendorEmpty = checkEmptyInput(vendor, setVendorError); 
+    
+        if (isProductNameEmpty || isPriceEmpty || isStockEmpty || isCategoryEmpty || isPriceNotNumber || isStockNotInteger || isDescriptionEmpty || isVendorEmpty) {
             return;
         }
-
+    
         let newItemId;
         if (data.length === 0) {
             newItemId = '00001';
@@ -145,24 +147,32 @@ export const AdminProductPage = () => {
             const maxItemId = Math.max(...data.map(item => Number(item.item_id)));
             newItemId = String(maxItemId + 1).padStart(5, '0');
         }
-
-        const newData = [...data];
-        if (isAddProductOpen) { // add new product
-            newData.push({ 
+    
+        fetch('http://localhost:3001/add-product', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
                 item_id: newItemId, 
-                name: productName, 
-                price: price, 
-                stock_quantity: stock, 
-                url: url || '', 
+                name: productName,
+                price: price,
+                stock_quantity: stock,
+                url:  url ? url.toString() : '',
                 description: description || '', 
                 vendor: vendor || '', 
-                category: category, 
-                comments: [] 
-            });
+                category: category.toString(), 
+            }),
+        })
+        .then(response => response.json())
+        .then(newProduct => {
+            setData(prevData => [...prevData, newProduct]);
             setIsAddProductOpen(false);
-        }
-        setData(newData);
+        })
+        .catch(err => console.error(err));
     };
+    
+    
 
     const handleEditProductOkClick = () => {
         const isProductNameEmpty = checkEmptyInput(productName, setProductNameError);
@@ -171,36 +181,50 @@ export const AdminProductPage = () => {
         const isCategoryEmpty = checkEmptyInput(category, setCategoryError);
         const isPriceNotNumber = checkNumberInput(price, setPriceError);
         const isStockNotInteger = checkIntegerInput(stock, setStockError);
+        const isDescriptionEmpty = checkEmptyInput(description, setDescriptionError); 
+        const isVendorEmpty = checkEmptyInput(vendor, setVendorError); 
     
-        if (isProductNameEmpty || isPriceEmpty || isStockEmpty || isCategoryEmpty || isPriceNotNumber || isStockNotInteger) {
+        if (isProductNameEmpty || isPriceEmpty || isStockEmpty || isCategoryEmpty || isPriceNotNumber || isStockNotInteger|| isDescriptionEmpty || isVendorEmpty) {
             return;
         }
     
-        const newData = [...data];
-        if (isEditProductOpen) { // edit product
-            newData[editIndex] = { 
-                item_id: newData[editIndex].item_id, 
-                name: productName, 
-                price: price, 
-                stock_quantity: stock, 
-                url: url || '', 
+        fetch(`http://localhost:3001/edit-product/${data[editIndex]._id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: productName,
+                price: price,
+                stock_quantity: stock,
+                url:  url ? url.toString() : '',
                 description: description || '', 
                 vendor: vendor || '', 
-                category: category, 
-                comments: newData[editIndex].comments 
-            };
+                category: category.toString(), 
+            }),
+        })
+        .then(response => response.json())
+        .then(responseData => {
+            const newData = [...data];
+            newData[editIndex] = responseData;
+            setData(newData);
             setIsEditProductOpen(false);
-        }
-        setData(newData);
-        setEditIndex(null); // reset editIndex after updating data
+        })
+        .catch(err => console.error(err));
     };
     
-
-    const handleDelete = (index) => { // delete product
-        const newData = [...data];
-        newData.splice(index, 1);
-        setData(newData);
+    const handleDelete = (index) => {
+        fetch(`http://localhost:3001/delete-product/${data[index]._id}`, {
+            method: 'DELETE',
+        })
+        .then(() => {
+            const newData = [...data];
+            newData.splice(index, 1);
+            setData(newData);
+        })
+        .catch(err => console.error(err));
     };
+    
 
 
 
@@ -217,7 +241,12 @@ export const AdminProductPage = () => {
                 <CustomButton styleType="style4" buttonText = 'add new Product +' onClick={handleOpenAddProductModal}/>
             </div>
             <div style={styles.padding}>
-                <CustomProductTable data={data.filter(Product => Product.name.includes(searchTerm))} onDelete={handleDelete} onEdit={handleOpenEditProductModal}/>
+            <CustomProductTable 
+                data={data && data.filter(Product => Product && Product.name && Product.name.includes(searchTerm))}
+                onDelete={handleDelete} 
+                onEdit={handleOpenEditProductModal}
+            />
+
             </div>
 
 
@@ -227,40 +256,42 @@ export const AdminProductPage = () => {
                     <Title value='Add a new product' fontWeight='bold' fontSize='30px'></Title>
                 </div>
                 <div>
-                    <Title value='Product Name*' fontSize='20px'></Title>
+                    <Title value='Product Name*' fontSize='19px'></Title>
                     <Inputbox onChange={e => setProductName(e.target.value)}/>
                         {productNameError && <Title value='Name cannot be empty.' color='red' fontSize='14px'></Title>} 
                 </div>
                 <div>
-                    <Title value='Vendor' fontSize='20px'></Title>
+                    <Title value='Vendor*' fontSize='19px'></Title>
                     <Inputbox onChange={e => setVendor(e.target.value)}/>
+                        {vendorError && <Title value='Vendor cannot be empty.' color='red' fontSize='14px'></Title>}
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <div style={{ width: '30%' }}>
-                        <Title value='Price*' fontSize='20px'></Title>
+                        <Title value='Price*' fontSize='19px'></Title>
                         <Inputbox onChange={e => setPrice(e.target.value)}/>
                             {priceError && <Title value='Price must be number and cannot be empty.' color='red' fontSize='14px'></Title>} 
                     </div>
                     <div style={{ width: '65%' }}>
-                        <Title value='Stock Quantity*' fontSize='20px'></Title>
+                        <Title value='Stock Quantity*' fontSize='19px'></Title>
                         <Inputbox onChange={e => setStock(e.target.value)}/>
                             {stockError && <Title value='Stock Quantity must be integer and cannot be empty.' color='red' fontSize='14px'></Title>} 
                     </div>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <div style={{ width: '30%' }}>
-                        <Title value='URL' fontSize='20px'></Title>
+                        <Title value='URL' fontSize='19px'></Title>
                         <Inputbox onChange={e => setUrl(e.target.value)}/>
                     </div>
                     <div style={{ width: '65%' }}>
-                        <Title value='Category*' fontSize='20px'></Title>
+                        <Title value='Category*' fontSize='19px'></Title>
                         <Inputbox onChange={e => setCategory(e.target.value)}/>
                             {categoryError && <Title value='Category cannot be empty.' color='red' fontSize='14px'></Title>} 
                     </div>
                 </div>
                 <div>
-                    <Title value='Description' fontSize='20px'></Title>
+                    <Title value='Description*' fontSize='19px'></Title>
                     <Inputbox onChange={e => setDescription(e.target.value)}/>
+                        {descriptionError && <Title value='Description cannot be empty.' color='red' fontSize='14px'></Title>}
                 </div>
                 <CustomButton buttonText="OK" onClick={handleAddProductOkClick}></CustomButton>
             </Modalbox>
