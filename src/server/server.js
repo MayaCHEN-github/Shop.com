@@ -77,7 +77,15 @@ db.once('open', () => {
             type: Number,
             required: [true, "Rating is required"],
         }
-    }]
+    }],
+    rating:{
+        type:Number,
+        required:true
+    },
+    rating_count:{
+      type:Number,
+      required:true
+  }
 });
 
     const Item =  mongoose.model("Item",ItemSchema);
@@ -407,16 +415,18 @@ db.once('open', () => {
         }
     });
 
-
+    // ===Product functions=====================================================
+    app.get('/product/:id', async (req, res) => {
+      try {
+        const item = await Item.find({ item_id: req.params.id });
+        res.status(200).json(item);
+      } catch (err) {
+        console.error(err);
+        res.status(500).send('Product Functions: Failed to find product with the specified id.');
+      }
+    })
 
 });
-
-
-
- 
-
-
-
 
 
 app.listen(PORT, () => {

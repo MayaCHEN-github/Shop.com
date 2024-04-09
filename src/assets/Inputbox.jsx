@@ -21,7 +21,7 @@ const Inputbox = (props) => {
     };
 
     return (
-        <input
+        <textarea
             type={ props.type ||"text" }
             value={props.value}
             style={style}
