@@ -22,7 +22,7 @@ export default function PerProductPage(props) {
     name: "",
     vendor: "",
     rating: "",
-    ratingCount: "",
+    rating_count: "",
     description: "",
     price: "",
   })
@@ -61,7 +61,7 @@ export default function PerProductPage(props) {
             <Title value={data.vendor} fontSize={"20px"}/>
             <div style={{ display: 'flex', gap: 4 }}>
               <StarRatings rating={data.rating} />
-              ({data.ratingCount})
+              ({data.rating_count})
             </div>
             <div style={{ height: 1, backgroundColor: 'black', margin: '16px 0' }}/>
             <DescriptionBullets value={data.description}/>

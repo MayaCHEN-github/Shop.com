@@ -34,7 +34,7 @@ export default function MainProductPage() {
                 company={product.vendor}
                 price={product.price}
                 rating={product.rating}
-                ratingCount={product.ratingCount}
+                ratingCount={product.rating_count}
                 itemId={product.item_id}
               />
             )
