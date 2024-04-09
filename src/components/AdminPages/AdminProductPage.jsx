@@ -25,6 +25,7 @@ export const AdminProductPage = () => {
     const [description, setDescription] = useState('');
     const [vendor, setVendor] = useState('');
     const [category, setCategory] = useState('');
+    const [curated, setCurated] = useState(false);
 
     const [imageError, setImageError] = useState(false);
     const [productNameError, setProductNameError] = useState(false);
@@ -34,6 +35,7 @@ export const AdminProductPage = () => {
     const [descriptionError, setDescriptionError] = useState(false);
     const [vendorError, setVendorError] = useState(false);
     const [categoryError, setCategoryError] = useState(false);
+
 
 
     useEffect(() => {
@@ -60,6 +62,7 @@ export const AdminProductPage = () => {
         setVendorError(false);
         setCategoryError(false);
         setIsAddProductOpen(true);
+        setCurated(false);
     };
     
     const handleCloseAddProductModal = () => {
@@ -85,6 +88,8 @@ export const AdminProductPage = () => {
         setCategoryError(false);
         setEditIndex(index);
         setIsEditProductOpen(true);
+        setCurated(data[index].curated || false);
+
     };
     
     
@@ -162,6 +167,7 @@ export const AdminProductPage = () => {
                 description: description || '', 
                 vendor: vendor || '', 
                 category: category.toString(), 
+                curated: curated,
             }),
         })
         .then(response => response.json())
@@ -201,6 +207,7 @@ export const AdminProductPage = () => {
                 description: description || '', 
                 vendor: vendor || '', 
                 category: category.toString(), 
+                curated: curated,
             }),
         })
         .then(response => response.json())
@@ -233,7 +240,7 @@ export const AdminProductPage = () => {
             <div>
                 <Headbar setSearchTerm={setSearchTerm} />
             </div>
-            <div style={{ marginTop: '130px' }}></div>
+            <div style={{ marginTop: '160px' }}></div>
             <div style={styles.padding}>
                 <Title value='Product management' fontWeight='Bold'></Title>
             </div>
@@ -288,6 +295,10 @@ export const AdminProductPage = () => {
                             {categoryError && <Title value='Category cannot be empty.' color='red' fontSize='14px'></Title>} 
                     </div>
                 </div>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <Title value='Curated:' fontSize='19px' style={{ marginRight: '10px' }}/>
+                    <input type="checkbox" onChange={e => setCurated(e.target.checked)} style={{ transform:'scale(1.5)', marginLeft: '15px',marginBottom: '11px' }}/>
+                </div>
                 <div>
                     <Title value='Description*' fontSize='19px'></Title>
                     <Inputbox onChange={e => setDescription(e.target.value)}/>
@@ -339,7 +350,10 @@ export const AdminProductPage = () => {
                         {categoryError && <Title value='Category cannot be empty.' color='red' fontSize='14px'></Title>}
                     </div>
                 </div>
-
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <Title value='Curated:' fontSize='20px' style={{ marginRight: '10px' }}/>
+                    <input type="checkbox"checked={curated} onChange={e => setCurated(e.target.checked)}  style={{ transform:'scale(1.5)', marginLeft: '15px',marginBottom: '11px' }} />
+                </div>
                 <div>
                     <Title value='Description' fontSize='20px'></Title>
                     <Inputbox value={description} onChange={e => setDescription(e.target.value)}/>

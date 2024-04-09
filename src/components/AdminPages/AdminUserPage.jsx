@@ -165,7 +165,7 @@ export const AdminUserPage = () => {
             <div>
                 <Headbar setSearchTerm={setSearchTerm} />
             </div>
-            <div style={{ marginTop: '130px' }}></div>
+            <div style={{ marginTop: '160px' }}></div>
             <div style={styles.padding}>
                 <Title value='User management' fontWeight='Bold'></Title>
             </div>

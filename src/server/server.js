@@ -60,6 +60,10 @@ db.once('open', () => {
     url:{
         type: [String]
     },
+    curated: {
+        type: Boolean,
+        default: false
+    },    
     comments:[{
         username: {
             type: String,
@@ -365,7 +369,7 @@ db.once('open', () => {
             await User.findByIdAndDelete(req.params.id);
             res.status(200).send('User deleted');
         } catch (err) {
-            res.status(500).send('Failed to delete user');
+            res.status(500).send('Admin Functions: Failed to delete user');
         }
     });
 
