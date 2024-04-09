@@ -5,6 +5,7 @@ import './App.css'
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import AdminUserPage from './components/AdminPages/AdminUserPage';
 import AdminProductPage from './components/AdminPages/AdminProductPage';
+import Headbar from './components/AdminPages/HeadBarAdmin';
 
 
 function App() {

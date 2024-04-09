@@ -125,7 +125,7 @@ const styles = {
     height: '30px',
     backgroundColor: 'transparent' ,
     outline: 'none',
-    display: 'table-cell',
+    display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     textAlign: 'center', 
