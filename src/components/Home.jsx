@@ -1,10 +1,14 @@
-import react from 'react';
+import react, {useState,useEffect} from 'react';
+import {SearchResultBox} from './SearchResultBox';
 
-export default function Home (){
+export default function Home ({category, minprice, maxprice}){
+    const [fetched, setFetched] = useState([]);
+
+    useEffect
     return(
         <>
             <h1>Welcome Home</h1>
-            <button type="button" className="btn btn-primary">To cart</button>
+            
         </>
         
     )

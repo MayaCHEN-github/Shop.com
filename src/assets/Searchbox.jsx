@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
+import Form from 'react-bootstrap/Form'
+ import 'toolcool-range-slider';
 
-const SearchBox = () => {
+const SearchBox = ({onKeywordChange, onMinPriceChange, onMaxPriceChange} ) => {
     const [isOpen, setIsOpen] = useState(false);
+
 
     return (
         <div style={styles.container}>
@@ -13,13 +16,14 @@ const SearchBox = () => {
                 </button>
                 {isOpen && (
                     <div style={styles.dropdownMenu}>
-                        <button style={styles.dropdownItem}>Option 1</button>
-                        <button style={styles.dropdownItem}>Option 2</button>
-                        <button style={styles.dropdownItem}>Option 3</button>
+                        <tc-range-slider min="0" value1="0" value2="10000" max="10000" onChange ={(e)=>{
+                            onMinPriceChange(e.detail.value1);
+                            onMaxPriceChange(e.detail.value2);
+                         }}></tc-range-slider>
                     </div>
                 )}
             </div>
-            <input type="text" style={styles.input} />
+            <input type="text" style={styles.input} onInput={(e)=>onKeywordChange(e.target.value)}/>
             <button style={styles.searchButton}>
                 <img src="src/assets/Search.svg" alt="Search" style={styles.icon}/>
             </button>

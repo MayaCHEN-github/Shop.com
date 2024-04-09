@@ -117,10 +117,3 @@ export function ShoppingCartPage(){
         </>
     )
 }
-
-/*TO-DO
-1. redirect user to login page when not logged in when they try to access the shopping cart
-2. set a value of user_id to actual user's id in token
-3.
-
-*/

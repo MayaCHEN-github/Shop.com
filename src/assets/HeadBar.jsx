@@ -1,6 +1,8 @@
 import React from 'react';
 import Searchbox from './Searchbox';
 import ButtonBar from './ButtonBar';
+import {useNavigate} from 'react-router-dom';
+
 
 /*  You can use this component like this:
 
@@ -11,14 +13,34 @@ import ButtonBar from './ButtonBar';
 
     ↑Please add this div since the Headbar is fixed and it will overlay on other component.
 */
+const checkLoggedIn = () =>{
+  const token = localStorage.getItem('token');
+  return token !== null
+};
 
-const Headbar = () => (
+const useRedirectToLogin = ()=>{
+  const navigate  = useNavigate();
+
+  console.log('clicked redirection to login');
+  return () =>{
+    if(checkLoggedIn()){
+      navigate('/shopping-cart');
+    }else{
+      navigate('/login');
+    }
+  }
+}
+
+
+const Headbar = ({onKeywordChange, onMinPriceChange ,onMaxPriceChange}) => (
+    
+
   <div style={styles.headbar}>
     <div style={styles.headbarSection1}>
       <img src="src\assets\shop_com.png" alt="Shop.com logo" style={styles.logo} />
     </div>
     <div style={styles.headbarSection2}>
-      <Searchbox style={styles.searchbox}/>
+      <Searchbox style={styles.searchbox} onKeywordChange = {onKeywordChange} onMinPriceChange={onMinPriceChange} onMaxPriceChange={onMaxPriceChange}/>
       <ButtonBar buttons={[
                 { label: 'Home', onClick: () => console.log('clicked') },
                 { label: 'Electronics', onClick: () => console.log('clicked') },
@@ -28,11 +50,11 @@ const Headbar = () => (
                 { label: 'Toys', onClick: () => console.log('clicked') },
                 { label: 'Games', onClick: () => console.log('clicked') },
             ]}
-        />
+             />
     </div>
     <div style={styles.headbarSection3}>
         <ButtonBar buttons={[
-                { label: 'view cart', onClick: () => console.log('clicked') },
+                { label: 'view cart', onClick: useRedirectToLogin() },
                 { label: 'Welcome, username', onClick: () => console.log('clicked') /* Username: to be completed */},
                 
             ]}
