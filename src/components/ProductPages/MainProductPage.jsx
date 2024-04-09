@@ -1,10 +1,17 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Headbar from './HeadBarProduct';
 import ProductCard from './ProductCard';
 import Title from '../../assets/Title';
 
 export default function MainProductPage() {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState('')
+  const [data, setData] = useState([])
+
+  useEffect(() => {
+    fetch('http://localhost:3001/all-products')
+        .then(response => response.json())
+        .then(data => setData(data))
+  }, []);
 
   return (
     <>
@@ -17,46 +24,22 @@ export default function MainProductPage() {
         gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
         gap: 24
       }}>
-        <ProductCard 
-          name={"iPhone 15"} 
-          img={"https://m.media-amazon.com/images/I/51PtFHUPjBL._AC_SL1000_.jpg"} 
-          company="Apple Inc." 
-          price="1399"
-          rating="4.3"  
-          ratingCount="2367"
-        />
-        <ProductCard 
-          name={"iPhone 15"} 
-          img={"https://m.media-amazon.com/images/I/51PtFHUPjBL._AC_SL1000_.jpg"} 
-          company="Apple Inc." 
-          price="1399"
-          rating="4.3"  
-          ratingCount="2367"
-        />
-        <ProductCard 
-          name={"iPhone 15"} 
-          img={"https://m.media-amazon.com/images/I/51PtFHUPjBL._AC_SL1000_.jpg"} 
-          company="Apple Inc." 
-          price="1399"
-          rating="4.3"  
-          ratingCount="2367"
-        />
-        <ProductCard 
-          name={"iPhone 15"} 
-          img={"https://m.media-amazon.com/images/I/51PtFHUPjBL._AC_SL1000_.jpg"} 
-          company="Apple Inc." 
-          price="1399"
-          rating="4.3"  
-          ratingCount="2367"
-        />
-        <ProductCard 
-          name={"iPhone 15"} 
-          img={"https://m.media-amazon.com/images/I/51PtFHUPjBL._AC_SL1000_.jpg"} 
-          company="Apple Inc." 
-          price="1399"
-          rating="4.3"  
-          ratingCount="2367"
-        />
+        {
+          data.map(product => {
+            return (
+              <ProductCard 
+                key={product.item_id}
+                name={product.name} 
+                img={product.url} 
+                company={product.vendor}
+                price={product.price}
+                rating={product.rating}
+                ratingCount={product.ratingCount}
+                itemId={product.item_id}
+              />
+            )
+          })
+        }
       </div>
       </div>
     </>
