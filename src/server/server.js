@@ -32,13 +32,10 @@ db.once('open', () => {
         required: true,
         unique: true
     },
-<<<<<<< HEAD
-=======
     name: {
         type: String,
         required: true
     },
->>>>>>> origin/Maya
     description: {
         type: String,
         required: true
@@ -321,11 +318,6 @@ db.once('open', () => {
 
     });
 
-<<<<<<< HEAD
-});
-
-
-=======
     // ===Admin Functions:==============================================================
 
     app.get('/all-users', async (req, res) => {
@@ -416,9 +408,6 @@ db.once('open', () => {
 });
 
 
-
->>>>>>> origin/Maya
- 
 
 
 
