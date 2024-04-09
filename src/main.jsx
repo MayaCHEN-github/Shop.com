@@ -20,6 +20,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <MainProductPage />
+    //element: <AdminUserPage />
   },
   {
     path: "/product/:itemId",

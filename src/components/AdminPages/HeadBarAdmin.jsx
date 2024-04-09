@@ -21,8 +21,8 @@ const Headbar = (props) => (
     <div style={styles.headbarSection2}>
       <Searchbox style={styles.searchbox} onSearch={props.setSearchTerm}/>
       <ButtonBar buttons={[
-        { label: 'User Management', onClick: () => {}, to: "/AdminUserPage" },
-        { label: 'Product Management', onClick: () => {}, to: "/AdminProductPage" },
+        { label: 'User Management', onClick: () => {}, to: "/admin-user" },
+        { label: 'Product Management', onClick: () => {}, to: "/admin-product" },
       ]} />
     </div>
     <div style={styles.headbarSection3}>
@@ -60,13 +60,13 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-start',
-    width: '60%', 
+    width: '65%', 
   },
   headbarSection3: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-start',
-    width: '25%', 
+    width: '20%', 
   },
   logo: {
     width: '100%',

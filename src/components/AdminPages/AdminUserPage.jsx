@@ -4,7 +4,7 @@ import Title from "../../assets/Title";
 import CustomButton from "../../assets/CustomButton";
 import Headbar from './HeadBarAdmin';
 import Modalbox from '../../assets/Modalbox';
-import Inputbox from '../../assets/Inputbox';
+import Inputbox from '../../assets/Inputbox_input';
 import e from 'cors';
 
 export const AdminUserPage = () => {
