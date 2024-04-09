@@ -45,7 +45,7 @@ export default function ProductCard(props) {
         </div>
         <Title value={company} fontSize='16px' />
         <div style={{ display: 'flex', gap: 4 }}>
-          <StarRatings rating={rating} />
+          <StarRatings rating={rating !== 0 && ratingCount !== 0 ? rating / ratingCount : 0} />
           ({ratingCount})
         </div>
         <div style={{ marginTop: 8 }}>
