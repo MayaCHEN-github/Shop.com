@@ -73,7 +73,15 @@ db.once('open', () => {
             type: Number,
             required: [true, "Rating is required"],
         }
-    }]
+    }],
+    rating:{
+        type:Number,
+        required:true
+    },
+    rating_count:{
+      type:Number,
+      required:true
+  }
 });
 
     const Item =  mongoose.model("Item",ItemSchema);

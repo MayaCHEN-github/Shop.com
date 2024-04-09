@@ -162,6 +162,8 @@ export const AdminProductPage = () => {
                 description: description || '', 
                 vendor: vendor || '', 
                 category: category.toString(), 
+                rating: 0,
+                rating_count: 0,
             }),
         })
         .then(response => response.json())
