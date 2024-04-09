@@ -15,7 +15,25 @@ import { Link } from 'react-router-dom';
     ↑Please add this div since the Headbar is fixed and it will overlay on other component.
 */
 
+/*
+import {useNavigate} from 'react-router-dom';
+const navigate = require(useNavigate);
+
+const redirectToLogin = ()) =>{
+  const token = localStorage.getItem('token');
+  if(token){
+    navigate('/shoppingcart');
+  }else{
+    navigate('/login');
+  }
+
+}
+
+*/
+
+
 const Headbar = (props) => (
+
   <div style={styles.headbar}>
     <div style={styles.headbarSection1}>
       <img src="src\assets\shop_com.png" alt="Shop.com logo" style={styles.logo} />
@@ -41,6 +59,7 @@ const Headbar = (props) => (
         />
     </div>
   </div>
+  
 );
 
 const styles = {
