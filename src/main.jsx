@@ -21,13 +21,17 @@ const router = createBrowserRouter([
     element: <MainProductPage />
   },
   {
-    path: "/iphone",
+    path: "/product/:itemId",
     element: <PerProductPage />,
   },
   {
-    path: "/admin",
+    path: "/admin-user",
     element: <AdminUserPage />,
-  }
+  },
+  {
+    path: "/admin-product",
+    element: <AdminProductPage />,
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(

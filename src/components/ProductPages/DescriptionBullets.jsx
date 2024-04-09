@@ -3,6 +3,10 @@ export default function DescriptionBullets(props) {
     value
   } = props
 
+  if (!value) {
+    return;
+  }
+
   // The start of each bullet point is demarcated by the use of a newline character
   // We also filter to remove any empty points
   const bulletPoints = value.split('\n').filter(i => i);

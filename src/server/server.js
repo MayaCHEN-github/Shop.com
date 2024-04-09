@@ -403,16 +403,18 @@ db.once('open', () => {
         }
     });
 
-
+    // ===Product functions=====================================================
+    app.get('/product/:id', async (req, res) => {
+      try {
+        const item = await Item.find({ item_id: req.params.id });
+        res.status(200).json(item);
+      } catch (err) {
+        console.error(err);
+        res.status(500).send('Product Functions: Failed to find product with the specified id.');
+      }
+    })
 
 });
-
-
-
- 
-
-
-
 
 
 app.listen(PORT, () => {
