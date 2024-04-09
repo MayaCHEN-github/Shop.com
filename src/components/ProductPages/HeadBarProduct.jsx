@@ -36,7 +36,7 @@ const Headbar = (props) => (
         <ButtonBar buttons={[
                 { label: 'logout', onClick: () => console.log('clicked') },
                 { label: 'Welcome, AdminUser', onClick: () => console.log('clicked') /* Username: to be completed */},
-                
+                { label: 'view cart', onClick: () => console.log('clicked view cart')}
             ]}
         />
     </div>

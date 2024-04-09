@@ -1,7 +1,7 @@
 import react, {useState, useEffect} from 'react';
 import { FiPlusCircle, FiMinusCircle} from "react-icons/fi";
 import { BsTrash } from "react-icons/bs";
-import "../../styles/shopping_cart_item.css";
+import '../../styles/shopping_cart_item.css';
  
 export function CartItemCard ({product, onUpdateTotal}){
 

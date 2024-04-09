@@ -1,6 +1,7 @@
 import react, {useState, useEffect} from 'react';
 import {CartItemCard} from './CartItemCard';
-export function ShoppingCartPage(){
+
+export default function ShoppingCartPage  () {
     const [total, setTotal] = useState(0);
     const [fetched, setFetched] = useState([]);
 
