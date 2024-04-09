@@ -1,10 +1,39 @@
-import { useState } from 'react';
+import {useState,useEffect } from 'react';
 import Headbar from './HeadBarProduct';
 import ProductCard from './ProductCard';
 import Title from '../../assets/Title';
-
-export default function MainProductPage() {
+import { Link } from 'react-router-dom';
+export default  function MainProductPage() {
   const [searchTerm, setSearchTerm] = useState('');
+  const [fetched, setFetched] = useState([]);
+
+  useEffect(()=>{ 
+    async function fetchData(){
+      const data = {
+        "searchTerm": searchTerm
+      };
+
+      try{
+        const response = await fetch("http://localhost:3001/all-items", {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+        setFetched(result);
+      
+      }catch(err){
+        console.log(err);
+      }
+
+    }
+
+  
+  fetchData(); 
+       },[searchTerm]);
 
   return (
     <>
@@ -17,46 +46,24 @@ export default function MainProductPage() {
         gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
         gap: 24
       }}>
-        <ProductCard 
-          name={"iPhone 15"} 
-          img={"https://m.media-amazon.com/images/I/51PtFHUPjBL._AC_SL1000_.jpg"} 
-          company="Apple Inc." 
-          price="1399"
-          rating="4.3"  
-          ratingCount="2367"
-        />
-        <ProductCard 
-          name={"iPhone 15"} 
-          img={"https://m.media-amazon.com/images/I/51PtFHUPjBL._AC_SL1000_.jpg"} 
-          company="Apple Inc." 
-          price="1399"
-          rating="4.3"  
-          ratingCount="2367"
-        />
-        <ProductCard 
-          name={"iPhone 15"} 
-          img={"https://m.media-amazon.com/images/I/51PtFHUPjBL._AC_SL1000_.jpg"} 
-          company="Apple Inc." 
-          price="1399"
-          rating="4.3"  
-          ratingCount="2367"
-        />
-        <ProductCard 
-          name={"iPhone 15"} 
-          img={"https://m.media-amazon.com/images/I/51PtFHUPjBL._AC_SL1000_.jpg"} 
-          company="Apple Inc." 
-          price="1399"
-          rating="4.3"  
-          ratingCount="2367"
-        />
-        <ProductCard 
-          name={"iPhone 15"} 
-          img={"https://m.media-amazon.com/images/I/51PtFHUPjBL._AC_SL1000_.jpg"} 
-          company="Apple Inc." 
-          price="1399"
-          rating="4.3"  
-          ratingCount="2367"
-        />
+      {
+        fetched.map((item) => {
+          return (
+            <Link key={item.item_id} to={`/PerProductPage/${item.item_id}`}>
+              <ProductCard
+                key={item.item_id}
+                name={item.name}
+                img={item.url}
+                company={item.vendor}
+                price={item.price}
+                rating={item.average_rating}
+                ratingCount={item.number_of_reviews}
+              />
+            </Link>
+          );
+        })
+      }
+        
       </div>
       </div>
     </>

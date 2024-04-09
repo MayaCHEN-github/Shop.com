@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-
+import { Link } from 'react-router-dom'
 import { colors } from '../../styles/palette'
 
 import Headbar from './HeadBarProduct'
@@ -10,6 +10,7 @@ import DescriptionBullets from './DescriptionBullets'
 export default function PerProductPage(props) {
   const MAX_QTY=20000
 
+  
   const tmpValuesToBeDataflow = {
     productName: "iPhone 15",
     company: "Apple Inc.",
@@ -39,8 +40,10 @@ export default function PerProductPage(props) {
     currency: currency,
   });
 
+ 
   return (
     <>
+     
       <Headbar setSearchTerm={setSearchTerm} />
       <div style={{ marginTop: '160px' }}> {/* Margin needed to offset */}
         <div style={{ display: 'flex', flex: '0 auto' }}>
@@ -81,6 +84,7 @@ export default function PerProductPage(props) {
           </div>
         </div>
       </div>
+       
     </>
   )
 }

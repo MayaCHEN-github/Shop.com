@@ -136,10 +136,40 @@ db.once('open', () => {
     const Admin = mongoose.model("Admin", AdminSchema);
     
     // =================================================================
-    app.get('/all-items',async (req, res)=>{
+    app.post('/all-items',async (req, res)=>{
         try{
+            const {searchTerm} = req.body;
+
             const items = await Item.find({});
-            res.status(200).json(items);
+
+            const items_with_ratings = items.map((item)=>{
+                const total_rating = item.comments.reduce((sum, comment) => {
+                    return sum + comment.rating;
+                  }, 0);
+
+                const number_of_reviews = item.comments.length;
+
+                const average_rating = number_of_reviews !== 0 ? (total_rating / number_of_reviews).toFixed(1) : 0;
+                return(
+                    {
+                    ...item.toObject(),
+                    "average_rating": average_rating,
+                    "number_of_reviews": number_of_reviews
+                    }
+                )
+            });
+
+            if(!items){
+                res.status(404).json({message: 'Unable to return items'});
+            }
+
+            if(searchTerm){ 
+                const filtered_items = items_with_ratings.filter((item) => item.name.toLowerCase().includes(searchTerm.toLowerCase()));
+                res.status(200).json(filtered_items);
+            }else{
+                res.status(200).json(items_with_ratings);
+            }
+            
         }catch(err){
             res.status(500).send('Failed fetching items');
         }
