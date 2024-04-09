@@ -83,4 +83,4 @@ const styles = {
       },
   }
 
-export default Headbar;
+export default  Headbar;
