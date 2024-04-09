@@ -60,7 +60,7 @@ export default function PerProductPage(props) {
             <Title value={data.name} fontSize={"36px"}/>
             <Title value={data.vendor} fontSize={"20px"}/>
             <div style={{ display: 'flex', gap: 4 }}>
-              <StarRatings rating={data.rating} />
+              <StarRatings rating={data.rating !== 0 && data.rating_count !== 0 ? data.rating / data.rating_count : 0} />
               ({data.rating_count})
             </div>
             <div style={{ height: 1, backgroundColor: 'black', margin: '16px 0' }}/>
