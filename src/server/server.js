@@ -60,6 +60,10 @@ db.once('open', () => {
     url:{
         type: [String]
     },
+    curated: {
+        type: Boolean,
+        default: false
+    },    
     comments:[{
         username: {
             type: String,
@@ -73,7 +77,15 @@ db.once('open', () => {
             type: Number,
             required: [true, "Rating is required"],
         }
-    }]
+    }],
+    rating:{
+        type:Number,
+        required:true
+    },
+    rating_count:{
+      type:Number,
+      required:true
+  }
 });
 
     const Item =  mongoose.model("Item",ItemSchema);
@@ -365,7 +377,7 @@ db.once('open', () => {
             await User.findByIdAndDelete(req.params.id);
             res.status(200).send('User deleted');
         } catch (err) {
-            res.status(500).send('Failed to delete user');
+            res.status(500).send('Admin Functions: Failed to delete user');
         }
     });
 
@@ -403,14 +415,18 @@ db.once('open', () => {
         }
     });
 
-
+    // ===Product functions=====================================================
+    app.get('/product/:id', async (req, res) => {
+      try {
+        const item = await Item.find({ item_id: req.params.id });
+        res.status(200).json(item);
+      } catch (err) {
+        console.error(err);
+        res.status(500).send('Product Functions: Failed to find product with the specified id.');
+      }
+    })
 
 });
-
-
-
-
-
 
 
 app.listen(PORT, () => {
