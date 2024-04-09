@@ -23,13 +23,13 @@ const Headbar = (props) => (
     <div style={styles.headbarSection2}>
       <Searchbox style={styles.searchbox} onSearch={props.setSearchTerm}/>
       <ButtonBar buttons={[
-        { label: 'Home', onClick: () => <Link to="/">Home</Link> },
-        { label: 'Electronics', onClick: () => <Link to="/electronics">Electronics</Link> },
-        { label: 'Cosmetics', onClick: () => <Link to="/cosmetics">Cosmetics</Link> },
-        { label: 'Furniture', onClick: () => <Link to="/furniture">Furniture</Link> },
-        { label: 'Books', onClick: () => <Link to="/books">Books</Link> },
-        { label: 'Toys', onClick: () => <Link to="/toys">Toys</Link> },
-        { label: 'Games', onClick: () => <Link to="/games">Games</Link> },
+        { label: 'Home', to: "/" },
+        { label: 'Electronics', to: "/electronics" },
+        { label: 'Cosmetics', to: "/cosmetics" },
+        { label: 'Furniture', to: "/furniture" },
+        { label: 'Books', to: "/books" },
+        { label: 'Toys', to: "/toys" },
+        { label: 'Games', to: "/games" },
       ]} />
     </div>
     <div style={styles.headbarSection3}>

@@ -3,7 +3,6 @@ import { colors } from '../../styles/palette'
 import Title from "../../assets/Title"
 import StarRatings from './StarRatings'
 
-
 export default function ProductCard(props) {
   const {
     img,
