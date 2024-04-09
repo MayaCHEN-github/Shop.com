@@ -34,7 +34,6 @@ const Headbar = () => (
         <ButtonBar buttons={[
                 { label: 'view cart', onClick: () => console.log('clicked') },
                 { label: 'Welcome, username', onClick: () => console.log('clicked') /* Username: to be completed */},
-                
             ]}
         />
     </div>
@@ -49,7 +48,7 @@ const styles = {
       alignItems: 'center',
       backgroundColor: 'black',
       color: 'white',
-      padding: '20px',
+      // padding: '10px',
       position: 'fixed', 
       top: 0, 
       left: 0,
