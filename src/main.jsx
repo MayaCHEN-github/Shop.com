@@ -14,6 +14,7 @@ import { AdminProductPage } from './components/AdminPages/AdminProductPage.jsx';
 import { TestPage } from './assets/01_TestPage.jsx';
 import MainProductPage from './components/ProductPages/MainProductPage.jsx';
 import PerProductPage from './components/ProductPages/PerProductPage.jsx';
+import ShoppingCartPage from './components/ShoppingCartPage/ShoppingCartPage.jsx';
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
   {
     path: "/admin",
     element: <AdminUserPage />,
+  },
+  {
+    path: "/shopping-cart",
+    element: <ShoppingCartPage />
   }
 ]);
 
