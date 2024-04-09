@@ -23,6 +23,7 @@ const styles = {
         fontFamily: 'Comfortaa',
         fontSize: '16px',
         color: 'white',
+        padding: 0,
     },
     buttonbar: {
         border: 'none',
