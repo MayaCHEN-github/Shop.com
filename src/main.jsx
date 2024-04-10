@@ -19,6 +19,11 @@ import CategoryPage from './components/ProductPages/CategoryPage.jsx';
 
 import ShoppingCartPage from './components/ShoppingCartPage/ShoppingCartPage.jsx';
 
+import {PaymentPage} from './components/Payment/PaymentPage.jsx';
+import {OrderTrackArrive} from './components/Payment/OrderTrackArrive.jsx';
+import {OrderTrackShip} from './components/Payment/OrderTrackShip.jsx';
+import {OrderTrackProcess} from './components/Payment/OrderTrackProcess.jsx';
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -43,7 +48,23 @@ const router = createBrowserRouter([
   {
     path: "/category/:category",
     element: <CategoryPage />
-  }
+  },
+  {
+    path: "/payment",
+    element: <PaymentPage />
+  },
+  {
+    path: "/ordertrack-process",
+    element: <OrderTrackProcess />
+  },
+  {
+    path: "/ordertrack-ship",
+    element: <OrderTrackShip />
+  },
+  {
+    path: "/ordertrack-arrive",
+    element: <OrderTrackArrive />
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
