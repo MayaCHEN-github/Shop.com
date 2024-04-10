@@ -6,6 +6,8 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+import {jwtDecode} from 'jwt-decode';
 
 app.use(cors());
 app.use(express.json());
@@ -15,7 +17,7 @@ const PORT = 3001 ;
 
 const mongoose = require('mongoose');
 const uri = 'mongodb+srv://Shop_com:iD5HFvC4Ly9YKb2j@shop-comdb.rn4suxq.mongodb.net/Shop_com';
-
+const secretKey = 'shopdotcom'
 //
 mongoose.connect(uri).then(() => {
     console.log('MongoDB Connected…')
@@ -161,6 +163,66 @@ db.once('open', () => {
             }).catch(err => {
                 res.status(404).json({message:err});
             });      
+        }catch(e){
+            res.status(404).json({message:"failed"});
+        }
+    })
+
+    app.post('/login', async (req, res) => {
+        const {usernameOrEmail, password} = req.body;
+
+        const hashed_password = await bcrypt.hash(password,10);
+
+        try{
+            const matching_user =  User.findOne({ $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }] });
+
+            if(!matching_user){
+                const matching_admin =  Admin.findOne({ $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }] });
+                if(!matching_admin){
+                    res.status(404).json({ message:"user not found"});
+                }
+
+                const compare_password = bcrypt.compare(hashed_password,matching_admin.password);
+
+                if(compare_password){
+                    jwt.sign(
+                        { 
+                            id: matching_admin.user_id,
+                            user_type: "admin",
+                            username: matching_admin.username
+                        },  
+                        secretKey,
+                        { expiresIn: '12h' },
+                        (err,token)=>{
+                            if(err){
+                                return res.status(500).json({message: err})
+                            }
+                            return res.status(200).json({message: "success",token:token })
+                        }  
+                    );
+ 
+                }else{
+                    res.status(500).json({ message:"Incorrect password"});
+                }            
+            }
+
+            const compare_password = await bcrypt.compare(hashed_password,matching_user.password);
+
+            if(compare_password){
+                const token = jwt.sign(
+                    { 
+                        id: matching_user.user_id,
+                        user_type: "user",
+                        username: matching_user.username
+                    },  
+                    secretKey,
+                    { expiresIn: '12h' }  
+                );
+
+                res.status(200).json({ message:"success",token:token});
+            }else{
+                res.status(500).json({ message:"Incorrect password"});
+            }
         }catch(e){
             res.status(404).json({message:"failed"});
         }
