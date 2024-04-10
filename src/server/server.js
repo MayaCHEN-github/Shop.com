@@ -2,7 +2,6 @@ import {createRequire} from 'module';
 const require = createRequire(import.meta.url);
 require('dotenv').config();
 
-import authenticateToken from '../auth/authenticateToken';
 const express = require('express');
 const app = express();
 const cors = require('cors');
@@ -15,6 +14,32 @@ app.use(express.json());
 const PORT = 3001 ; 
 const secretKey = 'shopdotcom';
 //3001
+ 
+const authenticateToken = (req, res, next) => {
+    const token = req.headers['x-access-token']?.split(' ')[1];
+    if (token) {
+        jwt.verify(token, secretKey, (err, decoded) => {
+            if (err) {
+
+                console.log(JSON.stringify(err));
+                return res.status(500).json({
+                    isLoggedIn: false,
+                    message: "Failed authentication."
+                });
+            }
+            req.user = {
+                user_id: decoded.user_id,
+                username: decoded.username
+            };
+
+            console.log(JSON.stringify(req.user));
+            next();
+        });
+    } else {
+        return res.status(401).json({ error: 'Authentication failed, token not provided.' });
+    }
+};
+
 
 const mongoose = require('mongoose');
 const uri = 'mongodb+srv://Shop_com:iD5HFvC4Ly9YKb2j@shop-comdb.rn4suxq.mongodb.net/Shop_com';
@@ -23,6 +48,7 @@ const uri = 'mongodb+srv://Shop_com:iD5HFvC4Ly9YKb2j@shop-comdb.rn4suxq.mongodb.
 mongoose.connect(uri).then(() => {
     console.log('MongoDB Connected…')
 }).catch(err => console.log(err));
+
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Connection error:'));
@@ -155,7 +181,10 @@ db.once('open', () => {
         const {username, password, email} = req.body;
         const new_password = await bcrypt.hash(password,10);
         try{
-            const new_user = new User({username: username, password: new_password, email:email});
+            const maxUser  = await User.findOne().sort({ user_id: -1 }).exec();
+        const user_id = maxUser ? Number(maxUser.user_id) + 1 : 1;
+
+            const new_user = new User({user_id:user_id,username: username, password: new_password, email:email});
             new_user.save().then(() => {
                 res.status(200).json({message:"success"});
             }).catch(err => {
@@ -204,7 +233,7 @@ db.once('open', () => {
                 }            
             }
 
-            const compare_password = bcrypt.compare(hashed_password,matching_user.password);
+            const compare_password = await bcrypt.compare(hashed_password,matching_user.password);
 
             if(compare_password){
                 const token = jwt.sign(
@@ -235,7 +264,7 @@ db.once('open', () => {
         }
     });
 
-    app.post('/all-cart-items', authenticateToken, async (req, res) => {
+    app.post('/all-cart-items', async (req, res) => {
         const {user_id} = req.body;
         try{
             const user = await User.findOne({"user_id" : user_id}).populate('shopping_cart.item');
