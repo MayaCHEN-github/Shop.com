@@ -78,6 +78,7 @@ const styles = {
     left: 0,
     right: 0,
     width: '100%',
+    zIndex: 99,
   },
   headbarSection1: {
     display: 'flex',
