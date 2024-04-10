@@ -5,7 +5,7 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const cors = require('cors');
-
+const bcrypt = require('bcrypt');
 
 app.use(cors());
 app.use(express.json());
@@ -148,6 +148,24 @@ db.once('open', () => {
     const Admin = mongoose.model("Admin", AdminSchema);
     
     // =================================================================
+    app.post('/signup', async (req, res) => {
+        const {username, password, email} = req.body;
+        const new_password = await bcrypt.hash(password,10);
+        try{
+            const maxUser  = await User.findOne().sort({ user_id: -1 }).exec();
+            const user_id = maxUser ? Number(maxUser.user_id) + 1 : 1;
+
+            const new_user = new User({user_id:user_id,username: username, password: new_password, email:email});
+            new_user.save().then(() => {
+                res.status(200).json({message:"success"});
+            }).catch(err => {
+                res.status(404).json({message:err});
+            });      
+        }catch(e){
+            res.status(404).json({message:"failed"});
+        }
+    })
+
     app.get('/all-items',async (req, res)=>{
         try{
             const items = await Item.find({});

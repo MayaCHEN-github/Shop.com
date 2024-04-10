@@ -4,6 +4,7 @@ import Title from "../../assets/Title";
 import CustomButton from "../../assets/CustomButton";
 import Headbar from './HeadBarUser';
 import Inputbox from '../../assets/Inputbox';
+import {useNavigate} from 'react-router-dom';
 
 export const SignUpPage = () => {
 
@@ -19,12 +20,7 @@ export const SignUpPage = () => {
 
     const [searchTerm, setSearchTerm] = useState('');
 
-    useEffect(() => {
-        fetch('http://localhost:3001/all-users')
-            .then(response => response.json())
-            .then(data => setData(data));
-    }, []);
-    
+    const navigate = useNavigate();
 
 
     const checkEmptyInput = (input, setInputError) => {
@@ -37,7 +33,8 @@ export const SignUpPage = () => {
         }
     };
 
-    const handleOkClick = () => {
+    const handleOkClick = (e) => {
+        e.preventDefault();
 
         const isusernameEmpty = checkEmptyInput(username, setUsernameError);
         const ispasswordEmpty = checkEmptyInput(password, setPasswordError);
@@ -62,17 +59,25 @@ export const SignUpPage = () => {
         } else {
             setConfirmPasswordError(false);
         }
-    
-        let user;
-        let newUserId;
-        if (data.length === 0) {
-            newUserId = '001';
-        } else {
-            const maxUserId = Math.max(...data.map(item => Number(item.user_id)));
-            newUserId = String(maxUserId + 1).padStart(3, '0');
-        }
-        user = { user_id: newUserId, username: username, password: password, email: email};
-    }
+        
+      const data = {
+          "username":username,
+          "password":password,
+          "email":email
+      }
+
+      fetch("http://localhost:3001/signup",{
+          method: 'POST',
+          headers:{
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+      }).then(result => {console.log(result)
+      navigate("/login")
+      })
+      .catch(err => console.log(err))
+  };
+
     
     
 
