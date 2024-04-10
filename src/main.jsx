@@ -20,8 +20,13 @@ import SearchResultsPage from './components/ProductPages/SearchResultsPage.jsx';
 
 import ShoppingCartPage from './components/ShoppingCartPage/ShoppingCartPage.jsx';
 
+import {PaymentPage} from './components/Payment/PaymentPage.jsx';
+import {OrderTrackArrive} from './components/Payment/OrderTrackArrive.jsx';
+import {OrderTrackShip} from './components/Payment/OrderTrackShip.jsx';
+import {OrderTrackProcess} from './components/Payment/OrderTrackProcess.jsx';
 import { SignUpPage } from './components/UserPages/SignUpPage.jsx';
 import { LoginPage } from './components/UserPages/LoginPage.jsx';
+
 
 const router = createBrowserRouter([
   {
@@ -49,6 +54,23 @@ const router = createBrowserRouter([
     element: <CategoryPage />
   },
   {
+
+    path: "/payment",
+    element: <PaymentPage />
+  },
+  {
+    path: "/ordertrack-process",
+    element: <OrderTrackProcess />
+  },
+  {
+    path: "/ordertrack-ship",
+    element: <OrderTrackShip />
+  },
+  {
+    path: "/ordertrack-arrive",
+    element: <OrderTrackArrive />
+  },
+
     path: "/search",
     element: <SearchResultsPage />,
   },
@@ -60,6 +82,7 @@ const router = createBrowserRouter([
     path: "/login",
     element: <LoginPage />,
   }
+
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
