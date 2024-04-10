@@ -351,7 +351,10 @@ export const AdminProductPage = () => {
 
                     <div style={{ width: '65%' }}>
                         <Title value='Category*' fontSize='20px'></Title>
-                        <Selectbox onChange={e => setCategory(e.target.value)} options={categories} />
+                        {/* Currently categories is not multi select. 
+                          But the DB is using arrays to store categories for potential future multi-cat items. 
+                          So we need to access the category with 0 index. */}
+                        <Selectbox selected={category[0]} onChange={e => setCategory(e.target.value)} options={categories} />
                         {categoryError && <Title value='Category cannot be empty.' color='red' fontSize='14px'></Title>}
                     </div>
                 </div>

@@ -77,7 +77,10 @@ export const Selectbox = (props) => {
 
   return (
       <select style={style} onChange={handleChange}>
-          {props?.options.map(option => <option key={option} value={option}>{capitalize(option)}</option>)}
+          {props.options.map(
+            option => props.selected === option 
+              ? <option selected key={option} value={option}>{capitalize(option)}</option>
+              : <option key={option} value={option}>{capitalize(option)}</option>)}
       </select>
   );
 }
