@@ -70,7 +70,7 @@ const router = createBrowserRouter([
     path: "/ordertrack-arrive",
     element: <OrderTrackArrive />
   },
-
+  {
     path: "/search",
     element: <SearchResultsPage />,
   },
