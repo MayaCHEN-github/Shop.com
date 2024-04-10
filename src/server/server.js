@@ -5,7 +5,9 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const cors = require('cors');
-
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+import {jwtDecode} from 'jwt-decode';
 
 app.use(cors());
 app.use(express.json());
@@ -15,7 +17,7 @@ const PORT = 3001 ;
 
 const mongoose = require('mongoose');
 const uri = 'mongodb+srv://Shop_com:iD5HFvC4Ly9YKb2j@shop-comdb.rn4suxq.mongodb.net/Shop_com';
-
+const secretKey = 'shopdotcom'
 //
 mongoose.connect(uri).then(() => {
     console.log('MongoDB Connected…')
@@ -148,6 +150,86 @@ db.once('open', () => {
     const Admin = mongoose.model("Admin", AdminSchema);
     
     // =================================================================
+    app.post('/signup', async (req, res) => {
+        const {username, password, email} = req.body;
+        const new_password = await bcrypt.hash(password,10);
+        try{
+            const maxUser  = await User.findOne().sort({ user_id: -1 }).exec();
+            const user_id = maxUser ? Number(maxUser.user_id) + 1 : 1;
+
+            const new_user = new User({user_id:user_id,username: username, password: new_password, email:email});
+            new_user.save().then(() => {
+                res.status(200).json({message:"success"});
+            }).catch(err => {
+                res.status(404).json({message:err});
+            });      
+        }catch(e){
+            res.status(404).json({message:"failed"});
+        }
+    })
+
+    app.post('/login', async (req, res) => {
+        const {usernameOrEmail, password} = req.body;
+
+      const hashed_password = await bcrypt.hash(password,10);
+
+        try{
+            const matching_user = await User.findOne({ $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }] });
+
+            if(!matching_user){
+                const matching_admin = await Admin.findOne({ $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }] });
+                if(!matching_admin){
+                    res.status(404).json({ message:"user not found"});
+                }
+
+                const compare_password = bcrypt.compare(password,matching_admin.password);
+
+                if(compare_password){
+                    jwt.sign(
+                        { 
+                            id: matching_admin.user_id,
+                            user_type: "admin",
+                            username: matching_admin.username
+                        },  
+                        secretKey,
+                        { expiresIn: '12h' },
+                        (err,token)=>{
+                            if(err){
+                                return res.status(500).json({message: err})
+                            }
+                            return res.status(200).json({message: "success",token:token })
+                        }  
+                    );
+ 
+                }else{
+                    res.status(500).json({ message:"Incorrect admin password"});
+                }            
+            }
+
+            console.log("Input password is" + hashed_password);
+            console.log("DB password is" +matching_user.password);
+            const compare_password = await bcrypt.compare(password,matching_user.password);
+
+            if(compare_password){
+                const token = jwt.sign(
+                    { 
+                        id: matching_user.user_id,
+                        user_type: "user",
+                        username: matching_user.username
+                    },  
+                    secretKey,
+                    { expiresIn: '12h' }  
+                );
+
+                res.status(200).json({ message:"success",token:token});
+            }else{
+                res.status(500).json({ message:"Incorrect user password"});
+            }
+        }catch(e){
+            res.status(404).json({message:"failed"});
+        }
+    })
+
     app.get('/all-items',async (req, res)=>{
         try{
             const items = await Item.find({});
@@ -436,6 +518,15 @@ db.once('open', () => {
       }
     })
 
+    app.get('/search' , async (req, res) => {
+      try {
+        const item = await Item.find({ $text: { $search: req.query.q, $caseSensitive: false } });
+        res.status(200).json(item);
+      } catch (err) {
+        console.error(err);
+        res.status(500).send(`Product Functions: Failed to search products with the specified query ${req.query.q}.`);
+      }
+    })
 });
 
 
