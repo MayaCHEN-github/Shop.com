@@ -4,6 +4,7 @@ import Title from "../../assets/Title";
 import CustomButton from "../../assets/CustomButton";
 import Headbar from './HeadBarUser';
 import Inputbox from '../../assets/Inputbox';
+import {useNavigate} from 'react-router-dom';
 
 export const LoginPage = () => {
 
@@ -14,7 +15,7 @@ export const LoginPage = () => {
     const [data, setData] = useState([]);
 
     const [searchTerm, setSearchTerm] = useState('');
-
+    const navigate  = useNavigate();
     useEffect(() => {
         fetch('http://localhost:3001/all-users')
             .then(response => response.json())
@@ -33,14 +34,37 @@ export const LoginPage = () => {
         }
     };
 
-    const handleOkClick = () => {
-
+    const handleOkClick = (e) => {
+        e.preventDefault();
         const isusernameOrEmailEmpty = checkEmptyInput(usernameOrEmail, setUsernameOrEmailError);
         const ispasswordEmpty = checkEmptyInput(password, setPasswordError);
     
         if (isusernameOrEmailEmpty || ispasswordEmpty) {
             return;
         }
+
+        const data = {
+            "usernameOrEmail":usernameOrEmail,
+            "password":password,
+            
+        }
+  
+        fetch("http://localhost:3001/login",{
+            method: 'POST',
+            headers:{
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }).then(response => response.json())
+        .then(result => {
+           if(result.message === 'success'){
+            localStorage.setItem('token', result.token);
+            navigate('/');
+           } else{
+            alert('Error: ' + result.message);
+           }
+          })
+        .catch(err => console.log(err))
 
     }
     

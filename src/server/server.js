@@ -171,18 +171,18 @@ db.once('open', () => {
     app.post('/login', async (req, res) => {
         const {usernameOrEmail, password} = req.body;
 
-        const hashed_password = await bcrypt.hash(password,10);
+      const hashed_password = await bcrypt.hash(password,10);
 
         try{
-            const matching_user =  User.findOne({ $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }] });
+            const matching_user = await User.findOne({ $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }] });
 
             if(!matching_user){
-                const matching_admin =  Admin.findOne({ $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }] });
+                const matching_admin = await Admin.findOne({ $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }] });
                 if(!matching_admin){
                     res.status(404).json({ message:"user not found"});
                 }
 
-                const compare_password = bcrypt.compare(hashed_password,matching_admin.password);
+                const compare_password = bcrypt.compare(password,matching_admin.password);
 
                 if(compare_password){
                     jwt.sign(
@@ -202,11 +202,13 @@ db.once('open', () => {
                     );
  
                 }else{
-                    res.status(500).json({ message:"Incorrect password"});
+                    res.status(500).json({ message:"Incorrect admin password"});
                 }            
             }
 
-            const compare_password = await bcrypt.compare(hashed_password,matching_user.password);
+            console.log("Input password is" + hashed_password);
+            console.log("DB password is" +matching_user.password);
+            const compare_password = await bcrypt.compare(password,matching_user.password);
 
             if(compare_password){
                 const token = jwt.sign(
@@ -221,7 +223,7 @@ db.once('open', () => {
 
                 res.status(200).json({ message:"success",token:token});
             }else{
-                res.status(500).json({ message:"Incorrect password"});
+                res.status(500).json({ message:"Incorrect user password"});
             }
         }catch(e){
             res.status(404).json({message:"failed"});
