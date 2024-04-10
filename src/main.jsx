@@ -12,8 +12,11 @@ import {
 import { AdminUserPage } from './components/AdminPages/AdminUserPage.jsx';
 import { AdminProductPage } from './components/AdminPages/AdminProductPage.jsx';
 import { TestPage } from './assets/01_TestPage.jsx';
+
 import MainProductPage from './components/ProductPages/MainProductPage.jsx';
 import PerProductPage from './components/ProductPages/PerProductPage.jsx';
+import CategoryPage from './components/ProductPages/CategoryPage.jsx';
+
 import ShoppingCartPage from './components/ShoppingCartPage/ShoppingCartPage.jsx';
 
 const router = createBrowserRouter([
@@ -36,6 +39,10 @@ const router = createBrowserRouter([
   {
     path: "/shopping-cart",
     element: <ShoppingCartPage />
+  },
+  {
+    path: "/category/:category",
+    element: <CategoryPage />
   }
 ]);
 

@@ -1,23 +1,26 @@
 import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom'
 import Headbar from './HeadBarProduct';
 import ProductCard from './ProductCard';
 import Title from '../../assets/Title';
 
-export default function MainProductPage() {
+export default function CategoryPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [data, setData] = useState([])
 
+  const { category } = useParams()
+
   useEffect(() => {
-    fetch('http://localhost:3001/all-products')
+    fetch(`http://localhost:3001/category/${category}`)
         .then(response => response.json())
         .then(data => setData(data))
-  }, []);
+  }, [category]);
 
   return (
     <>
       <Headbar setSearchTerm={setSearchTerm} />
       <div style={{ marginTop: '160px' }}> {/* Margin needed to offset */}
-      <Title value="Browse products" fontWeight={900} />
+      <Title value={`Browse ${category}`} fontWeight={900} />
       <div style={{ 
         display: 'grid',
         alignItems: 'center',
@@ -41,6 +44,7 @@ export default function MainProductPage() {
           })
         }
       </div>
+      {data.length === 0 && <div style={{ marginTop: 100 }}>Sorry, there are no products available for this category.</div>}
       </div>
     </>
   )

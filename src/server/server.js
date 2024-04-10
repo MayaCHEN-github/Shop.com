@@ -426,6 +426,16 @@ db.once('open', () => {
       }
     })
 
+    app.get('/category/:category', async (req, res) => {
+      try {
+        const item = await Item.find({ category: req.params.category });
+        res.status(200).json(item);
+      } catch (err) {
+        console.error(err);
+        res.status(500).send(`Product Functions: Failed to find products with the specified category ${req.params.category}.`);
+      }
+    })
+
 });
 
 
