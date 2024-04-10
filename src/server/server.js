@@ -5,13 +5,41 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const cors = require('cors');
-
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 app.use(cors());
 app.use(express.json());
 
 const PORT = 3001 ; 
+const secretKey = 'shopdotcom';
 //3001
+ 
+const authenticateToken = (req, res, next) => {
+    const token = req.headers['x-access-token']?.split(' ')[1];
+    if (token) {
+        jwt.verify(token, secretKey, (err, decoded) => {
+            if (err) {
+
+                console.log(JSON.stringify(err));
+                return res.status(500).json({
+                    isLoggedIn: false,
+                    message: "Failed authentication."
+                });
+            }
+            req.user = {
+                user_id: decoded.user_id,
+                username: decoded.username
+            };
+
+            console.log(JSON.stringify(req.user));
+            next();
+        });
+    } else {
+        return res.status(401).json({ error: 'Authentication failed, token not provided.' });
+    }
+};
+
 
 const mongoose = require('mongoose');
 const uri = 'mongodb+srv://Shop_com:iD5HFvC4Ly9YKb2j@shop-comdb.rn4suxq.mongodb.net/Shop_com';
@@ -20,6 +48,7 @@ const uri = 'mongodb+srv://Shop_com:iD5HFvC4Ly9YKb2j@shop-comdb.rn4suxq.mongodb.
 mongoose.connect(uri).then(() => {
     console.log('MongoDB Connected…')
 }).catch(err => console.log(err));
+
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Connection error:'));
@@ -148,6 +177,84 @@ db.once('open', () => {
     const Admin = mongoose.model("Admin", AdminSchema);
     
     // =================================================================
+    app.post('/signup', async (req, res) => {
+        const {username, password, email} = req.body;
+        const new_password = await bcrypt.hash(password,10);
+        try{
+            const maxUser  = await User.findOne().sort({ user_id: -1 }).exec();
+        const user_id = maxUser ? Number(maxUser.user_id) + 1 : 1;
+
+            const new_user = new User({user_id:user_id,username: username, password: new_password, email:email});
+            new_user.save().then(() => {
+                res.status(200).json({message:"success"});
+            }).catch(err => {
+                res.status(404).json({message:err});
+            });      
+        }catch(e){
+            res.status(404).json({message:"failed"});
+        }
+    })
+
+    app.post('/login', async (req, res) => {
+        const {usernameOrEmail, password} = req.body;
+
+        const hashed_password = await bcrypt.hash(password,10);
+
+        try{
+            const matching_user =  User.findOne({ $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }] });
+
+            if(!matching_user){
+                const matching_admin =  Admin.findOne({ $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }] });
+                if(!matching_admin){
+                    res.status(404).json({ message:"user not found"});
+                }
+
+                const compare_password = bcrypt.compare(hashed_password,matching_admin.password);
+
+                if(compare_password){
+                    jwt.sign(
+                        { 
+                            id: matching_admin.user_id,
+                            user_type: "admin",
+                            username: matching_admin.username
+                        },  
+                        secretKey,
+                        { expiresIn: '12h' },
+                        (err,token)=>{
+                            if(err){
+                                return res.status(500).json({message: err})
+                            }
+                            return res.status(200).json({message: "success",token:token })
+                        }  
+                    );
+ 
+                }else{
+                    res.status(500).json({ message:"Incorrect password"});
+                }            
+            }
+
+            const compare_password = await bcrypt.compare(hashed_password,matching_user.password);
+
+            if(compare_password){
+                const token = jwt.sign(
+                    { 
+                        id: matching_user.user_id,
+                        user_type: "admin",
+                        username: matching_user.username
+                    },  
+                    secretKey,
+                    { expiresIn: '12h' }  
+                );
+
+                res.status(200).json({ message:"success",token:token});
+            }else{
+                res.status(500).json({ message:"Incorrect password"});
+            }
+        }catch(e){
+            res.status(404).json({message:"failed"});
+        }
+    })
+
     app.get('/all-items',async (req, res)=>{
         try{
             const items = await Item.find({});

@@ -1,4 +1,5 @@
-import { React, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import {useNavigate} from 'react-router-dom';
 
 import Title from "../../assets/Title";
 import CustomButton from "../../assets/CustomButton";
@@ -9,43 +10,36 @@ export const LoginPage = () => {
 
     const [usernameOrEmail, setUsernameOrEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [usernameOrEmailError, setUsernameOrEmailError] = useState(false);
-    const [passwordError, setPasswordError] = useState(false);
-    const [data, setData] = useState([]);
+    const navigate = useNavigate();
 
-    const [searchTerm, setSearchTerm] = useState('');
-
-    useEffect(() => {
-        fetch('http://localhost:3001/all-users')
-            .then(response => response.json())
-            .then(data => setData(data));
-    }, []);
+    const handleLogin = (event) => {
+      event.preventDefault();
     
-
-
-    const checkEmptyInput = (input, setInputError) => {
-        if (!input.trim()) {
-            setInputError(true);
-            return true;
-        } else {
-            setInputError(false);
-            return false;
-        }
-    };
-
-    const handleOkClick = () => {
-
-        const isusernameOrEmailEmpty = checkEmptyInput(usernameOrEmail, setUsernameOrEmailError);
-        const ispasswordEmpty = checkEmptyInput(password, setPasswordError);
+          const data = {
+              "usernameOrEmail":usernameOrEmail,
+              "password":password,
+              
+          }
     
-        if (isusernameOrEmailEmpty || ispasswordEmpty) {
-            return;
-        }
-
-    }
+          fetch("http://localhost:3001/login",{
+              method: 'POST',
+              headers:{
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(data)
+          }).then(response => response.json())
+          .then(result => {
+             if(result.message === 'success'){
+              localStorage.setItem('token', result.token);
+              navigate('/');
+             } else{
+              alert('Error: ' + result.message);
+             }
+            })
+          .catch(err => console.log(err))
+      };
     
-    
-
+  
     return (
         <div>
             <div>

@@ -1,8 +1,7 @@
 import React from 'react';
 import Searchbox from './SearchboxAdmin';
 import ButtonBar from '../../assets/ButtonBar';
-import { Link } from 'react-router-dom';
-
+import { Link, useNavigate} from 'react-router-dom';
 import ShopComLogo from '../../assets/shop_com.png'
 
 /*  You can use this component like this:
@@ -19,21 +18,26 @@ import ShopComLogo from '../../assets/shop_com.png'
 import {useNavigate} from 'react-router-dom';
 const navigate = require(useNavigate);
 
-const redirectToLogin = ()) =>{
-  const token = localStorage.getItem('token');
-  if(token){
-    navigate('/shoppingcart');
-  }else{
-    navigate('/login');
-  }
 
-}
 
 */
 
 
-const Headbar = (props) => (
+const Headbar = (props) => {
 
+  const navigate = useNavigate();
+
+  const redirectToLogin = () =>{
+    const token = localStorage.getItem('token');
+    if(token){
+      navigate('/shopping-cart');
+    }else{
+      navigate('/login');
+    }
+  
+  }
+
+  return(
   <div style={styles.headbar}>
     <div style={styles.headbarSection1}>
       <img src={ShopComLogo} alt="Shop.com logo" style={styles.logo} />
@@ -55,13 +59,13 @@ const Headbar = (props) => (
         <ButtonBar buttons={[
                 { label: 'logout', onClick: () => console.log('clicked') },
                 { label: 'Welcome, AdminUser', onClick: () => console.log('clicked') /* Username: to be completed */},
-                { label: 'view cart', onClick: () => console.log('clicked view cart')}
+                { label: 'view cart', onClick: () => {redirectToLogin()}}
             ]}
         />
     </div>
   </div>
-  
-);
+  )
+}
 
 const styles = {
   headbar: {
