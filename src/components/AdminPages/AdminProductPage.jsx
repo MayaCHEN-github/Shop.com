@@ -39,8 +39,6 @@ export const AdminProductPage = () => {
     const [vendorError, setVendorError] = useState(false);
     const [categoryError, setCategoryError] = useState(false);
 
-
-
     useEffect(() => {
         fetch('http://localhost:3001/all-products')
             .then(response => response.json())
@@ -55,7 +53,7 @@ export const AdminProductPage = () => {
         setUrl('');
         setDescription('');
         setVendor('');
-        setCategory('');
+        setCategory(categories[0]);
         setImageError(false);
         setProductNameError(false);
         setPriceError(false);
@@ -296,7 +294,7 @@ export const AdminProductPage = () => {
                     </div>
                     <div style={{ width: '65%' }}>
                         <Title value='Category*' fontSize='19px'></Title>
-                        <Selectbox onChange={e => setCategory(e.target.value)} options={categories} />
+                        <Selectbox selected={category[0]} onChange={e => setCategory(e.target.value)} options={categories} />
                             {categoryError && <Title value='Category cannot be empty.' color='red' fontSize='14px'></Title>} 
                     </div>
                 </div>

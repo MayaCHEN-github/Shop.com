@@ -543,6 +543,15 @@ db.once('open', () => {
       }
     })
 
+    app.get('/search' , async (req, res) => {
+      try {
+        const item = await Item.find({ $text: { $search: req.query.q, $caseSensitive: false } });
+        res.status(200).json(item);
+      } catch (err) {
+        console.error(err);
+        res.status(500).send(`Product Functions: Failed to search products with the specified query ${req.query.q}.`);
+      }
+    })
 });
 
 

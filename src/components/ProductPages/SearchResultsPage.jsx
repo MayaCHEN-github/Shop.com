@@ -1,26 +1,33 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
+
+import queryString from 'query-string'
+
 import Headbar from './HeadBarProduct';
 import ProductCard from './ProductCard';
 import Title from '../../assets/Title';
 
-export default function CategoryPage() {
-  const [searchTerm, setSearchTerm] = useState('')
-  const [data, setData] = useState([])
+export default function SearchResultsPage() {
+  const location = useLocation()
+  const { q } = queryString.parse(location.search)
 
-  const { category } = useParams()
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`http://localhost:3001/category/${category}`)
-        .then(response => response.json())
-        .then(data => setData(data))
-  }, [category]);
+    setLoading(true);
 
+    fetch(`http://localhost:3001/search?q=${q}`)
+      .then(response => response.json())
+      .then(data => setData(data))
+      .finally(() => setLoading(false))
+  }, [q])
+  
   return (
     <>
-      <Headbar />
+      <Headbar defaultQuery={q} />
       <div style={{ marginTop: '160px' }}> {/* Margin needed to offset */}
-      <Title value={`Browse ${category}`} fontWeight={900} />
+      <Title value={`Search results for "${q}"`} fontWeight={900} />
       <div style={{ 
         display: 'grid',
         alignItems: 'center',
@@ -44,7 +51,8 @@ export default function CategoryPage() {
           })
         }
       </div>
-      {data.length === 0 && <div style={{ marginTop: 100 }}>Sorry, there are no products available for this category.</div>}
+      {loading && <div style={{ marginTop: 100 }}>Please wait while we search our database...</div>}
+      {!loading && data.length === 0 && <div style={{ marginTop: 100 }}>Sorry, there are no products that match your query.</div>}
       </div>
     </>
   )
