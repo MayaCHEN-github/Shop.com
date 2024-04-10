@@ -1,11 +1,14 @@
 import { React, useState, useEffect } from 'react';
+
 import CustomProductTable from "./CustomProductTable";
 import Title from "../../assets/Title";
 import CustomButton from "../../assets/CustomButton";
 import Headbar from './HeadBarAdmin';
 import Modalbox from '../../assets/Modalbox';
-import Inputbox from '../../assets/Inputbox';
+import Inputbox, { Selectbox, Textareabox } from '../../assets/Inputbox';
 import e from 'cors';
+
+import { categories } from '../../constants/categories';
 
 export const AdminProductPage = () => {
 
@@ -293,7 +296,7 @@ export const AdminProductPage = () => {
                     </div>
                     <div style={{ width: '65%' }}>
                         <Title value='Category*' fontSize='19px'></Title>
-                        <Inputbox onChange={e => setCategory(e.target.value)}/>
+                        <Selectbox onChange={e => setCategory(e.target.value)} options={categories} />
                             {categoryError && <Title value='Category cannot be empty.' color='red' fontSize='14px'></Title>} 
                     </div>
                 </div>
@@ -303,7 +306,7 @@ export const AdminProductPage = () => {
                 </div>
                 <div>
                     <Title value='Description*' fontSize='19px'></Title>
-                    <Inputbox onChange={e => setDescription(e.target.value)}/>
+                    <Textareabox onChange={e => setDescription(e.target.value)}/>
                         {descriptionError && <Title value='Description cannot be empty.' color='red' fontSize='14px'></Title>}
                 </div>
                 <CustomButton buttonText="OK" onClick={handleAddProductOkClick}></CustomButton>
@@ -348,7 +351,7 @@ export const AdminProductPage = () => {
 
                     <div style={{ width: '65%' }}>
                         <Title value='Category*' fontSize='20px'></Title>
-                        <Inputbox value={category} onChange={e => setCategory(e.target.value)}/>
+                        <Selectbox onChange={e => setCategory(e.target.value)} options={categories} />
                         {categoryError && <Title value='Category cannot be empty.' color='red' fontSize='14px'></Title>}
                     </div>
                 </div>
@@ -358,7 +361,7 @@ export const AdminProductPage = () => {
                 </div>
                 <div>
                     <Title value='Description' fontSize='20px'></Title>
-                    <Inputbox value={description} onChange={e => setDescription(e.target.value)}/>
+                    <Textareabox value={description} onChange={e => setDescription(e.target.value)}/>
                 </div>
 
                 <CustomButton buttonText="OK" onClick={handleEditProductOkClick}></CustomButton>

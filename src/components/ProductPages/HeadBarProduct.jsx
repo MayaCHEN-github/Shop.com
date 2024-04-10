@@ -42,12 +42,13 @@ const Headbar = (props) => (
       <Searchbox style={styles.searchbox} onSearch={props.setSearchTerm}/>
       <ButtonBar buttons={[
         { label: 'Home', to: "/" },
-        { label: 'Electronics', to: "/electronics" },
-        { label: 'Cosmetics', to: "/cosmetics" },
-        { label: 'Furniture', to: "/furniture" },
-        { label: 'Books', to: "/books" },
-        { label: 'Toys', to: "/toys" },
-        { label: 'Games', to: "/games" },
+        { label: 'Electronics', to: "/category/electronics" },
+        { label: 'Cosmetics', to: "/category/cosmetics" },
+        { label: 'Furniture', to: "/category/furniture" },
+        { label: 'Books', to: "/category/books" },
+        { label: 'Toys', to: "/category/toys" },
+        { label: 'Games', to: "/category/games" },
+        { label: 'Others', to: "/category/others" },
       ]} />
     </div>
     <div style={styles.headbarSection3}>
