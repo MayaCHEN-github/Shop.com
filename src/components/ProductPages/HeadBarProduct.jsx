@@ -3,7 +3,7 @@ import Searchbox from './SearchboxAdmin';
 import ButtonBar from '../../assets/ButtonBar';
 import { Link } from 'react-router-dom';
 
-
+import ShopComLogo from '../../assets/shop_com.png'
 
 /*  You can use this component like this:
 
@@ -36,7 +36,7 @@ const Headbar = (props) => (
 
   <div style={styles.headbar}>
     <div style={styles.headbarSection1}>
-      <img src="src\assets\shop_com.png" alt="Shop.com logo" style={styles.logo} />
+      <img src={ShopComLogo} alt="Shop.com logo" style={styles.logo} />
     </div>
     <div style={styles.headbarSection2}>
       <Searchbox style={styles.searchbox} onSearch={props.setSearchTerm}/>
