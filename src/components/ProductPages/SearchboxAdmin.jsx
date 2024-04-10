@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Title from '../../assets/Title';
 
+import SearchLogo from '../../assets/Search.svg';
+
 const SearchBox = (props) => {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -10,7 +12,7 @@ const SearchBox = (props) => {
             <style>@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap')</style>
             <div style={styles.dropdownContainer}>
                 <button onClick={() => setIsOpen(!isOpen)} style={styles.filterButton}>
-                        <img src="src/assets/Search.svg" alt="Search" style={styles.icon}/> 
+                        <img src={SearchLogo} alt="Search" style={styles.icon}/> 
                 </button>
             </div>
             <input type="text" style={styles.input} onChange={e => props.onSearch(e.target.value)} />
