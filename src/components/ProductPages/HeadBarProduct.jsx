@@ -1,5 +1,5 @@
 import React from 'react';
-import Searchbox from './SearchboxAdmin';
+import Searchbox from './SearchboxProduct';
 import ButtonBar from '../../assets/ButtonBar';
 import { Link } from 'react-router-dom';
 
@@ -39,7 +39,7 @@ const Headbar = (props) => (
       <img src={ShopComLogo} alt="Shop.com logo" style={styles.logo} />
     </div>
     <div style={styles.headbarSection2}>
-      <Searchbox style={styles.searchbox} onSearch={props.setSearchTerm}/>
+      <Searchbox style={styles.searchbox} defaultQuery={props.defaultQuery} />
       <ButtonBar buttons={[
         { label: 'Home', to: "/" },
         { label: 'Electronics', to: "/category/electronics" },

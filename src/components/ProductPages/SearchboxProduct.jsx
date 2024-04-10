@@ -1,21 +1,38 @@
 import React, { useState } from 'react';
-import Title from '../../assets/Title';
+import { useNavigate } from 'react-router-dom';
 
+import Title from '../../assets/Title';
 import SearchLogo from '../../assets/Search.svg';
 
 const SearchBox = (props) => {
+    const navigate = useNavigate();
+
     const [isOpen, setIsOpen] = useState(false);
+
+    const defaultQuery = props?.defaultQuery || "";
+
+    const [query, setQuery] = useState(defaultQuery);
+
+    const handleQueryChange = e => {
+      setQuery(e.target.value)
+    }
+
+    const handleSearch = () => {
+      navigate(`/search?q=${query}`);
+    }
 
     return (
         <div style={styles.container}>
             <style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap')</style>
             <style>@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap')</style>
+
+            <input type="text" style={styles.input} onChange={handleQueryChange} value={query} />
+
             <div style={styles.dropdownContainer}>
-                <button onClick={() => setIsOpen(!isOpen)} style={styles.filterButton}>
-                        <img src={SearchLogo} alt="Search" style={styles.icon}/> 
+                <button onClick={handleSearch} style={styles.filterButton}>
+                    <img src={SearchLogo} alt="Search" style={styles.icon}/> 
                 </button>
             </div>
-            <input type="text" style={styles.input} onChange={e => props.onSearch(e.target.value)} />
         </div>
     );
 };
