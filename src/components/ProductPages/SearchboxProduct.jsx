@@ -21,12 +21,18 @@ const SearchBox = (props) => {
       navigate(`/search?q=${query}`);
     }
 
+    const handleKeyDown = (event) => {
+      if (event.key === 'Enter') {
+        navigate(`/search?q=${query}`);
+      }
+    }
+
     return (
         <div style={styles.container}>
             <style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap')</style>
             <style>@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap')</style>
 
-            <input type="text" style={styles.input} onChange={handleQueryChange} value={query} />
+            <input type="text" style={styles.input} onChange={handleQueryChange} onKeyDown={handleKeyDown} value={query} />
 
             <div style={styles.dropdownContainer}>
                 <button onClick={handleSearch} style={styles.filterButton}>
