@@ -59,7 +59,7 @@ export const SignUpPage = () => {
         } else {
             setConfirmPasswordError(false);
         }
-        
+
       const data = {
           "username":username,
           "password":password,
@@ -107,6 +107,7 @@ export const SignUpPage = () => {
                 <Inputbox onChange={e => setConfirmPassword(e.target.value)}/>
                     {confirmpasswordError && <Title value='Confirm password cannot be empty and must be the same as password.' color='red' fontSize='14px'></Title>} 
                 <CustomButton buttonText="Create Account" onClick={handleOkClick}></CustomButton>
+                <CustomButton buttonText="Log into existing account " onClick={()=>navigate('/login')}></CustomButton>
         </div>
     );
 }

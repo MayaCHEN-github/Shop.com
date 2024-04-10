@@ -90,6 +90,7 @@ export const LoginPage = () => {
                 <Inputbox onChange={e => setPassword(e.target.value)}/>
                     {passwordError && <Title value='Password cannot be empty.' color='red' fontSize='14px'></Title>} 
                 <CustomButton buttonText="Login" onClick={handleOkClick}></CustomButton>
+                <CustomButton buttonText="Sign up instead" onClick={()=>navigate('/sign-up')}></CustomButton>
         </div>
     );
 }

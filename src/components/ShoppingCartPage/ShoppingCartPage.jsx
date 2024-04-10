@@ -1,35 +1,39 @@
 import react, {useState, useEffect} from 'react';
 import {CartItemCard} from './CartItemCard';
+import {jwtDecode} from 'jwt-decode'
+import {useNavigate} from 'react-router-dom';
 
 export default function ShoppingCartPage  () {
     const [total, setTotal] = useState(0);
     const [fetched, setFetched] = useState([]);
 
-    const user_id = "001"; // delete this line after setting up account management
+    const navigate = useNavigate();
+  //    const user_id = "001"; // delete this line after setting up account management
 
     const updateTotal = (newTotal) => {
       setTotal(newTotal);
     };
 
-    /**
-    import jwt_decode from 'jwt_decode'
+    
 
     const fetchUserId = ()=>{
       const token = localStorage.getItem('token');
       if(token){
-          decoded_token = jwt_decode(token);
-          user_id = decoded_token.user_id;
+          const decoded_token = jwtDecode(token);
+          const user_id = decoded_token.id;
 
           return user_id;  
         }else{
           return null;
         }
-    }
-     
-     const checkLoggedIn = () =>{
+    } 
+    
+    const checkLoggedIn = () =>{
         const token = localStorage.getItem('token');
         return token !== null
      }
+     /**
+    
 
      
          useEffect(() => {
@@ -74,7 +78,7 @@ export default function ShoppingCartPage  () {
         async function fetchData() {
           try {
             const data = {
-              "user_id" : user_id
+              "user_id" : fetchUserId(),
             };
 
             const response = await fetch('http://localhost:3001/all-cart-items',{
@@ -103,8 +107,11 @@ export default function ShoppingCartPage  () {
             console.error(err);
           }
         }
-
-        fetchData();    
+        if(checkLoggedIn()){
+          fetchData();    
+        }else{
+          navigate('/login');
+        }
     },[]);
 
     return (

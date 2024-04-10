@@ -1,7 +1,7 @@
 import React from 'react';
 import Searchbox from './SearchboxUser';
 import ButtonBar from '../../assets/ButtonBar';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 /*  You can use this component like this:
 
