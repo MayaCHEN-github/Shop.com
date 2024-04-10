@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Title from "../../assets/Title";
+import {OrderCard} from './OrderCard';
 // import CustomButton from "../../assets/CustomButton.jsx";
 // import CustomProductTable from "../AdminPages/CustomProductTable";
 import Headbar from "../ProductPages/HeadBarProduct.jsx";
@@ -13,12 +14,43 @@ export const OrderTrackArrive = () => {
     const [showDropdown, setShowDropdown] = useState(false);
     const [isPayOpen, setIsPayOpen] = useState(false);
     const [data, setData] = useState([]);
+    const [fetched, setFetched] = useState([]);
+    const [total, setTotal] = useState(0);
+
+    const userId = "001";
 
     useEffect(() => {
-        fetch('http://localhost:3001/all-products')
-            .then(response => response.json())
-            .then(data => setData(data));
-    }, []);
+        async function fetchData() {
+          try {
+            const data = {
+              "user_id" : userId
+            };
+
+            const response = await fetch('http://localhost:3001/all-cart-items',{
+              method : 'POST',
+              headers:{
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+              throw new Error(`Error: ${response.status} ${response.statusText}`);
+            }
+
+            const items = await response.json();
+            setFetched(items.items);
+          } catch (err) {
+            console.error(err);
+          }
+        }
+
+        fetchData();    
+    },[]);
+
+    const updateTotal = (newTotal) => {
+        setTotal(newTotal);
+    };
 
     return (
         <div style={{width:'100%'}}>
@@ -65,28 +97,9 @@ export const OrderTrackArrive = () => {
             </div>
             <div style={styles.padding3}/>
             <div style={{marginLeft:'10%'}}>
-                {data.map((item, index) => (
-                    <div key={index} style={styles.tr(index)}>
-                        {/* <td style={styles.td1}>{item.item_id}</td>
-                        <td style={styles.td2}><img src={item.url} 
-                                                    alt={item.name} 
-                                                    style={styles.image} 
-                                                    onError={(e) => {e.target.onerror = null; 
-                                                                    e.target.src="src/assets/Product_default_image.svg"
-                                                                    }}/></td>
-                        <td style={styles.td3}>{item.name}</td>
-                        <td style={item.price === 0 ? styles.td4ZeroPrice : styles.td4}>{item.price}</td>
-                        <td style={item.stock_quantity === 0 ? styles.td5ZeroStock : styles.td5}>{item.stock_quantity}</td>
-                        <td style={styles.td6}>
-                            <button style={styles.Button}>
-                            <img src="src/assets/Delete.svg" alt="Delete" style={styles.icon} onClick={() => onDelete(index)}/>
-                            </button>
-                        </td>
-                        <td style={styles.td7}>
-                            <button style={styles.Button}>
-                            <img src="src/assets/Edit.svg" alt="Edit" style={styles.icon} onClick={() => onEdit(index)}/>
-                            </button>
-                        </td> */}
+                {fetched.map((item,index) => (
+                    <div key={item.item.item_id} style={styles.tr(index)}>
+                        <OrderCard key={item.item.item_id} product={item} onUpdateTotal={updateTotal} stage={"Arrived on 29-03-2023"}/>
                     </div>
                 ))}
             </div>

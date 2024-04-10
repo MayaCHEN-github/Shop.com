@@ -200,7 +200,7 @@ const styles = {
         textAlign: 'left',
     },
     padding2: {
-        paddingLeft: '10px',
+        paddingLeft: '10%',
         textAlign: 'center',
     },
     padding3: {
@@ -275,7 +275,7 @@ const styles = {
         height: '172px',
         width: '50%',
         padding:'10px',
-        marginTop: '10px'
+        marginTop: '1.7%'
     },
     line: {
         backgroundColor: 'rgba(52, 52, 52, 0.8)',
@@ -283,7 +283,7 @@ const styles = {
         width: '400px',
     },
     editB: {
-        marginLeft:'60%',
+        marginLeft:'70%',
         backgroundColor:'rgba(52, 52, 52, 0.0)'
     },
     crossB:{
