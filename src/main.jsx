@@ -16,6 +16,7 @@ import { TestPage } from './assets/01_TestPage.jsx';
 import MainProductPage from './components/ProductPages/MainProductPage.jsx';
 import PerProductPage from './components/ProductPages/PerProductPage.jsx';
 import CategoryPage from './components/ProductPages/CategoryPage.jsx';
+import SearchResultsPage from './components/ProductPages/SearchResultsPage.jsx';
 
 import ShoppingCartPage from './components/ShoppingCartPage/ShoppingCartPage.jsx';
 
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
   {
     path: "/category/:category",
     element: <CategoryPage />
+  },
+  {
+    path: "/search",
+    element: <SearchResultsPage />,
   },
   {
     path: "/sign-up",
