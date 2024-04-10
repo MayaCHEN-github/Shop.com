@@ -6,6 +6,8 @@ import CustomProductTable from "../AdminPages/CustomProductTable";
 import Headbar from "../../assets/HeadBar.jsx";
 import Modalbox from '../../assets/Modalbox';
 import Inputbox from '../../assets/Inputbox';
+import {CartPayCard} from './CartPayCard';
+
 
 export const PaymentPage = () => {
 
@@ -20,12 +22,51 @@ export const PaymentPage = () => {
     const [phone, setPhone] = useState();
     const [region, setRegion] = useState();
     const [address, setAddress] = useState();
+    const [total, setTotal] = useState(0);
+    const [fetched, setFetched] = useState([]);
+
+    const user_id = "001";
 
     useEffect(() => {
-        fetch('http://localhost:3001/all-products')
-            .then(response => response.json())
-            .then(data => setData(data));
-    }, []);
+        async function fetchData() {
+          try {
+            const data = {
+              "user_id" : user_id
+            };
+
+            const response = await fetch('http://localhost:3001/all-cart-items',{
+              method : 'POST',
+              headers:{
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+              throw new Error(`Error: ${response.status} ${response.statusText}`);
+            }
+
+            const items = await response.json();
+            /*
+            items=
+              {         
+                    items: user_cart,
+                    total: total,
+              }
+            */
+            setFetched(items.items);
+            setTotal(items.total); 
+          } catch (err) {
+            console.error(err);
+          }
+        }
+
+        fetchData();    
+    },[]);
+
+    const updateTotal = (newTotal) => {
+        setTotal(newTotal);
+      };
 
     const handleClosePay = () => {
         setIsPayOpen(false);
@@ -92,30 +133,11 @@ export const PaymentPage = () => {
             </div>
             <div style={{display: 'flex'}}>
                 <div style={styles.scroll}>
-                    {data.map((item, index) => (
-                        <div key={index} style={styles.tr(index)}>
-                            {/* <td style={styles.td1}>{item.item_id}</td>
-                            <td style={styles.td2}><img src={item.url} 
-                                                        alt={item.name} 
-                                                        style={styles.image} 
-                                                        onError={(e) => {e.target.onerror = null; 
-                                                                        e.target.src="src/assets/Product_default_image.svg"
-                                                                        }}/></td>
-                            <td style={styles.td3}>{item.name}</td>
-                            <td style={item.price === 0 ? styles.td4ZeroPrice : styles.td4}>{item.price}</td>
-                            <td style={item.stock_quantity === 0 ? styles.td5ZeroStock : styles.td5}>{item.stock_quantity}</td>
-                            <td style={styles.td6}>
-                                <button style={styles.Button}>
-                                <img src="src/assets/Delete.svg" alt="Delete" style={styles.icon} onClick={() => onDelete(index)}/>
-                                </button>
-                            </td>
-                            <td style={styles.td7}>
-                                <button style={styles.Button}>
-                                <img src="src/assets/Edit.svg" alt="Edit" style={styles.icon} onClick={() => onEdit(index)}/>
-                                </button>
-                            </td> */}
-                        </div>
-                    ))}
+                {fetched.map((item,index) => (
+                    <div key={item.item.item_id} style={styles.tr(index)}>
+                        <CartPayCard key={item.item.item_id} product={item} onUpdateTotal={updateTotal} />
+                    </div>
+                ))}   
                 </div>
                 <div style={styles.padding2}/>
                 <div style={styles.totalB}>
@@ -123,14 +145,14 @@ export const PaymentPage = () => {
                         Payment details
                     </h4>
                     <div style={styles.line}/>
-                    <h6 style={styles.padding3}>Items total-$10590.00</h6>
+                    <h6 style={styles.padding3}>Items total: {total}</h6>
                     <div style={{display:'flex'}}>
-                        <h6>Discount</h6>
-                        <h6 style={{color:'red'}}>-$500.00</h6>
+                        <h6>Discount: </h6>
+                        <h6 style={{color:'red'}}>0</h6>
                     </div>
-                    <h6>Total shipping fee-$100</h6>
+                    <h6>Total shipping fee: $100</h6>
                     <h6>Total checkout</h6>
-                    <h5 style={{color:'green'}}>$10190.00</h5>
+                    <h5 style={{color:'green'}}>${total - 0 + 100}</h5>
                 </div>
             </div>
             <div style={{display: 'flex'}}>
@@ -246,7 +268,8 @@ const styles = {
         fontSize: '20px',
         textAlign: 'center',
         height: '70px',
-        width: '600px'
+        width: '600px',
+        border: '1px solid #000000',
     }),
     icon1: {
         width: '30px', 
