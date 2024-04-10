@@ -32,7 +32,7 @@ const SearchBox = (props) => {
             <style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap')</style>
             <style>@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap')</style>
 
-            <input type="text" style={styles.input} onChange={handleQueryChange} onKeyDown={handleKeyDown} value={query} />
+            <input type="text" style={styles.input} onChange={handleQueryChange} onKeyDown={handleKeyDown} value={query} placeholder="Search with keywords..."/>
 
             <div style={styles.dropdownContainer}>
                 <button onClick={handleSearch} style={styles.filterButton}>
