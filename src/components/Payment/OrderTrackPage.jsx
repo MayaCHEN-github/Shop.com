@@ -8,8 +8,16 @@ import Headbar from "../../assets/HeadBar.jsx";
 // import Inputbox from '../../assets/Inputbox';
 
 export const OrderTrackPage = () => {
+
     const [showDropdown, setShowDropdown] = useState(false);
     const [isPayOpen, setIsPayOpen] = useState(false);
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        fetch('http://localhost:3001/all-products')
+            .then(response => response.json())
+            .then(data => setData(data));
+    }, []);
 
     return (
         <div style={{width:'100%'}}>
@@ -18,26 +26,58 @@ export const OrderTrackPage = () => {
             <div style={styles.padding}>
                 <Title value='Follow Your Purchase' fontWeight='Bold'></Title>
             </div>
-            <div style={{display:'flex',alignItems:'center',paddingLeft:'25%'}}>
-                <button style={{borderRadius:50,width:50,height:50,marginRight:10,marginLeft:10}} onClick={() => setIsPayOpen(!isPayOpen)}>
-                    Pay
-                </button>
-                <div style={{width:'50px',height:'5px',backgroundColor:'black'}}/>
-                <button style={{borderRadius:50,width:50,height:50,marginRight:10,marginLeft:10}} onClick={() => setIsPayOpen(!isPayOpen)}>
-                    Pay
-                </button>
-                <div style={{width:'50px',height:'5px',backgroundColor:'black'}}/>
-                <button style={{borderRadius:50,width:50,height:50,marginRight:10,marginLeft:10}} onClick={() => setIsPayOpen(!isPayOpen)}>
-                    Pay
-                </button>
-                <div style={{width:'50px',height:'5px',backgroundColor:'black'}}/>
-                <button style={{borderRadius:50,width:50,height:50,marginRight:10,marginLeft:10}} onClick={() => setIsPayOpen(!isPayOpen)}>
-                    Pay
-                </button>
-                <div style={{width:'50px',height:'5px',backgroundColor:'black'}}/>
-                <button style={{borderRadius:50,width:50,height:50,marginRight:10,marginLeft:10}} onClick={() => setIsPayOpen(!isPayOpen)}>
-                    Pay
-                </button>
+            <div style={{display:'flex',alignItems:'center',paddingLeft:'20%'}}>
+                <div>
+                    <button style={{borderRadius:50,width:50,height:50}} onClick={() => setIsPayOpen(!isPayOpen)}></button>
+                    <Title value='Select' fontWeight='Bold'></Title>
+                </div>
+                <div style={{width:'100px',height:'5px',backgroundColor:'black',marginBottom:30}}/>
+                <div>
+                    <button style={{borderRadius:50,width:50,height:50}} onClick={() => setIsPayOpen(!isPayOpen)}></button>
+                    <Title value='Payment' fontWeight='Bold'></Title>
+                </div>
+                <div style={{width:'100px',height:'5px',backgroundColor:'black',marginBottom:30}}/>
+                <div>
+                    <button style={{borderRadius:50,width:50,height:50}} onClick={() => setIsPayOpen(!isPayOpen)}></button>
+                    <Title value='Processing' fontWeight='Bold'></Title>
+                </div>
+                <div style={{width:'100px',height:'5px',backgroundColor:'black',marginBottom:30}}/>
+                <div>
+                    <button style={{borderRadius:50,width:50,height:50}} onClick={() => setIsPayOpen(!isPayOpen)}></button>
+                    <Title value='Shipped' fontWeight='Bold'></Title>
+                </div>
+                <div style={{width:'100px',height:'5px',backgroundColor:'black',marginBottom:30}}/>
+                <div>
+                    <button style={{borderRadius:50,width:50,height:50}} onClick={() => setIsPayOpen(!isPayOpen)}></button>
+                    <Title value='Arrived' fontWeight='Bold'></Title>
+                </div>
+            </div>
+            <div style={styles.padding3}/>
+            <div style={{marginLeft:'20%'}}>
+                {data.map((item, index) => (
+                    <div key={index} style={styles.tr(index)}>
+                        {/* <td style={styles.td1}>{item.item_id}</td>
+                        <td style={styles.td2}><img src={item.url} 
+                                                    alt={item.name} 
+                                                    style={styles.image} 
+                                                    onError={(e) => {e.target.onerror = null; 
+                                                                    e.target.src="src/assets/Product_default_image.svg"
+                                                                    }}/></td>
+                        <td style={styles.td3}>{item.name}</td>
+                        <td style={item.price === 0 ? styles.td4ZeroPrice : styles.td4}>{item.price}</td>
+                        <td style={item.stock_quantity === 0 ? styles.td5ZeroStock : styles.td5}>{item.stock_quantity}</td>
+                        <td style={styles.td6}>
+                            <button style={styles.Button}>
+                            <img src="src/assets/Delete.svg" alt="Delete" style={styles.icon} onClick={() => onDelete(index)}/>
+                            </button>
+                        </td>
+                        <td style={styles.td7}>
+                            <button style={styles.Button}>
+                            <img src="src/assets/Edit.svg" alt="Edit" style={styles.icon} onClick={() => onEdit(index)}/>
+                            </button>
+                        </td> */}
+                    </div>
+                ))}
             </div>
         </div>
         
@@ -57,18 +97,16 @@ const styles = {
     padding3: {
         paddingTop:'15px'
     },
-    scroll: {
-        overflowY: 'scroll',
-        height: '210px',
-        width: '600px',
-    },
     tr: (index) => ({
         backgroundColor: index % 2 === 0 ? '#FFEDED' : '#FFDBDB',
         fontFamily: 'comfortaa',
         fontSize: '20px',
         textAlign: 'center',
-        height: '70px',
-        width: '600px'
+        height: '100px',
+        width: '920px',
+        marginBottom:15,
+        border: '2px solid #000000',
+
     }),
     icon1: {
         width: '30px', 
