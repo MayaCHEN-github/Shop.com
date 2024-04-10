@@ -3,7 +3,7 @@ import React from 'react';
 import Title from "../../assets/Title";
 import CustomButton from "../../assets/CustomButton.jsx";
 import CustomProductTable from "../AdminPages/CustomProductTable";
-import Headbar from "../../assets/HeadBar.jsx";
+import Headbar from "../ProductPages/HeadBarProduct.jsx";
 import Modalbox from '../../assets/Modalbox';
 import Inputbox from '../../assets/Inputbox';
 import {CartPayCard} from './CartPayCard';
@@ -11,7 +11,7 @@ import {CartPayCard} from './CartPayCard';
 
 export const PaymentPage = () => {
 
-    const [data, setData] = useState([]);
+    const [data1, setData1] = useState([]);
     const [isPayOpen, setIsPayOpen] = useState(false);
     const [isEditOpen, setIsEditOpen] = useState(false);
     const [cardNumber, setCardNumber] = useState();
@@ -25,13 +25,13 @@ export const PaymentPage = () => {
     const [total, setTotal] = useState(0);
     const [fetched, setFetched] = useState([]);
 
-    const user_id = "001";
+    const userId = "001";
 
     useEffect(() => {
         async function fetchData() {
           try {
             const data = {
-              "user_id" : user_id
+              "user_id" : userId
             };
 
             const response = await fetch('http://localhost:3001/all-cart-items',{
@@ -47,13 +47,6 @@ export const PaymentPage = () => {
             }
 
             const items = await response.json();
-            /*
-            items=
-              {         
-                    items: user_cart,
-                    total: total,
-              }
-            */
             setFetched(items.items);
             setTotal(items.total); 
           } catch (err) {
@@ -76,50 +69,7 @@ export const PaymentPage = () => {
         setIsEditOpen(false);
     };
 
-    const handleAddProductOkClick = () => {
-        // const isProductNameEmpty = checkEmptyInput(productName, setProductNameError);
-        // const isPriceEmpty = checkEmptyInput(price, setPriceError);
-        // const isStockEmpty = checkEmptyInput(stock, setStockError);
-        // const isCategoryEmpty = checkEmptyInput(category, setCategoryError);
-        // const isPriceNotNumber = checkNumberInput(price, setPriceError);
-        // const isStockNotInteger = checkIntegerInput(stock, setStockError);
-        // const isDescriptionEmpty = checkEmptyInput(description, setDescriptionError); 
-        // const isVendorEmpty = checkEmptyInput(vendor, setVendorError); 
-    
-        // if (isProductNameEmpty || isPriceEmpty || isStockEmpty || isCategoryEmpty || isPriceNotNumber || isStockNotInteger || isDescriptionEmpty || isVendorEmpty) {
-        //     return;
-        // }
-    
-        // let newItemId;
-        // if (data.length === 0) {
-        //     newItemId = '00001';
-        // } else {
-        //     const maxItemId = Math.max(...data.map(item => Number(item.item_id)));
-        //     newItemId = String(maxItemId + 1).padStart(5, '0');
-        // }
-    
-        // fetch('http://localhost:3001/add-product', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({
-        //         item_id: newItemId, 
-        //         name: productName,
-        //         price: price,
-        //         stock_quantity: stock,
-        //         url:  url ? url.toString() : '',
-        //         description: description || '', 
-        //         vendor: vendor || '', 
-        //         category: category.toString(), 
-        //     }),
-        // })
-        // .then(response => response.json())
-        // .then(newProduct => {
-        //     setData(prevData => [...prevData, newProduct]);
-        //     setIsAddProductOpen(false);
-        // })
-        // .catch(err => console.error(err));
+    const handleAddAddressOkClick = () => {
     };
 
     return (
@@ -163,9 +113,9 @@ export const PaymentPage = () => {
                             <img src="src/assets/pen_note.png" style={styles.icon1}/>
                         </button>
                     </div>
-                    <h6>Chris</h6>
-                    <h6>+852 111</h6>
-                    <h6>HK,HK,HK</h6>
+                    <h6>hellouser</h6>
+                    <h6>98765432</h6>
+                    <h6>HK,Sha Tin,CUHK</h6>
                 </div>
                 <div style={{alignContent:'center',display:"grid",width:'50%'}}>
                     <img src="src/assets/e-pay.png" style={styles.icon2}/>
@@ -201,7 +151,7 @@ export const PaymentPage = () => {
                     <Inputbox onChange={e => setCardName(e.target.value)}/>
                         {/* {descriptionError && <Title value='Description cannot be empty.' color='red' fontSize='14px'></Title>} */}
                 </div>
-                <button style={styles.Button1} onClick={handleAddProductOkClick}>
+                <button style={styles.Button1} onClick={handleAddAddressOkClick}>
                     <Title value='OK'></Title>
                 </button>
             </Modalbox>
@@ -234,12 +184,11 @@ export const PaymentPage = () => {
                     <Inputbox onChange={e => setAddress(e.target.value)}/>
                         {/* {descriptionError && <Title value='Description cannot be empty.' color='red' fontSize='14px'></Title>} */}
                 </div>
-                <button style={styles.Button1} onClick={handleAddProductOkClick}>
+                <button style={styles.Button1} onClick={handleAddAddressOkClick}>
                     <Title value='OK'></Title>
                 </button>
             </Modalbox>
         </div>
-        
         
     );
     
@@ -279,7 +228,7 @@ const styles = {
         width: '80px', 
         height: '80px',
         marginLeft:'43.5%',
-        marginTop:'15%'
+        marginTop:'10%'
     },
     Button: {
         width: '30px',
@@ -323,7 +272,7 @@ const styles = {
         backgroundColor: 'rgba(52, 52, 52, 0.4)',
         fontFamily: 'comfortaa',
         textAlign: 'left',
-        height: '200px',
+        height: '172px',
         width: '50%',
         padding:'10px',
         marginTop: '10px'

@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Title from "../../assets/Title";
 // import CustomButton from "../../assets/CustomButton.jsx";
 // import CustomProductTable from "../AdminPages/CustomProductTable";
-import Headbar from "../../assets/HeadBar.jsx";
+import Headbar from "../ProductPages/HeadBarProduct.jsx";
 // import Modalbox from '../../assets/Modalbox';
 // import Inputbox from '../../assets/Inputbox';
 
@@ -28,27 +29,37 @@ export const OrderTrackArrive = () => {
             </div>
             <div style={{display:'flex',alignItems:'center',marginLeft:'10%'}}>
                 <div>
-                    <button style={{borderRadius:50,width:50,height:50}} onClick={() => setIsPayOpen(!isPayOpen)}></button>
+                    <Link to={"/"}>
+                        <button style={{borderRadius:50,width:50,height:50,backgroundColor:'rgba(52, 52, 52)'}}></button>
+                    </Link>
                     <Title value='Select' fontWeight='Bold'></Title>
                 </div>
                 <div style={{width:'100px',height:'5px',backgroundColor:'black',marginBottom:30}}/>
                 <div>
-                    <button style={{borderRadius:50,width:50,height:50}} onClick={() => setIsPayOpen(!isPayOpen)}></button>
+                    <Link to={"/payment"}>
+                        <button style={{borderRadius:50,width:50,height:50,backgroundColor:'rgba(52, 52, 52)'}}></button>
+                    </Link>
                     <Title value='Payment' fontWeight='Bold'></Title>
                 </div>
                 <div style={{width:'100px',height:'5px',backgroundColor:'black',marginBottom:30}}/>
                 <div>
-                    <button style={{borderRadius:50,width:50,height:50}} onClick={() => setIsPayOpen(!isPayOpen)}></button>
+                    <Link to={"/ordertrack-process"}>
+                        <button style={{borderRadius:50,width:50,height:50}}></button>
+                    </Link>
                     <Title value='Processing' fontWeight='Bold'></Title>
                 </div>
                 <div style={{width:'100px',height:'5px',backgroundColor:'black',marginBottom:30}}/>
                 <div>
-                    <button style={{borderRadius:50,width:50,height:50}} onClick={() => setIsPayOpen(!isPayOpen)}></button>
+                    <Link to={"/ordertrack-ship"}>
+                        <button style={{borderRadius:50,width:50,height:50,backgroundColor:'rgba(52, 52, 52)'}} onClick={() => setIsPayOpen(!isPayOpen)}></button>
+                    </Link>
                     <Title value='Shipped' fontWeight='Bold'></Title>
                 </div>
                 <div style={{width:'100px',height:'5px',backgroundColor:'black',marginBottom:30}}/>
                 <div>
-                    <button style={{borderRadius:50,width:50,height:50}} onClick={() => setIsPayOpen(!isPayOpen)}></button>
+                    <Link to={"/ordertrack-arrive"}>
+                        <button style={{borderRadius:50,width:50,height:50,backgroundColor:'rgba(52, 52, 52)'}} onClick={() => setIsPayOpen(!isPayOpen)}></button>
+                    </Link> 
                     <Title value='Arrived' fontWeight='Bold'></Title>
                 </div>
             </div>
