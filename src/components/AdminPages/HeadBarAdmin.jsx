@@ -16,7 +16,9 @@ import { Link } from 'react-router-dom';
 const Headbar = (props) => (
   <div style={styles.headbar}>
     <div style={styles.headbarSection1}>
-      <img src="src\assets\shop_com.png" alt="Shop.com logo" style={styles.logo} />
+      <Link to="/">
+        <img src="src\assets\shop_com.png" alt="Shop.com logo" style={styles.logo} />
+      </Link>
     </div>
     <div style={styles.headbarSection2}>
       <Searchbox style={styles.searchbox} onSearch={props.setSearchTerm}/>
