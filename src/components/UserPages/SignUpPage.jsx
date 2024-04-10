@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import {useNavigate} from 'react-router-dom';
 
 function SignUpPage() {
   const [username, setUsername] = useState('');
@@ -6,16 +7,33 @@ function SignUpPage() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
+  const navigate = useNavigate();
+  
   const handleSignUp = (event) => {
     event.preventDefault();
-    // Perform sign-up logic here
-    console.log('Sign-up form submitted');
-    console.log('Username:', username);
-    console.log('Email:', email);
-    console.log('Password:', password);
-    console.log('Confirm Password:', confirmPassword);
+
+
+      const data = {
+          "username":username,
+          "password":password,
+          "email":email
+      }
+
+      fetch("http://localhost:3001/signup",{
+          method: 'POST',
+          headers:{
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+      }).then(result => {console.log(result)
+      navigate("/login")
+      })
+      .catch(err => console.log(err))
   };
 
+  
+
+  
   return (
     <div>
       <h1>Sign Up</h1>

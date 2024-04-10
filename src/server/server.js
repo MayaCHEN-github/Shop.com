@@ -2,15 +2,18 @@ import {createRequire} from 'module';
 const require = createRequire(import.meta.url);
 require('dotenv').config();
 
+import authenticateToken from '../auth/authenticateToken';
 const express = require('express');
 const app = express();
 const cors = require('cors');
-
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 app.use(cors());
 app.use(express.json());
 
 const PORT = 3001 ; 
+const secretKey = 'shopdotcom';
 //3001
 
 const mongoose = require('mongoose');
@@ -148,6 +151,81 @@ db.once('open', () => {
     const Admin = mongoose.model("Admin", AdminSchema);
     
     // =================================================================
+    app.post('/signup', async (req, res) => {
+        const {username, password, email} = req.body;
+        const new_password = await bcrypt.hash(password,10);
+        try{
+            const new_user = new User({username: username, password: new_password, email:email});
+            new_user.save().then(() => {
+                res.status(200).json({message:"success"});
+            }).catch(err => {
+                res.status(404).json({message:err});
+            });      
+        }catch(e){
+            res.status(404).json({message:"failed"});
+        }
+    })
+
+    app.post('/login', async (req, res) => {
+        const {usernameOrEmail, password} = req.body;
+
+        const hashed_password = await bcrypt.hash(password,10);
+
+        try{
+            const matching_user =  User.findOne({ $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }] });
+
+            if(!matching_user){
+                const matching_admin =  Admin.findOne({ $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }] });
+                if(!matching_admin){
+                    res.status(404).json({ message:"user not found"});
+                }
+
+                const compare_password = bcrypt.compare(hashed_password,matching_admin.password);
+
+                if(compare_password){
+                    jwt.sign(
+                        { 
+                            id: matching_admin.user_id,
+                            user_type: "admin",
+                            username: matching_admin.username
+                        },  
+                        secretKey,
+                        { expiresIn: '12h' },
+                        (err,token)=>{
+                            if(err){
+                                return res.status(500).json({message: err})
+                            }
+                            return res.status(200).json({message: "success",token:token })
+                        }  
+                    );
+ 
+                }else{
+                    res.status(500).json({ message:"Incorrect password"});
+                }            
+            }
+
+            const compare_password = bcrypt.compare(hashed_password,matching_user.password);
+
+            if(compare_password){
+                const token = jwt.sign(
+                    { 
+                        id: matching_user.user_id,
+                        user_type: "admin",
+                        username: matching_user.username
+                    },  
+                    secretKey,
+                    { expiresIn: '12h' }  
+                );
+
+                res.status(200).json({ message:"success",token:token});
+            }else{
+                res.status(500).json({ message:"Incorrect password"});
+            }
+        }catch(e){
+            res.status(404).json({message:"failed"});
+        }
+    })
+
     app.get('/all-items',async (req, res)=>{
         try{
             const items = await Item.find({});
@@ -157,7 +235,7 @@ db.once('open', () => {
         }
     });
 
-    app.post('/all-cart-items', async (req, res) => {
+    app.post('/all-cart-items', authenticateToken, async (req, res) => {
         const {user_id} = req.body;
         try{
             const user = await User.findOne({"user_id" : user_id}).populate('shopping_cart.item');

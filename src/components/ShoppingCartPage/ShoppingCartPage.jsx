@@ -1,10 +1,12 @@
 import react, {useState, useEffect} from 'react';
 import {CartItemCard} from './CartItemCard';
+import {useNavigate} from 'react-router-dom';
 
 export default function ShoppingCartPage  () {
     const [total, setTotal] = useState(0);
     const [fetched, setFetched] = useState([]);
 
+    const navigate = useNavigate ();
     const user_id = "001"; // delete this line after setting up account management
 
     const updateTotal = (newTotal) => {
@@ -88,6 +90,12 @@ export default function ShoppingCartPage  () {
             if (!response.ok) {
               throw new Error(`Error: ${response.status} ${response.statusText}`);
             }
+
+            if (response.status === 401) {  
+              navigate('/login');
+              return;
+          }
+
 
             const items = await response.json();
             /*
