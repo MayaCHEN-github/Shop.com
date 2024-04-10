@@ -1,8 +1,8 @@
 import React from 'react';
-import Searchbox from './SearchboxAdmin';
+import Searchbox from './SearchboxProduct';
 import ButtonBar from '../../assets/ButtonBar';
 import { Link, useNavigate} from 'react-router-dom';
-
+import ShopComLogo from '../../assets/shop_com.png'
 
 /*  You can use this component like this:
 
@@ -40,10 +40,12 @@ const Headbar = (props) => {
   return(
   <div style={styles.headbar}>
     <div style={styles.headbarSection1}>
-      <img src="src\assets\shop_com.png" alt="Shop.com logo" style={styles.logo} />
+      <Link to="/">
+        <img src={ShopComLogo} alt="Shop.com logo" style={styles.logo} />
+      </Link>
     </div>
     <div style={styles.headbarSection2}>
-      <Searchbox style={styles.searchbox} onSearch={props.setSearchTerm}/>
+      <Searchbox style={styles.searchbox} defaultQuery={props.defaultQuery} />
       <ButtonBar buttons={[
         { label: 'Home', to: "/" },
         { label: 'Electronics', to: "/category/electronics" },
@@ -80,6 +82,7 @@ const styles = {
     left: 0,
     right: 0,
     width: '100%',
+    zIndex: 99,
   },
   headbarSection1: {
     display: 'flex',

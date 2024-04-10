@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import {useNavigate} from 'react-router-dom';
 
-function LoginPage() {
+import Title from "../../assets/Title";
+import CustomButton from "../../assets/CustomButton";
+import Headbar from './HeadBarUser';
+import Inputbox from '../../assets/Inputbox';
+
+export const LoginPage = () => {
+
     const [usernameOrEmail, setUsernameOrEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
@@ -35,31 +41,39 @@ function LoginPage() {
     
   
     return (
-      <div>
-        <h1>Login</h1>
-        <form onSubmit={handleLogin}>
-          <label>
-            Username/Email:
-            <input
-              type="text"
-              value={usernameOrEmail}
-              onChange={(event) => setUsernameOrEmail(event.target.value)}
-            />
-          </label>
-          <br />
-          <label>
-            Password:
-            <input
-              type="password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-            />
-          </label>
-          <br />
-          <button type="submit">Login</button>
-        </form>
-      </div>
+        <div>
+            <div>
+                <Headbar setSearchTerm={setSearchTerm} />
+            </div>
+            <div style={{ marginTop: '120px' }}></div>
+            <div style={styles.padding}>
+                <Title value='Login' fontWeight='Bold'></Title>
+            </div>
+            <div style={styles.padding}>
+            </div>
+
+
+                <Title value='Username/Email'></Title>
+                <Inputbox onChange={e => setUsernameOrEmail(e.target.value)}/>
+                    {usernameOrEmailError && <Title value='Username/Email cannot be empty.' color='red' fontSize='14px'></Title>} 
+                <Title value='Password'></Title>
+                <Inputbox onChange={e => setPassword(e.target.value)}/>
+                    {passwordError && <Title value='Password cannot be empty.' color='red' fontSize='14px'></Title>} 
+                <CustomButton buttonText="Login" onClick={handleOkClick}></CustomButton>
+        </div>
     );
-  }
-  
-  export default LoginPage;
+}
+
+const styles = {
+    padding: {
+        paddingTop: '10px',
+        paddingBottom: '10px',
+        textAlign: 'left',
+    },
+    padding2: {
+        paddingBottom: '10px',
+        textAlign: 'center',
+    },
+};
+
+export default LoginPage;

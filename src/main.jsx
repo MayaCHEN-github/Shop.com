@@ -17,8 +17,12 @@ import SignUpPage from './components/UserPages/SignUpPage.jsx';
 import MainProductPage from './components/ProductPages/MainProductPage.jsx';
 import PerProductPage from './components/ProductPages/PerProductPage.jsx';
 import CategoryPage from './components/ProductPages/CategoryPage.jsx';
-import LoginPage from './components/UserPages/LoginPage.jsx';
+import LoginPage from './components/UserPages/LoginPage.jsx';import SearchResultsPage from './components/ProductPages/SearchResultsPage.jsx';
+
 import ShoppingCartPage from './components/ShoppingCartPage/ShoppingCartPage.jsx';
+
+import { SignUpPage } from './components/UserPages/SignUpPage.jsx';
+import { LoginPage } from './components/UserPages/LoginPage.jsx';
 
 const router = createBrowserRouter([
   {
@@ -46,12 +50,16 @@ const router = createBrowserRouter([
     element: <CategoryPage />
   },
   {
-    path: "/login",
-    element: <LoginPage />
+    path: "/search",
+    element: <SearchResultsPage />,
   },
   {
-    path: "/signup",
-    element: <SignUpPage />
+    path: "/sign-up",
+    element: <SignUpPage />,
+  },
+  {
+    path: "/login",
+    element: <LoginPage />,
   }
 ]);
 

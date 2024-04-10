@@ -80,4 +80,16 @@ function SignUpPage() {
   );
 }
 
+const styles = {
+    padding: {
+        paddingTop: '10px',
+        paddingBottom: '10px',
+        textAlign: 'left',
+    },
+    padding2: {
+        paddingBottom: '10px',
+        textAlign: 'center',
+    },
+};
+
 export default SignUpPage;
