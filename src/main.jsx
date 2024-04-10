@@ -19,6 +19,8 @@ import CategoryPage from './components/ProductPages/CategoryPage.jsx';
 
 import ShoppingCartPage from './components/ShoppingCartPage/ShoppingCartPage.jsx';
 
+import { SignUpPage } from './components/UserPages/SignUpPage.jsx';
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -43,6 +45,10 @@ const router = createBrowserRouter([
   {
     path: "/category/:category",
     element: <CategoryPage />
+  },
+  {
+    path: "/sign-up",
+    element: <SignUpPage />,
   }
 ]);
 
