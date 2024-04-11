@@ -38,7 +38,7 @@ export const LoginPage = () => {
         e.preventDefault();
         const isusernameOrEmailEmpty = checkEmptyInput(usernameOrEmail, setUsernameOrEmailError);
         const ispasswordEmpty = checkEmptyInput(password, setPasswordError);
-    
+
         if (isusernameOrEmailEmpty || ispasswordEmpty) {
             return;
         }
@@ -63,6 +63,7 @@ export const LoginPage = () => {
             console.log('Result:', result);
             if(result.message === 'success'){
                 localStorage.setItem('token', result.token);
+                localStorage.setItem('user_type', result.user_type)
                 if (result.user_type === 'admin') {
                     navigate('/admin-user');
                 } else {

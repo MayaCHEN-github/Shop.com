@@ -168,7 +168,6 @@ db.once('open', () => {
         }
     })
 
-    /*
     app.post('/login', async (req, res) => {
         const { usernameOrEmail, password } = req.body;
     
@@ -187,7 +186,7 @@ db.once('open', () => {
                         secretKey,
                         { expiresIn: '12h' }
                     );
-                    return res.status(200).json({ message: "success", token: token });
+                    return res.status(200).json({ message: "success", token: token, user_type: "user" });
                 } else {
                     return res.status(401).json({ message: "Incorrect user password" });
                 }
@@ -208,7 +207,7 @@ db.once('open', () => {
                         secretKey,
                         { expiresIn: '12h' }
                     );
-                    return res.status(200).json({ message: "success", token: token });
+                    return res.status(200).json({ message: "success", token: token, user_type: "admin" });
                 } else {
                     return res.status(401).json({ message: "Incorrect admin password" });
                 }
@@ -271,54 +270,6 @@ db.once('open', () => {
             return res.status(500).json({message: "An error occurred"});
         }
     })
-    */
-
-    app.post('/login', async (req, res) => {
-        const {usernameOrEmail, password} = req.body;
-    
-        const hashed_password = await bcrypt.hash(password,10);
-        console.log('Hashed password:', hashed_password);
-    
-        try{
-            const matching_user = await User.findOne({ $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }] });
-            console.log('Matching user:', matching_user);
-    
-            if(!matching_user){
-                const matching_admin = await Admin.findOne({ $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }] });
-                console.log('Matching admin:', matching_admin);
-                if(!matching_admin){
-                    res.status(404).json({ message:"user not found"});
-                }
-    
-                const compare_password = bcrypt.compare(password,matching_admin.password);
-                console.log('Password comparison result:', compare_password);
-    
-                if(compare_password){
-                    jwt.sign(
-                        { 
-                            id: matching_admin.user_id,
-                            user_type: "admin",
-                            username: matching_admin.username
-                        },  
-                        secretKey,
-                        { expiresIn: '12h' },
-                        (err,token)=>{
-                            if(err){
-                                console.log('JWT sign error:', err);
-                                return res.status(500).json({message: err})
-                            }
-                            return res.status(200).json({message: "success",token:token, user_type: "admin" })
-                        }  
-                    );
-    
-                }else{
-                    res.status(500).json({ message:"Incorrect admin password"});
-                }            
-            }
-        } catch(err) {
-            console.log('Error:', err);
-        }
-    });
 
     app.get('/all-items',async (req, res)=>{
         try{

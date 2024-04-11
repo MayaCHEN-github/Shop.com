@@ -38,6 +38,15 @@ export const AdminProductPage = () => {
     const [vendorError, setVendorError] = useState(false);
     const [categoryError, setCategoryError] = useState(false);
 
+    const navigate = useNavigate()
+
+    useEffect(() => {
+      const userType = localStorage.getItem('user_type');
+      if (userType !== "admin") {
+        navigate("/")
+      }
+    }, [localStorage.userType])
+
     useEffect(() => {
         fetch('http://localhost:3001/all-products')
             .then(response => response.json())

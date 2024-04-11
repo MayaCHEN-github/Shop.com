@@ -1,4 +1,5 @@
 import { React, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'
 import CustomUserTable from "./CustomUserTable";
 import Title from "../../assets/Title";
 import CustomButton from "../../assets/CustomButton";
@@ -24,6 +25,15 @@ export const AdminUserPage = () => {
     const [isAddUserOpen, setIsAddUserOpen] = useState(false);
     const [isEditUserOpen, setIsEditUserOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+      const userType = localStorage.getItem('user_type');
+      if (userType !== "admin") {
+        navigate("/")
+      }
+    }, [localStorage.userType])
 
     useEffect(() => {
         fetch('http://localhost:3001/all-users')

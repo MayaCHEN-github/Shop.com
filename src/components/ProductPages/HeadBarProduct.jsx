@@ -57,6 +57,7 @@ const Headbar = (props) => {
       navigate('/login');
     } else {
       localStorage.removeItem('token');
+      localStorage.removeItem('user_type');
       navigate('/');
     }
   }
