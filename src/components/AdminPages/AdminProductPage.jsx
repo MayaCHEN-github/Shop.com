@@ -6,8 +6,7 @@ import CustomButton from "../../assets/CustomButton";
 import Headbar from './HeadBarAdmin';
 import Modalbox from '../../assets/Modalbox';
 import Inputbox, { Selectbox, Textareabox } from '../../assets/Inputbox';
-import e from 'cors';
-
+import {useNavigate} from 'react-router-dom';
 import { categories } from '../../constants/categories';
 
 export const AdminProductPage = () => {

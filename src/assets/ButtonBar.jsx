@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Button = ({ label, to }) => (
+const Button = ({ label, to, onClick }) => (
   <Link to={to}>
-    <button style={styles.button}>{label}</button>
+    <button onClick={onClick} style={styles.button}>{label}</button>
   </Link>
 );
 
@@ -11,7 +11,7 @@ const ButtonBar = ({ buttons }) => (
   <div style={styles.buttonbar}>
     {buttons.map((button, index) => (
       <React.Fragment key={index}>
-        <Button label={button.label} to={button.to} />
+        <Button label={button.label} to={button.to} onClick={button.onClick} />
         {index < buttons.length - 1 && ' | '}
       </React.Fragment>
     ))}
