@@ -2,7 +2,7 @@ import react, {useState, useEffect} from 'react';
 import {CartItemCard} from './CartItemCard';
 import {jwtDecode} from 'jwt-decode'
 import {useNavigate} from 'react-router-dom';
-
+ 
 export default function ShoppingCartPage  () {
     const [total, setTotal] = useState(0);
     const [fetched, setFetched] = useState([]);
@@ -116,6 +116,7 @@ export default function ShoppingCartPage  () {
 
     return (
         <>
+           
             <h1>Shopping Cart</h1>
             {fetched.map((item) => (
                 <CartItemCard key={item.item.item_id} product={item} onUpdateTotal={updateTotal} />
