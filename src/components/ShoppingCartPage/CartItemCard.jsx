@@ -2,14 +2,23 @@ import react, {useState, useEffect} from 'react';
 import { FiPlusCircle, FiMinusCircle} from "react-icons/fi";
 import { BsTrash } from "react-icons/bs";
 import '../../styles/shopping_cart_item.css';
- 
+import { jwtDecode } from 'jwt-decode';
+
 export function CartItemCard ({product, onUpdateTotal}){
 
     const [purchased, setPurchased] = useState(product.purchased);
     const [subtotal, setSubtotal] = useState((product.purchased * product.item.price).toFixed(2));
     const [invisible, setInvisible] = useState(false);
 
-    const user_id = "001";
+    const fetchUserId = ()=>{
+        const token = localStorage.getItem('token');
+        if(!token) {
+            return null;
+        }
+        const decoded_token = jwtDecode(token);
+        return decoded_token.id
+     }
+    const user_id = fetchUserId();
 
     const QuantityPlusOne = async () =>{
         if(purchased >= 1){
