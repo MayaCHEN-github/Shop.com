@@ -223,7 +223,7 @@ db.once('open', () => {
         //console.log(req.body);
         try{
             const item = await Item.findOne({item_id: item_id});
-          //  console.log(item);
+            console.log('item :'+ item);
             if(!item) {
                 return res.status(404).json({ "message": "Item not Found" });
             }
@@ -232,18 +232,20 @@ db.once('open', () => {
                 return res.status(400).json({ "message": "Purchased quantity exceeded stock quantity" });
             }
             const user = await User.findOne({user_id: user_id}).populate('shopping_cart.item');
-        //    console.log(user);
+            console.log('user:' + user);
 
             if(!user) {
                 return res.status(404).json({ "message": "User not found" });
             }
             
-            let existing_item = user.shopping_cart.find(item => item.item.item_id === item._id);
+            let existing_item = user.shopping_cart.find((item) => item.item.item_id === item_id);
 
-            console.log(existing_item);
+            console.log('existing item:'+existing_item);
             if(existing_item){
                 existing_item.purchased = purchased;
-                return  res.status(200).json({ "message": "Purchased quantity updated successfully" });
+                await user.save();
+                console.log(existing_item.purchased);
+                return res.status(200).json({ "message": "Purchased quantity updated successfully" });
 
             }else{
                 const data = {
