@@ -238,12 +238,12 @@ db.once('open', () => {
                 return res.status(404).json({ "message": "User not found" });
             }
             
-            let existing_item = user.shopping_cart.find(item => item.item.item_id === item_id);
+            let existing_item = user.shopping_cart.find(item => item.item.item_id === item._id);
 
             console.log(existing_item);
             if(existing_item){
                 existing_item.purchased = purchased;
-                return  res.status(200).json({ "message": "Item quantity updated successfully" });
+                return  res.status(200).json({ "message": "Purchased quantity updated successfully" });
 
             }else{
                 const data = {
