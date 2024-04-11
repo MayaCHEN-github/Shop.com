@@ -1,7 +1,9 @@
 import React from 'react';
-import Searchbox from './SearchboxCart';
+import {SearchBox} from './SearchboxCart';
 import ButtonBar from '../../assets/ButtonBar';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+
+import ShopComLogo from '../../assets/shop_com.png'
 
 /*  You can use this component like this:
 
@@ -13,28 +15,55 @@ import { Link, useNavigate } from 'react-router-dom';
     ↑Please add this div since the Headbar is fixed and it will overlay on other component.
 */
 
-const Headbar = (props)=>{ 
+/*
+import {useNavigate} from 'react-router-dom';
+const navigate = require(useNavigate);
 
-return(
-    <div style={styles.headbar}>
-        <div style={styles.headbarSection1}>
-        <img src="src\assets\shop_com.png" alt="Shop.com logo" style={styles.logo} />
-        </div>
-        <div style={styles.headbarSection2}>
-        <Searchbox style={styles.searchbox} onSearch={props.setSearchTerm}/>
+const redirectToLogin = ()) =>{
+  const token = localStorage.getItem('token');
+  if(token){
+    navigate('/shoppingcart');
+  }else{
+    navigate('/login');
+  }
 
-        </div>
-        <div style={styles.headbarSection3}>
-            <ButtonBar buttons={[
-                    { label: 'Sign Up', onClick: () => console.log('clicked') },
-                    { label: 'Login', onClick: () => console.log('clicked') /* Username: to be completed */},
-                    
-                ]}
-            />
-        </div>
+}
+
+*/
+
+
+const Headbar = (props) => (
+
+  <div style={styles.headbar}>
+    <div style={styles.headbarSection1}>
+      <Link to="/">
+        <img src={ShopComLogo} alt="Shop.com logo" style={styles.logo} />
+      </Link>
     </div>
-  )
-};
+    <div style={styles.headbarSection2}>
+      <SearchBox style={styles.searchbox} defaultQuery={props.defaultQuery} />
+      <ButtonBar buttons={[
+        { label: 'Home', to: "/" },
+        { label: 'Electronics', to: "/category/electronics" },
+        { label: 'Cosmetics', to: "/category/cosmetics" },
+        { label: 'Furniture', to: "/category/furniture" },
+        { label: 'Books', to: "/category/books" },
+        { label: 'Toys', to: "/category/toys" },
+        { label: 'Games', to: "/category/games" },
+        { label: 'Others', to: "/category/others" },
+      ]} />
+    </div>
+    <div style={styles.headbarSection3}>
+        <ButtonBar buttons={[
+                { label: 'logout', onClick: () => console.log('clicked') },
+                { label: 'Welcome, AdminUser', onClick: () => console.log('clicked') /* Username: to be completed */},
+                { label: 'view cart', onClick: () => console.log('clicked view cart')}
+            ]}
+        />
+    </div>
+  </div>
+  
+);
 
 const styles = {
   headbar: {
@@ -49,6 +78,7 @@ const styles = {
     left: 0,
     right: 0,
     width: '100%',
+    zIndex: 99,
   },
   headbarSection1: {
     display: 'flex',
@@ -60,13 +90,13 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-start',
-    width: '60%', 
+    width: '65%', 
   },
   headbarSection3: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-start',
-    width: '25%', 
+    width: '20%', 
   },
   logo: {
     width: '100%',
