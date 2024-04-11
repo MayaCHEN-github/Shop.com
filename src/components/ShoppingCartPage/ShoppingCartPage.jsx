@@ -122,7 +122,7 @@ export default function ShoppingCartPage  () {
                 <CartItemCard key={item.item.item_id} product={item} onUpdateTotal={updateTotal} />
             ))}            
             <div className="text-end" style={{ fontSize: '1.25rem'} }><p>Total Price &#58; &#36;  {total}</p></div>
-            <div className="text-end" ><button className="btn btn-info hover">Checkout</button></div>
+            <div className="text-end" ><button className="btn btn-info hover" onClick = {()=>navigate('/payment')}>Checkout</button></div>
         </>
     )
 }
