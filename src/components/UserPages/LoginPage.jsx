@@ -55,16 +55,25 @@ export const LoginPage = () => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(data)
-        }).then(response => response.json())
+        }).then(response => {
+            console.log('Response:', response);
+            return response.json();
+        })
         .then(result => {
-           if(result.message === 'success'){
-            localStorage.setItem('token', result.token);
-            navigate('/');
-           } else{
-            alert('Error: ' + result.message);
-           }
-          })
-        .catch(err => console.log(err))
+            console.log('Result:', result);
+            if(result.message === 'success'){
+                localStorage.setItem('token', result.token);
+                if (result.user_type === 'admin') {
+                    navigate('/admin-user');
+                } else {
+                    navigate('/');
+                    console.log('User:', result.user);
+                }
+            } else{
+                alert('Error: ' + result.message);
+            }
+        })
+        .catch(err => console.log('Error:', err));
 
     }
     

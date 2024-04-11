@@ -49,8 +49,18 @@ const Headbar = (props) => {
     }else{
       navigate('/login');
     }
-  
   }
+
+  const navigateToLogInOrOut = ()=>{
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/login');
+    } else {
+      localStorage.removeItem('token');
+      navigate('/');
+    }
+  }
+  
   return(
   <div style={styles.headbar}>
     <div style={styles.headbarSection1}>
@@ -73,7 +83,7 @@ const Headbar = (props) => {
     </div>
     <div style={styles.headbarSection3}>
         <ButtonBar buttons={[
-                { label: `${loginOrLogout()}`, onClick: () => console.log('clicked') },
+                { label: `${loginOrLogout()}`, onClick: () => navigateToLogInOrOut() },
                 { label: `Welcome, ${getName()}`, onClick: () => console.log('clicked') /* Username: to be completed */},
                 { label: 'view cart', onClick: () => {redirectCart()}}
             ]}

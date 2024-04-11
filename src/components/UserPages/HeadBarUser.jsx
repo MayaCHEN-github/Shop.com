@@ -24,8 +24,8 @@ const Headbar = (props) => (
     </div>
     <div style={styles.headbarSection3}>
         <ButtonBar buttons={[
-                { label: 'Sign Up', onClick: () => console.log('clicked') },
-                { label: 'Login', onClick: () => console.log('clicked') /* Username: to be completed */},
+                { label: 'Sign Up', to: '/sign-up'},
+                { label: 'Login', to: '/login'}
                 
             ]}
         />

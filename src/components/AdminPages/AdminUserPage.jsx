@@ -6,6 +6,8 @@ import Headbar from './HeadBarAdmin';
 import Modalbox from '../../assets/Modalbox';
 import Inputbox from '../../assets/Inputbox';
 import e from 'cors';
+import bcrypt from 'bcryptjs';
+
 
 export const AdminUserPage = () => {
 
@@ -70,7 +72,7 @@ export const AdminUserPage = () => {
         }
     };
 
-    const handleOkClick = () => {
+    const handleOkClick = async() => {
 
         const isusernameEmpty = checkEmptyInput(username, setUsernameError);
         const ispasswordEmpty = checkEmptyInput(password, setPasswordError);
@@ -87,10 +89,13 @@ export const AdminUserPage = () => {
         } else {
             setEmailError(false);
         }
+
+        // Generate a password hash (salt + hash)
+        const passwordHash = await bcrypt.hash(password, 10);
     
         let user;
         if (isEditUserOpen) { // edit user
-            user = { user_id: data[editIndex].user_id, username: username, password: password, email: email};
+            user = { user_id: data[editIndex].user_id, username: username, password: passwordHash, email: email};
         } else if (isAddUserOpen) { // add new user
             let newUserId;
             if (data.length === 0) {
@@ -99,7 +104,7 @@ export const AdminUserPage = () => {
                 const maxUserId = Math.max(...data.map(item => Number(item.user_id)));
                 newUserId = String(maxUserId + 1).padStart(3, '0');
             }
-            user = { user_id: newUserId, username: username, password: password, email: email};
+            user = { user_id: newUserId, username: username, password: passwordHash, email: email};
         }
     
         if (isEditUserOpen) { // edit user
@@ -200,9 +205,6 @@ export const AdminUserPage = () => {
                 <Inputbox value={username} onChange={e => setUsername(e.target.value)}/>
                         {usernameError && <Title value='Username cannot be empty.' color='red' fontSize='14px'></Title>} 
 
-                <Title value='Password'></Title>
-                <Inputbox value={password} onChange={e => setPassword(e.target.value)}/>
-                        {passwordError && <Title value='Password cannot be empty.' color='red' fontSize='14px'></Title>} 
                 <Title value='Email'></Title>  
                 <Inputbox value={email} onChange={e => setEmail(e.target.value)}/>
                     {emailError && <Title value='Email must be in format example@domain.com.' color='red' fontSize='14px'></Title>} 
