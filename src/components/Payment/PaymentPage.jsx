@@ -7,7 +7,7 @@ import Headbar from "../ProductPages/HeadBarProduct.jsx";
 import Modalbox from '../../assets/Modalbox';
 import Inputbox from '../../assets/Inputbox';
 import {CartPayCard} from './CartPayCard';
-
+import {jwtDecode} from 'jwt-decode'
 
 export const PaymentPage = () => {
 
@@ -25,7 +25,21 @@ export const PaymentPage = () => {
     const [total, setTotal] = useState(0);
     const [fetched, setFetched] = useState([]);
 
-    const userId = "001";
+    
+    const fetchUserId = ()=>{
+        const token = localStorage.getItem('token');
+        if(token){
+            const decoded_token = jwtDecode(token);
+            const user_id = decoded_token.id;
+  
+            return user_id;  
+          }else{
+            return null;
+          }
+      } 
+    
+      
+    const userId = fetchUserId();
 
     useEffect(() => {
         async function fetchData() {
