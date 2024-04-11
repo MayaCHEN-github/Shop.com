@@ -217,7 +217,7 @@ db.once('open', () => {
             return res.status(500).json({ message: "An internal error occurred" });
         }
     });
-
+*/
     app.post('/add-to-cart',async (req, res) => {
         const {user_id, purchased, item_id} = req.body;
         //console.log(req.body);
