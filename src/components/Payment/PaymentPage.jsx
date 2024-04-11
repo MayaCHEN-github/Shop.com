@@ -127,9 +127,9 @@ export const PaymentPage = () => {
                             <img src="src/assets/pen_note.png" style={styles.icon1}/>
                         </button>
                     </div>
-                    <h6>hellouser</h6>
-                    <h6>98765432</h6>
-                    <h6>HK,Sha Tin,CUHK</h6>
+                    <h6>Name: {name}</h6>
+                    <h6>Phone: {phone}</h6>
+                    <h6>Address:{address}</h6>
                 </div>
                 <div style={{alignContent:'center',display:"grid",width:'50%'}}>
                     <img src="src/assets/e-pay.png" style={styles.icon2}/>
