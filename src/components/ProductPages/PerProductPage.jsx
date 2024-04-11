@@ -7,6 +7,7 @@ import Headbar from './HeadBarProduct'
 import Title from "../../assets/Title"
 import StarRatings from './StarRatings'
 import DescriptionBullets from './DescriptionBullets'
+import { jwtDecode } from 'jwt-decode';
 
 export default function PerProductPage(props) {
   const MAX_QTY=20000
@@ -40,6 +41,34 @@ export default function PerProductPage(props) {
       setAddToCartDisabled(true)
     }
   }, [qty])
+
+  const addToCart = async () => {
+    const token = localStorage.getItem('token');
+    if(!token){
+      return null
+    }
+    const decoded_token = jwtDecode(token);
+    const user_id = decoded_token.id;
+
+    const data = {
+      user_id : user_id,
+      purchased : qty,
+      item_id: itemId
+    }
+
+    const response = await fetch('http://localhost:3001/add-to-cart',{
+      method:'POST',
+      headers:{
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+
+    const result = await response.json();
+
+    alert(result.message);
+
+  }
 
   // TODO: Debt, can be cleared up if currency formatting is required
   const currency = 'USD'
@@ -85,6 +114,8 @@ export default function PerProductPage(props) {
                 value="Add to cart" 
                 disabled={addToCartDisabled} 
                 style={{ backgroundColor: colors.buttonOrange, borderRadius: 10, border: 0, padding: '8px 16px' }}
+              
+                onClick={()=>addToCart()}
               />
             </div>
           </div>

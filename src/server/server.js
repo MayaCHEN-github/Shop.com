@@ -218,6 +218,60 @@ db.once('open', () => {
         }
     });
 
+    app.post('/add-to-cart',async (req, res) => {
+        const {user_id, purchased, item_id} = req.body;
+        //console.log(req.body);
+        try{
+            const item = await Item.findOne({item_id: item_id});
+          //  console.log(item);
+            if(!item) {
+                return res.status(404).json({ "message": "Item not Found" });
+            }
+
+            if(item.stock_quantity < purchased) {
+                return res.status(400).json({ "message": "Purchased quantity exceeded stock quantity" });
+            }
+            const user = await User.findOne({user_id: user_id}).populate('shopping_cart.item');
+        //    console.log(user);
+
+            if(!user) {
+                return res.status(404).json({ "message": "User not found" });
+            }
+            
+            let existing_item = user.shopping_cart.find(item => item.item.item_id === item_id);
+
+            console.log(existing_item);
+            if(existing_item){
+                existing_item.purchased = purchased;
+                return  res.status(200).json({ "message": "Item quantity updated successfully" });
+
+            }else{
+                const data = {
+                    item: item._id,
+                    purchased: purchased
+                }
+
+                console.log(data);
+
+                user.shopping_cart.push(data);
+                await user.save();
+
+                await item.save(); 
+                return  res.status(200).json({ "message": "Item added successfully" });
+               
+            }
+
+
+
+        }catch(err) {
+            console.error(err); 
+            return res.status(500).json({message: "An error occurred"});
+        }
+
+
+
+    });
+
     app.get('/all-items',async (req, res)=>{
         try{
             const items = await Item.find({});
