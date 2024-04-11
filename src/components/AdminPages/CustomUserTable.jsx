@@ -18,8 +18,7 @@ const CustomUserTable = ({ data, onDelete, onEdit }) => {
           <tr>
             <th style={styles.td}>UserID</th>
             <th style={styles.td}>UserName</th>
-            <th style={styles.td}>UserPassword</th>
-            <th style={styles.td}>  </th>
+            <th style={styles.td}>UserEmail</th>
             <th style={styles.td}>Delete</th>
             <th style={styles.td}>Detail</th>
           </tr>
@@ -29,12 +28,7 @@ const CustomUserTable = ({ data, onDelete, onEdit }) => {
             <tr key={index} style={styles.tr(index)}>
               <td style={styles.td1}>{item.user_id}</td>
               <td style={styles.td2}>{item.username}</td>
-              <td style={styles.td3}>{showPassword[index] ? item.password : '***************************'}</td>
-              <td style={styles.tdToggle}>
-                <button style={styles.Button} onClick={() => togglePassword(index)}>
-                  <img src={showPassword[index] ? "src/assets/EyeOpen.svg" : "src/assets/EyeClosed.svg"} alt="Toggle password visibility" style={styles.icon} />
-                </button>
-              </td>
+              <td style={styles.td3}>{item.email}</td>
               <td style={styles.td4}>
                 <button style={styles.Button}>
                   <img src="src/assets/Delete.svg" alt="Delete" style={styles.icon} onClick={() => onDelete(index)}/>
