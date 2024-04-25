@@ -8,6 +8,7 @@ import Title from "../../assets/Title"
 import StarRatings from './StarRatings'
 import DescriptionBullets from './DescriptionBullets'
 import { jwtDecode } from 'jwt-decode';
+import {useNavigate} from 'react-router-dom';
 
 export default function PerProductPage(props) {
   const MAX_QTY=20000
@@ -15,7 +16,7 @@ export default function PerProductPage(props) {
   const [searchTerm, setSearchTerm] = useState('')
   const [qty, setQty] = useState(1)
   const [addToCartDisabled, setAddToCartDisabled] = useState(true)
-
+  const navigate = useNavigate(); 
   const { itemId } = useParams()
 
   const [data, setData] = useState({
@@ -45,6 +46,8 @@ export default function PerProductPage(props) {
   const addToCart = async () => {
     const token = localStorage.getItem('token');
     if(!token){
+      navigate('/login');
+      alert('Please login to add items to cart');
       return null
     }
     const decoded_token = jwtDecode(token);
