@@ -32,47 +32,7 @@ export default function ShoppingCartPage  () {
         const token = localStorage.getItem('token');
         return token !== null
      }
-     /**
-    
 
-     
-         useEffect(() => {
-          if(checkLoggedIn){
-            const user_id = fetchUserId();
-            async function fetchData() {
-              try {
-                const data = {
-                  "user_id" : user_id
-                };
-
-                const response = await fetch('http://localhost:3001/all-cart-items',{
-                  method : 'POST',
-                  headers:{
-                    'Content-Type': 'application/json'
-                  },
-                  body: JSON.stringify(data)
-                });
-
-                if (!response.ok) {
-                  throw new Error(`Error: ${response.status} ${response.statusText}`);
-                }
-
-                const items = await response.json();
-              
-                  setFetched(items.items);
-                  setTotal(items.total); 
-                } catch (err) {
-                  console.error(err);
-                }
-              }
-      
-              fetchData();
-          }else{
-            navigate('/login');
-          }    
-      },[navigate]);
-
-     */
 
     useEffect(() => {
         async function fetchData() {
