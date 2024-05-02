@@ -221,10 +221,8 @@ db.once('open', () => {
 
     app.post('/add-to-cart',async (req, res) => {
         const {user_id, purchased, item_id} = req.body;
-        //console.log(req.body);
         try{
             const item = await Item.findOne({item_id: item_id});
-            console.log('item :'+ item);
             if(!item) {
                 return res.status(404).json({ "message": "Item not Found" });
             }
@@ -233,19 +231,15 @@ db.once('open', () => {
                 return res.status(400).json({ "message": "Purchased quantity exceeded stock quantity" });
             }
             const user = await User.findOne({user_id: user_id}).populate('shopping_cart.item');
-            console.log('user:' + user);
 
             if(!user) {
                 return res.status(404).json({ "message": "User not found" });
             }
             
             let existing_item = user.shopping_cart.find((item) => item.item.item_id === item_id);
-
-            console.log('existing item:'+existing_item);
             if(existing_item){
                 existing_item.purchased = purchased;
                 await user.save();
-                console.log(existing_item.purchased);
                 return res.status(200).json({ "message": "Purchased quantity updated successfully" });
 
             }else{
@@ -254,8 +248,6 @@ db.once('open', () => {
                     purchased: purchased
                 }
 
-                console.log(data);
-
                 user.shopping_cart.push(data);
                 await user.save();
 
@@ -263,9 +255,6 @@ db.once('open', () => {
                 return  res.status(200).json({ "message": "Item added successfully" });
                
             }
-
-
-
         }catch(err) {
             console.error(err); 
             return res.status(500).json({message: "An error occurred"});
@@ -428,8 +417,7 @@ db.once('open', () => {
             const target_item = user.shopping_cart[target_item_index];
             
             if (target_item_index !== -1) {
-                if(target_item.purchased>= 1){
-                    if(target_item.purchased > 1){
+                     
                         target_item.purchased -= 1;
                         await user.save();   
                                   
@@ -450,14 +438,8 @@ db.once('open', () => {
                         }
         
                         res.status(200).json(updated_result);
-                    }else{ 
-                        user.shopping_cart.splice(target_item_index,1);
-                        await user.save();             
-                        res.status(202).send(`Item ${item_id} deleted from cart`);
-                    }
-                }else{
-                    res.status(200).send(`Item ${item_id} purchased quantity exceeded stock quantiy`);
-                }
+                    
+                 
             } else {
                 res.status(404).send('Item not found in shopping cart');
             }
