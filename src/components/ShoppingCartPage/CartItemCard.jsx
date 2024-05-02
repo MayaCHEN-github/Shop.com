@@ -55,7 +55,7 @@ export function CartItemCard ({product, onUpdateTotal}){
     }
 
     const QuantityMinusOne = async () =>{
-        if(purchased >= 1){
+        if(purchased > 1){
             try{
                 const params = {
                     "user_id": user_id,
@@ -80,6 +80,8 @@ export function CartItemCard ({product, onUpdateTotal}){
                 setSubtotal(result.subtotal);
                 onUpdateTotal(result.total);
             }catch(err) {console.log(err)}
+        }else{
+            alert('Item quantity must be at least 1\n Click trash can to delete items instead');
         }
     }
   
