@@ -4,18 +4,17 @@ import {jwtDecode} from 'jwt-decode'
 import {useNavigate} from 'react-router-dom';
  
 export default function ShoppingCartPage  () {
-    const [total, setTotal] = useState(0);
-    const [fetched, setFetched] = useState([]);
+    const [total, setTotal] = useState(0); // total price
+    const [fetched, setFetched] = useState([]); 
 
     const navigate = useNavigate();
-  //    const user_id = "001"; // delete this line after setting up account management
-
+ 
     const updateTotal = (newTotal) => {
       setTotal(newTotal);
     };
 
     
-
+    //extracting user id from web token
     const fetchUserId = ()=>{
       const token = localStorage.getItem('token');
       if(token){
@@ -28,12 +27,13 @@ export default function ShoppingCartPage  () {
         }
     } 
     
+    //check login status
     const checkLoggedIn = () =>{
         const token = localStorage.getItem('token');
         return token !== null
      }
 
-
+    //fetch data from db
     useEffect(() => {
         async function fetchData() {
           try {
@@ -87,9 +87,4 @@ export default function ShoppingCartPage  () {
     )
 }
 
-/*TO-DO
-1. redirect user to login page when not logged in when they try to access the shopping cart
-2. set a value of user_id to actual user's id in token
-3.
-
-*/
+ 

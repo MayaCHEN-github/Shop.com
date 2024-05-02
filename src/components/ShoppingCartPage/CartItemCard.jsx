@@ -6,9 +6,10 @@ import { jwtDecode } from 'jwt-decode';
 
 export function CartItemCard ({product, onUpdateTotal}){
 
-    const [purchased, setPurchased] = useState(product.purchased);
-    const [subtotal, setSubtotal] = useState((product.purchased * product.item.price).toFixed(2));
-    const [invisible, setInvisible] = useState(false);
+    
+    const [purchased, setPurchased] = useState(product.purchased); //purchased amount
+    const [subtotal, setSubtotal] = useState((product.purchased * product.item.price).toFixed(2)); // subtotal
+    const [invisible, setInvisible] = useState(false); //visibility
 
     const fetchUserId = ()=>{
         const token = localStorage.getItem('token');
@@ -20,6 +21,7 @@ export function CartItemCard ({product, onUpdateTotal}){
      }
     const user_id = fetchUserId();
 
+    //add quantity by 1
     const QuantityPlusOne = async () =>{
         if(purchased >= 1){
             try{
@@ -42,6 +44,7 @@ export function CartItemCard ({product, onUpdateTotal}){
                 console.log(result);
                 
                 if(response.ok){
+                    //update corresponding details
                     setPurchased(result.purchased);
                     setSubtotal(result.subtotal);
                     onUpdateTotal(result.total);
@@ -53,7 +56,8 @@ export function CartItemCard ({product, onUpdateTotal}){
             }catch(err) {console.log(err)}
         }
     }
-
+    
+    //decrease quantity by 1
     const QuantityMinusOne = async () =>{
         if(purchased > 1){
             try{
@@ -80,11 +84,13 @@ export function CartItemCard ({product, onUpdateTotal}){
                 setSubtotal(result.subtotal);
                 onUpdateTotal(result.total);
             }catch(err) {console.log(err)}
-        }else{
+        }else{ 
+            //when quantity = 1, cannot drop further below
             alert('Item quantity must be at least 1\n Click trash can to delete items instead');
         }
     }
   
+    //delete from cart
     const DeleteFromCart =  async() =>{
         if(confirm(`Are you sure you want to delete ${product.item.name} from cart? \n(This action is irreversible)`)){
             if(purchased > 0){
@@ -108,8 +114,8 @@ export function CartItemCard ({product, onUpdateTotal}){
                     }
                     
                     const result = await response.json();
-                    onUpdateTotal(result.total);
-                    setInvisible(true);
+                    onUpdateTotal(result.total); // update total price
+                    setInvisible(true); //hide card from user 
                     
                 }catch(err) {console.log(err)}
         }

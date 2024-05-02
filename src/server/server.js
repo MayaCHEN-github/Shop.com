@@ -309,6 +309,7 @@ db.once('open', () => {
         try{
         const user = await User.findOne({user_id : user_id}).populate('shopping_cart.item');
 
+        //Unable to find user
         if(!user){
             res.status(404).send('Failed fetching user');
         }
@@ -317,9 +318,11 @@ db.once('open', () => {
 
         const target_item = user.shopping_cart[target_item_index];
 
+        //If item found
         if (target_item_index !== -1) {
             const stock_quantity = target_item.item.stock_quantity;
 
+            //if stock > requested amount
             if(stock_quantity > target_item.purchased){
                 target_item.purchased += 1;
                 await user.save(); 
@@ -406,6 +409,7 @@ db.once('open', () => {
         try{
         const user = await User.findOne({user_id : user_id}).populate('shopping_cart.item');
        
+
         if(!user){
             res.status(404).send('Failed fetching user');
         }
@@ -413,7 +417,8 @@ db.once('open', () => {
         const target_item_index = user.shopping_cart.findIndex((item) => item.item.item_id.toString() === item_id);
 
         if (target_item_index !== -1) {
-            user.shopping_cart.splice(target_item_index,1);
+
+            user.shopping_cart.splice(target_item_index,1); // removes item from shopping cart array
             await user.save();
             const user_cart = user.shopping_cart;
 
@@ -423,6 +428,7 @@ db.once('open', () => {
             }
      
             const total = user_cart.reduce((sum, item) =>   sum + 100 * parseFloat(item.item.price) * parseInt(item.purchased, 10), 0)/100;
+             //recalculate total
              
             res.status(202).json({"total":total});
         }else {
