@@ -43,9 +43,10 @@ export default function PerProductPage(props) {
     }
   }, [qty])
 
+  //add item to cart
   const addToCart = async () => {
     const token = localStorage.getItem('token');
-    if(!token){
+    if(!token){ //if not yet logged in ,redirect
       navigate('/login');
       alert('Please login to add items to cart');
       return null
