@@ -1,13 +1,13 @@
 #Shop.com - A CSCI3100 project by Group G5
 
 
-#**Before you begin...**#
+# **Before you begin...** #
 
 Ensure you have the following installed 
 1. Node.js
 2. npm
 
-#**Frontend Initialization**#
+# **Frontend Initialization** #
 
 After cloning the repository to your local machine, you may begin to set up the frontend
 
@@ -32,7 +32,7 @@ Here,
 The backend server will start subsequently, at http://localhost:3001/.
 
 
-#**Tech Stack**#
+# **Tech Stack** #
 
 The following technologies are involved to build the project
 1. Vitejs - For quicker frontend build
@@ -41,7 +41,7 @@ The following technologies are involved to build the project
 4. ExpressJS - For building the API for handling network requests
 5. Mongoose - ODM for interacting with MongoDB database.
 
-#**Contributors**#
+# **Contributors** #
 
 1. YING Chun Wai - Implementation of payment handling and order tracking system and logic
 2. CHANG Si Kai - Implementation of the main UI/UX - particularly the homepage, product browsing page and individual product page and their logic
