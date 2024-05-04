@@ -1,3 +1,8 @@
+/**
+ * CustomButton.jsx:
+ *  This component is a button that can be styled in 4 different ways.
+ */
+
 import React from 'react';
 
 const CustomButton = ({ styleType='style1', buttonText = 'Button' }) => {

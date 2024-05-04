@@ -1,8 +1,16 @@
+/**
+ * CustomUserTable.jsx:
+ *  This component is to display user data in a table.
+ */
+
 import React from 'react';
 import { useState } from 'react';
 
 const CustomUserTable = ({ data, onDelete, onEdit }) => {
 
+  /**
+   * This is a function to toggle the password visibility.
+   */
   const [showPassword, setShowPassword] = useState(Array(data.length).fill(false));
   const togglePassword = index => {
     const newShowPassword = [...showPassword];
@@ -14,7 +22,7 @@ const CustomUserTable = ({ data, onDelete, onEdit }) => {
     <div>
       <style>@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap')</style>
       <table style={styles.table}>
-        <thead style={styles.thead}>
+        <thead style={styles.thead}> ({/** Item titles */})
           <tr>
             <th style={styles.td}>UserID</th>
             <th style={styles.td}>UserName</th>
@@ -23,19 +31,19 @@ const CustomUserTable = ({ data, onDelete, onEdit }) => {
             <th style={styles.td}>Detail</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody> ({/** Items' information*/})
           {data.map((item, index) => (
             <tr key={index} style={styles.tr(index)}>
               <td style={styles.td1}>{item.user_id}</td>
               <td style={styles.td2}>{item.username}</td>
               <td style={styles.td3}>{item.email}</td>
               <td style={styles.td4}>
-                <button style={styles.Button}>
+                <button style={styles.Button}> ({/** Delete buttoms */})
                   <img src="src/assets/Delete.svg" alt="Delete" style={styles.icon} onClick={() => onDelete(index)}/>
                 </button>
               </td>
               <td style={styles.td5}>
-                <button style={styles.Button}>
+                <button style={styles.Button}> ({/** Edit buttoms */})
                   <img src="src/assets/Edit.svg" alt="Edit" style={styles.icon} onClick={() => onEdit(index)}/>
                 </button>
               </td>

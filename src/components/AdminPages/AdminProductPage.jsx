@@ -1,3 +1,15 @@
+/**
+ *  AdminProductPage.jsx:
+ *  This is a page for admin users to deal with products' admin functions.
+ * 
+ *  It includes a headbar,a title, a table to list all products' information, and buttons to add, edit, and delete products.
+ *  When add or edit button is clicked, a modal box will pop up to let the user input the product information.
+ *  After admin user inputs information and clicks the OK button, the product information will be sent to the backend server.
+ *  When delete button is clicked, the product will be deleted from the database.
+ *  Details of product table is in CustomProductTable.jsx.
+ * 
+ */
+
 import { React, useState, useEffect } from 'react';
 
 import CustomProductTable from "./CustomProductTable";
@@ -40,6 +52,9 @@ export const AdminProductPage = () => {
 
     const navigate = useNavigate()
 
+    /** 
+     * Check if it is an admin account. If not, redirect to the home page.
+     */
     useEffect(() => {
       const userType = localStorage.getItem('user_type');
       if (userType !== "admin") {
@@ -47,12 +62,18 @@ export const AdminProductPage = () => {
       }
     }, [localStorage.userType])
 
+    /**
+     * Fetch products information from the backend server.
+     */
     useEffect(() => {
         fetch('http://localhost:3001/all-products')
             .then(response => response.json())
             .then(data => setData(data));
     }, []);
 
+    /**
+     * Handle the opening of "add product" modal.
+     */
     const handleOpenAddProductModal = () => {
         setImage('');
         setProductName('');
@@ -74,10 +95,16 @@ export const AdminProductPage = () => {
         setCurated(false);
     };
     
+    /**
+     * Handle the closing of "add product" modal.
+     */
     const handleCloseAddProductModal = () => {
         setIsAddProductOpen(false);
     };
     
+    /**
+     * Handle the opening of "edit product" modal with specific index.
+     */
     const handleOpenEditProductModal = (index) => {
         console.log("Index: ", index);
         console.log("Data at index: ", data[index]);
@@ -101,12 +128,16 @@ export const AdminProductPage = () => {
 
     };
     
-    
+    /**
+     * Handle the closing of "edit product" modal.
+     */
     const handleCloseEditProductModal = () => {
         setIsEditProductOpen(false);
     };
     
-
+    /**
+     * Error checking function. Check if the input is empty.
+     */
     const checkEmptyInput = (input, setInputError) => {
         input = String(input);
         if (!input.trim()) {
@@ -118,6 +149,9 @@ export const AdminProductPage = () => {
         }
     };
 
+    /**
+     * Error checking function. Check if the input is a number.
+     */
     const checkNumberInput = (input, setInputError) => {
         input = String(input);
         if (isNaN(input) || input.trim() === '') {
@@ -129,6 +163,9 @@ export const AdminProductPage = () => {
         }
     };
 
+    /**
+     * Error checking function. Check if the input is an integer.
+     */
     const checkIntegerInput = (input, setInputError) => {
         input = String(input);
         if (!Number.isInteger(Number(input)) || input.trim() === '') {
@@ -140,6 +177,11 @@ export const AdminProductPage = () => {
         }
     };
     
+    /**
+     * Handle the "OK" button click in the "add product" modal. 
+     * When clicking the "OK" button, several error checking functions will be called.
+     * If there is invalid input, the function will return and in the modalbox error message will be shown.
+     */
     const handleAddProductOkClick = () => {
         const isProductNameEmpty = checkEmptyInput(productName, setProductNameError);
         const isPriceEmpty = checkEmptyInput(price, setPriceError);
@@ -190,7 +232,11 @@ export const AdminProductPage = () => {
     };
     
     
-
+    /**
+     * Handle the "OK" button click in the "edit product" modal.
+     * When clicking the "OK" button, several error checking functions will be called.
+     * If there is invalid input, the function will return and in the modalbox error message will be shown.
+     */
     const handleEditProductOkClick = () => {
         const isProductNameEmpty = checkEmptyInput(productName, setProductNameError);
         const isPriceEmpty = checkEmptyInput(price, setPriceError);
@@ -249,16 +295,18 @@ export const AdminProductPage = () => {
     return (
         <div>
             <div>
-                <Headbar setSearchTerm={setSearchTerm} />
+                <Headbar setSearchTerm={setSearchTerm} /> ({/*Headbar*/})
             </div>
             <div style={{ marginTop: '160px' }}></div>
-            <div style={styles.padding}>
+            <div style={styles.padding}> ({/*Title*/})
                 <Title value='Product management' fontWeight='Bold'></Title>
             </div>
-            <div style={styles.padding}>
+
+            <div style={styles.padding}> ({/*Add product button*/})
                 <CustomButton styleType="style4" buttonText = 'add new Product +' onClick={handleOpenAddProductModal}/>
             </div>
-            <div style={styles.padding}>
+
+            <div style={styles.padding}> ({/*Product table*/})
             <CustomProductTable 
                 data={data && data.filter(Product => Product && Product.name && Product.name.includes(searchTerm))}
                 onDelete={handleDelete} 
@@ -268,7 +316,7 @@ export const AdminProductPage = () => {
             </div>
 
 
-
+            ({/*Modalbox for adding product information.*/})
             <Modalbox onClose={handleCloseAddProductModal} isOpen={isAddProductOpen}> 
                 <div style={styles.padding2}>
                     <Title value='Add a new product' fontWeight='bold' fontSize='30px'></Title>
@@ -318,7 +366,7 @@ export const AdminProductPage = () => {
                 <CustomButton buttonText="OK" onClick={handleAddProductOkClick}></CustomButton>
             </Modalbox>
 
-
+            ({/*Modalbox for editing product information.*/})
             <Modalbox onClose={handleCloseEditProductModal} isOpen={isEditProductOpen}> 
                 <div style={styles.padding2}>
                     <Title value='Edit product' fontWeight='bold' fontSize='30px'></Title>

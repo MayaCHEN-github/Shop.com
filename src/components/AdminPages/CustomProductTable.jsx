@@ -1,3 +1,8 @@
+/**
+ * CustomProductTable.jsx:
+ *  This component is to display product data in a table.
+ */
+
 import React from 'react';
 
 const CustomProductTable = ({ data, onDelete, onEdit }) => {
@@ -5,8 +10,8 @@ const CustomProductTable = ({ data, onDelete, onEdit }) => {
     <div>
       <style>@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap')</style>
       <table style={styles.table}>
-        <thead style={styles.thead}>
-          <tr>
+        <thead style={styles.thead}> ({/** Item titles */})
+          <tr> 
             <th style={styles.td}>ID</th>
             <th style={styles.td}>Image</th>
             <th style={styles.td}>ProductName</th>
@@ -16,7 +21,7 @@ const CustomProductTable = ({ data, onDelete, onEdit }) => {
             <th style={styles.td}>Detail</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody> ({/** Items' information*/})
           {data.map((item, index) => (
             <tr key={index} style={styles.tr(index)}>
               <td style={styles.td1}>{item.item_id}</td>
@@ -30,12 +35,12 @@ const CustomProductTable = ({ data, onDelete, onEdit }) => {
               <td style={item.price === 0 ? styles.td4ZeroPrice : styles.td4}>{item.price}</td>
               <td style={item.stock_quantity === 0 ? styles.td5ZeroStock : styles.td5}>{item.stock_quantity}</td>
               <td style={styles.td6}>
-                <button style={styles.Button}>
+                <button style={styles.Button}> ({/** Delete buttoms */})
                   <img src="src/assets/Delete.svg" alt="Delete" style={styles.icon} onClick={() => onDelete(index)}/>
                 </button>
               </td>
               <td style={styles.td7}>
-                <button style={styles.Button}>
+                <button style={styles.Button}> ({/** Edit buttoms */})
                   <img src="src/assets/Edit.svg" alt="Edit" style={styles.icon} onClick={() => onEdit(index)}/>
                 </button>
               </td>

@@ -1,3 +1,14 @@
+/**
+ *  AdminUserPage.jsx:
+ *  This is a page for admin users to deal with users' admin functions.
+ * 
+ *  It includes a headbar,a title, a table to list all users' infomation, and buttons to add, edit, and delete users.
+ *  When add or edit button is clicked, a modal box will pop up to let the user input the user information.
+ *  After admin user inputs information and clicks the OK button, the user information will be sent to the backend server.
+ *  When delete button is clicked, the user will be deleted from the database.
+ *  Details of user table is in CustomUserTable.jsx.
+ * 
+ */
 import { React, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'
 import CustomUserTable from "./CustomUserTable";
@@ -28,6 +39,9 @@ export const AdminUserPage = () => {
 
     const navigate = useNavigate();
 
+    /** 
+     * Check if it is an admin account. If not, redirect to the home page.
+     */
     useEffect(() => {
       const userType = localStorage.getItem('user_type');
       if (userType !== "admin") {
@@ -35,13 +49,18 @@ export const AdminUserPage = () => {
       }
     }, [localStorage.userType])
 
+    /**
+     * Fetch users information from the backend server.
+     */
     useEffect(() => {
         fetch('http://localhost:3001/all-users')
             .then(response => response.json())
             .then(data => setData(data));
     }, []);
     
-
+    /**
+     * Handle the opening of "add user" modal.
+     */
     const handleOpenAddUserModal = () => {
         setUsername('');
         setPassword('');
@@ -52,10 +71,16 @@ export const AdminUserPage = () => {
         setIsAddUserOpen(true);
     };
     
+    /**
+     * Handle the closing of "add user" modal.
+     */
     const handleCloseAddUserModal = () => {
         setIsAddUserOpen(false);
     };
 
+    /**
+     * Handle the opening of "edit user" modal.
+     */
     const handleOpenEditUserModal = (index) => {
         setUsername(data[index].username);
         setPassword(data[index].password);
@@ -67,11 +92,16 @@ export const AdminUserPage = () => {
         setIsEditUserOpen(true);
     };
     
+    /**
+     * Handle the closing of "edit user" modal.
+     */
     const handleCloseEditUserModal = () => {
         setIsEditUserOpen(false);
     };
 
-
+    /**
+     * Error checking function. Check if the input is empty.
+     */
     const checkEmptyInput = (input, setInputError) => {
         if (!input.trim()) {
             setInputError(true);
@@ -82,6 +112,11 @@ export const AdminUserPage = () => {
         }
     };
 
+    /**
+     * Handle the "OK" button click in the "add user" and "edit user" modal. 
+     * When clicking the "OK" button, several error checking functions will be called.
+     * If there is invalid input, the function will return and in the modalbox error message will be shown.
+     */
     const handleOkClick = async() => {
 
         const isusernameEmpty = checkEmptyInput(username, setUsernameError);
@@ -178,19 +213,20 @@ export const AdminUserPage = () => {
     return (
         <div>
             <div>
-                <Headbar setSearchTerm={setSearchTerm} />
+                <Headbar setSearchTerm={setSearchTerm} /> ({/*Headbar*/})
             </div>
             <div style={{ marginTop: '160px' }}></div>
-            <div style={styles.padding}>
+            <div style={styles.padding}>  ({/*Title*/})
                 <Title value='User management' fontWeight='Bold'></Title>
             </div>
-            <div style={styles.padding}>
+            <div style={styles.padding}> ({/*Add product button*/})
                 <CustomButton styleType="style4" buttonText = 'add new user +' onClick={handleOpenAddUserModal}/>
             </div>
-            <div style={styles.padding}>
+            <div style={styles.padding}> ({/*user table*/})
                 <CustomUserTable data={data.filter(user => user.username.includes(searchTerm))} onDelete={handleDelete} onEdit={handleOpenEditUserModal}/>
             </div>
 
+            ({/*Modalbox for adding user information.*/})
             <Modalbox onClose={handleCloseAddUserModal} isOpen={isAddUserOpen}> 
                 <div style={styles.padding2}>
                     <Title value='Add a new user' fontWeight='bold' fontSize='30px'></Title>
@@ -207,6 +243,7 @@ export const AdminUserPage = () => {
                 <CustomButton buttonText="OK" onClick={handleOkClick}></CustomButton>
             </Modalbox>
 
+            ({/*Modalbox for editing user information.*/})
             <Modalbox onClose={handleCloseEditUserModal} isOpen={isEditUserOpen}> 
                 <div style={styles.padding2}>
                     <Title value='Edit user' fontWeight='bold' fontSize='30px'></Title>

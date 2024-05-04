@@ -1,3 +1,9 @@
+/**
+ * SearchboxAdmin.jsx:
+ *  This component is a search box for the admin page.
+ *  Admin users can search for users or products by name.
+ */
+
 import React, { useState } from 'react';
 import Title from '../../assets/Title';
 
