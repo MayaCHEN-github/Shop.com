@@ -36,7 +36,7 @@ Here,
 
 The backend server will start subsequently, at http://localhost:3001/.
 
-Ensure you are not connected to any VPN, otherwise connection to MongoDB may be blocked.
+Ensure you are not connected to any VPN, otherwise connection to database may be blocked by MongoDB.
 
 # **Tech Stack** #
 
