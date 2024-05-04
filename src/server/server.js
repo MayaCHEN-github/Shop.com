@@ -321,13 +321,16 @@ db.once('open', () => {
     app.post('/all-cart-items', async (req, res) => {
         const {user_id} = req.body;
         try{
+            //find user
             const user = await User.findOne({"user_id" : user_id}).populate('shopping_cart.item');
+
 
             if (!user) {
                 res.status(404).send('User not found');
                 return;
             }
 
+            //extract user cart
             const user_cart = user.shopping_cart;
 
             if (!user_cart) {
@@ -335,8 +338,10 @@ db.once('open', () => {
                 return;
             }
  
+            //calculate total price
             const total = user_cart.reduce((sum, item) =>   sum + 100 * parseFloat(item.item.price) * parseInt(item.purchased, 10), 0)/100;
             
+            //if both user and cart found, send results to client-side
             if(user_cart && user){
                 res.status(200).json({
                     items: user_cart,
@@ -356,6 +361,7 @@ db.once('open', () => {
     app.post('/quantity-plus-one', async (req,res)=>{
         const {user_id, item_id} = req.body;
         try{
+            //find user
         const user = await User.findOne({user_id : user_id}).populate('shopping_cart.item');
 
         //Unable to find user
@@ -363,6 +369,7 @@ db.once('open', () => {
             res.status(404).send('Failed fetching user');
         }
 
+        //locate item position in cart
         const target_item_index = user.shopping_cart.findIndex((item) => item.item.item_id.toString() === item_id);
 
         const target_item = user.shopping_cart[target_item_index];
@@ -376,6 +383,7 @@ db.once('open', () => {
                 target_item.purchased += 1;
                 await user.save(); 
                 
+                //recalcuate subtotal
                 const subtotal = (100  * target_item.item.price) * target_item.purchased / 100;
                 const user_cart = user.shopping_cart; 
 
@@ -384,8 +392,10 @@ db.once('open', () => {
                     return;
                 }
      
+                //recalculate total
                 const total = user_cart.reduce((sum, item) =>   sum + (100 * parseFloat(item.item.price) )* parseInt(item.purchased, 10), 0)/ 100;
 
+                //updated calculations, send it back to client-side
                 const updated_result = {
                     purchased: target_item.purchased,
                     subtotal: subtotal,
@@ -394,9 +404,11 @@ db.once('open', () => {
 
                 res.status(200).json(updated_result);
             }else{
+                //if stock low on supply
                 res.status(400).json({"message":`Item ${item_id} purchased quantity exceeded stock quantity`});
             }
         } else {
+            //if item not found
             res.status(404).send('Item not found in shopping cart');
         }
         }catch(err){
@@ -456,6 +468,7 @@ db.once('open', () => {
     app.delete('/delete-item', async (req,res)=>{
         const {user_id, item_id} = req.body;
         try{
+            //find user
         const user = await User.findOne({user_id : user_id}).populate('shopping_cart.item');
        
 
@@ -463,11 +476,12 @@ db.once('open', () => {
             res.status(404).send('Failed fetching user');
         }
 
+        //locate item in cart
         const target_item_index = user.shopping_cart.findIndex((item) => item.item.item_id.toString() === item_id);
 
         if (target_item_index !== -1) {
-
-            user.shopping_cart.splice(target_item_index,1); // removes item from shopping cart array
+            // removes item from shopping cart array
+            user.shopping_cart.splice(target_item_index,1); 
             await user.save();
             const user_cart = user.shopping_cart;
 
@@ -475,9 +489,8 @@ db.once('open', () => {
                 res.status(404).send('Unable to fetch user\'s cart');
                 return;
             }
-     
+            //recalculate total
             const total = user_cart.reduce((sum, item) =>   sum + 100 * parseFloat(item.item.price) * parseInt(item.purchased, 10), 0)/100;
-             //recalculate total
              
             res.status(202).json({"total":total});
         }else {
