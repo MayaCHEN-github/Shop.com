@@ -14,7 +14,7 @@ Proceed by running the following commands:
 cd Shop.com // set 'current directory' to the project folder
 npm i
 npm run dev // To start development server.
-``` 
+``
 The project will be availble at http://localhost:5173/.
 
 
