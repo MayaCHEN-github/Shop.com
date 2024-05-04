@@ -8,7 +8,8 @@ cd Shop.com // set 'current directory' to the project folder
 npm i
 npm run dev // To start development server.
 ``` 
-As for the backend,
+For the backend
+
 First start a new terminal. 
 Here, 
 1. Set `cd` to the `server` folder, then
