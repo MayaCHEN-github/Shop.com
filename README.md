@@ -12,11 +12,15 @@ Ensure you have the following installed
 After cloning the repository to your local machine, you may begin to set up the frontend
 
 Proceed by running the following commands:
+
 ``
 cd Shop.com // set 'current directory' to the project folder
+
 npm i
+
 npm run dev // To start development server.
 ``
+
 The project will be availble at http://localhost:5173/.
 
 
