@@ -295,18 +295,18 @@ export const AdminProductPage = () => {
     return (
         <div>
             <div>
-                <Headbar setSearchTerm={setSearchTerm} /> ({/*Headbar*/})
+                <Headbar setSearchTerm={setSearchTerm} /> 
             </div>
             <div style={{ marginTop: '160px' }}></div>
-            <div style={styles.padding}> ({/*Title*/})
+            <div style={styles.padding}> 
                 <Title value='Product management' fontWeight='Bold'></Title>
             </div>
 
-            <div style={styles.padding}> ({/*Add product button*/})
+            <div style={styles.padding}> 
                 <CustomButton styleType="style4" buttonText = 'add new Product +' onClick={handleOpenAddProductModal}/>
             </div>
 
-            <div style={styles.padding}> ({/*Product table*/})
+            <div style={styles.padding}> 
             <CustomProductTable 
                 data={data && data.filter(Product => Product && Product.name && Product.name.includes(searchTerm))}
                 onDelete={handleDelete} 
@@ -316,7 +316,6 @@ export const AdminProductPage = () => {
             </div>
 
 
-            ({/*Modalbox for adding product information.*/})
             <Modalbox onClose={handleCloseAddProductModal} isOpen={isAddProductOpen}> 
                 <div style={styles.padding2}>
                     <Title value='Add a new product' fontWeight='bold' fontSize='30px'></Title>
@@ -366,7 +365,6 @@ export const AdminProductPage = () => {
                 <CustomButton buttonText="OK" onClick={handleAddProductOkClick}></CustomButton>
             </Modalbox>
 
-            ({/*Modalbox for editing product information.*/})
             <Modalbox onClose={handleCloseEditProductModal} isOpen={isEditProductOpen}> 
                 <div style={styles.padding2}>
                     <Title value='Edit product' fontWeight='bold' fontSize='30px'></Title>

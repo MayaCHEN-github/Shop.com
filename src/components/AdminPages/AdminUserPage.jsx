@@ -213,20 +213,19 @@ export const AdminUserPage = () => {
     return (
         <div>
             <div>
-                <Headbar setSearchTerm={setSearchTerm} /> ({/*Headbar*/})
+                <Headbar setSearchTerm={setSearchTerm} /> 
             </div>
             <div style={{ marginTop: '160px' }}></div>
-            <div style={styles.padding}>  ({/*Title*/})
+            <div style={styles.padding}>  
                 <Title value='User management' fontWeight='Bold'></Title>
             </div>
-            <div style={styles.padding}> ({/*Add product button*/})
+            <div style={styles.padding}> 
                 <CustomButton styleType="style4" buttonText = 'add new user +' onClick={handleOpenAddUserModal}/>
             </div>
-            <div style={styles.padding}> ({/*user table*/})
+            <div style={styles.padding}> 
                 <CustomUserTable data={data.filter(user => user.username.includes(searchTerm))} onDelete={handleDelete} onEdit={handleOpenEditUserModal}/>
             </div>
 
-            ({/*Modalbox for adding user information.*/})
             <Modalbox onClose={handleCloseAddUserModal} isOpen={isAddUserOpen}> 
                 <div style={styles.padding2}>
                     <Title value='Add a new user' fontWeight='bold' fontSize='30px'></Title>
@@ -243,7 +242,6 @@ export const AdminUserPage = () => {
                 <CustomButton buttonText="OK" onClick={handleOkClick}></CustomButton>
             </Modalbox>
 
-            ({/*Modalbox for editing user information.*/})
             <Modalbox onClose={handleCloseEditUserModal} isOpen={isEditUserOpen}> 
                 <div style={styles.padding2}>
                     <Title value='Edit user' fontWeight='bold' fontSize='30px'></Title>

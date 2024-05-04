@@ -42,20 +42,18 @@ const Headbar = (props) => {
   return (
     <div style={styles.headbar}>
       <div style={styles.headbarSection1}>
-        <Link to="/"> ({/** Shop.com logo */})
+        <Link to="/"> 
           <img src="src\assets\shop_com.png" alt="Shop.com logo" style={styles.logo} />
         </Link>
       </div>
       <div style={styles.headbarSection2}>
-        <Searchbox style={styles.searchbox} onSearch={props.setSearchTerm} /> ({/** Search box */})
-        ({/** Buttons for navigation between user management & product management pages */})
+        <Searchbox style={styles.searchbox} onSearch={props.setSearchTerm} /> 
         <ButtonBar buttons={[ 
           { label: 'User Management', onClick: () => { }, to: "/admin-user" },
           { label: 'Product Management', onClick: () => { }, to: "/admin-product" },
         ]} />
       </div>
       <div style={styles.headbarSection3}>
-        ({/** Buttons for logout & username display */})
         <ButtonBar buttons={[ 
           { label: 'logout', onClick: () => navigateLogout() },
           { label: `Welcome, ${getName()}`, onClick: () => console.log('clicked') /* Username: to be completed */ },
