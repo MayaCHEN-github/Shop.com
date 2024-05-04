@@ -40,7 +40,7 @@ Ensure you are not connected to any VPN, otherwise connection to database may be
 
 # **Tech Stack** #
 
-The following technologies are involved to build the project
+The following technologies are involved in building the project
 1. Vitejs - For quicker frontend build
 2. React - Main frontend framework
 3. Bootstrap (in the form of react-boostrap package) - For styling purposes
