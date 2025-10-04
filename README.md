@@ -1,13 +1,24 @@
-#Shop.com - A CSCI3100 project by Group G5
+# Shop.com - A CSCI3100 project by Group G5
 
+## What is Shop.com?
+Shop.com is a full-stack e-commerce web application developed as a CSCI3100 project. The platform enables customers to browse products, manage shopping carts, and complete purchases while providing administrators with tools to manage users and product inventory.
 
-# **Before you begin...** #
+The system implements a complete e-commerce workflow including:
+- User registration and authentication
+- Product catalog with search and category filtering
+- Shopping cart management with real-time price calculations
+- Checkout and order tracking
+- Administrative interfaces for user and product CRUD operations
+
+## Initialization
+
+### Before you begin...
 
 Ensure you have the following installed 
 1. Node.js
 2. npm
 
-# **Frontend Initialization** #
+### Frontend Initialization
 
 After cloning the repository to your local machine, you may begin to set up the frontend
 
@@ -25,7 +36,7 @@ npm run dev // To start development server.
 The project will be availble at http://localhost:5173/.
 
 
-# **Backend Initialization** #
+### Backend Initialization
 
 For the backend
 
@@ -38,7 +49,7 @@ The backend server will start subsequently, at http://localhost:3001/.
 
 Ensure you are not connected to any VPN, otherwise connection to database may be blocked by MongoDB.
 
-# **Tech Stack** #
+## Tech Stack
 
 The following technologies are involved in building the project
 1. Vitejs - For quicker frontend build
@@ -47,7 +58,7 @@ The following technologies are involved in building the project
 4. ExpressJS - For building the API for handling network requests
 5. Mongoose - ODM for interacting with MongoDB database.
 
-# **Contributors** #
+## Contributors
 
 1. YING Chun Wai - Implementation of payment handling and order tracking system and logic
 2. CHANG Si Kai - Implementation of the main UI/UX - particularly the homepage, product browsing page and individual product page and their logic
